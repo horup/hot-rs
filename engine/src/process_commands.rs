@@ -16,7 +16,7 @@ impl Engine {
                         }
                     }
                 }
-                Command::DefineTexture { handle, src } => {
+                Command::DefineTexture { handle: _, src: _ } => {
 
                 },
             }

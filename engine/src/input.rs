@@ -1,4 +1,4 @@
-use context::{Context, Command, PlayerInput};
+use context::{Command, PlayerInput};
 use macroquad::prelude::{is_key_pressed, KeyCode, is_key_down};
 
 use crate::Engine;
