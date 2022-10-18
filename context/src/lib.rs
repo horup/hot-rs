@@ -1,7 +1,8 @@
 #[derive(Debug, Clone, Copy)]
 pub struct Entity {
     pub x:f32,
-    pub y:f32
+    pub y:f32,
+    pub texture:u32
 }
 
 #[derive(Default, Debug, Clone)]
@@ -26,7 +27,7 @@ pub struct Context {
 
 impl Context {
     pub fn define_texture(&mut self, handle:u32, src:&str) {
-        self.commands.push(Command::DefineTexture { handle: handle, src: src.into() })
+        self.commands.push(Command::DefineTexture { handle: handle, path: src.into() })
     }
 }
 
