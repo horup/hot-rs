@@ -1,4 +1,4 @@
-use context::{Entity, Context, Command};
+use context::{Context, Command};
 
 static PLAYER_TEXTURE:u32 = 1;
 static PIGGY_TEXTURE:u32 = 2;
