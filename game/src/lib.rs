@@ -16,8 +16,31 @@ pub fn init(ctx:&mut Context) {
     ctx.define_texture(FLOOR_TEXTURE, "assets/textures/floor2.png");
     ctx.define_texture(WALL_TEXTURE, "assets/textures/wall2.png");
 
-    ctx.state.tilemap.get_mut(0, 0).unwrap().texture = WALL_TEXTURE;
-    ctx.state.tilemap.get_mut(0, 1).unwrap().texture = FLOOR_TEXTURE;
+
+    let tilemap = &mut ctx.state.tilemap;
+    for y in 0..tilemap.size() {
+        for x in 0..tilemap.size() {
+            tilemap.get_mut(x as i32, y as i32).unwrap().texture = FLOOR_TEXTURE;
+        }
+    }
+
+    for y in 0..1 {
+        for x in 0..tilemap.size() {
+            tilemap.get_mut(x as i32, y as i32).unwrap().texture = WALL_TEXTURE;
+        }
+    }
+
+    for y in 0..6 {
+        for x in 0..1 {
+            tilemap.get_mut(x as i32, y as i32).unwrap().texture = WALL_TEXTURE;
+        }
+    }
+
+    for y in 6..7 {
+        for x in 0..10 {
+            tilemap.get_mut(x as i32, y as i32).unwrap().texture = WALL_TEXTURE;
+        }
+    }
 }
 
 
