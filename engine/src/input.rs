@@ -1,4 +1,4 @@
-use context::{Command, PlayerInput};
+use context::{Command, PlayerInput, glam::Vec2};
 use macroquad::prelude::{is_key_pressed, KeyCode, is_key_down};
 
 use crate::Engine;
@@ -26,6 +26,6 @@ impl Engine {
             y += 1.0;
         }
     
-        self.context.player_input = PlayerInput { x: x, y: y, action: action };
+        self.context.player_input = PlayerInput { dir:Vec2::new(x, y), action: action };
     }
 }

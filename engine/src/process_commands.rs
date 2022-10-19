@@ -1,6 +1,6 @@
 use context::{Command, Context};
 use libloading::{Symbol};
-use macroquad::texture::{Texture2D, load_texture};
+use macroquad::texture::{Texture2D, load_texture, FilterMode};
 use crate::Engine;
 
 
@@ -20,6 +20,7 @@ impl Engine {
                 }
                 Command::DefineTexture { handle, path } => {
                     let texture: Texture2D = load_texture(path).await.unwrap();
+                    texture.set_filter(FilterMode::Nearest);
                     self.textures.insert(handle.clone(), texture);
                 },
                 Command::FlashScreen {  } => {
