@@ -48,9 +48,9 @@ impl Engine {
             let w = tex.width();
             let h = tex.height();
             //draw_texture(tex.clone(), e.x, e.y, WHITE);
-            let a = w/h;
-            let x = e.x;
-            let y = e.y;
+            let _a = w/h;
+            let _x = e.x;
+            let _y = e.y;
           /*  draw_texture_ex(tex, x, y, WHITE, 
                 DrawTextureParams { 
                     dest_size: (), 

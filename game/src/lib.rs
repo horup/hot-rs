@@ -1,4 +1,4 @@
-use context::{Entity, Context, Command, glam::Vec2};
+use context::{Entity, Context, Command};
 
 static PLAYER_TEXTURE:u32 = 1;
 static PIGGY_TEXTURE:u32 = 2;
@@ -22,7 +22,7 @@ pub fn init(ctx:&mut Context) {
             let x = ix as f32 * 24.0 + 48.0;
             let y = iy as f32 * 16.0 + 48.0;
             
-            if (ix == 0 || iy == 0) {
+            if ix == 0 || iy == 0 {
                 ctx.state.entities.push(Entity { 
                     x,
                     y, 
