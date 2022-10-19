@@ -16,42 +16,8 @@ pub fn init(ctx:&mut Context) {
     ctx.define_texture(FLOOR_TEXTURE, "assets/textures/floor2.png");
     ctx.define_texture(WALL_TEXTURE, "assets/textures/wall2.png");
 
-
-    for iy in 0..24 {
-        for ix in 0..24 {
-            let x = ix as f32 * 24.0 + 48.0;
-            let y = iy as f32 * 16.0 + 48.0;
-            
-            if ix == 0 || iy == 0 {
-                ctx.state.entities.push(Entity { 
-                    x,
-                    y, 
-                    texture:WALL_TEXTURE
-                });
-            }
-            else {
-                ctx.state.entities.push(Entity { 
-                    x,
-                    y, 
-                    texture:FLOOR_TEXTURE
-                });
-            }
-         
-        }
-    }
-
-    ctx.state.entities.push(Entity { 
-        x:100.0,
-        y:100.0, 
-        texture:PLAYER_TEXTURE
-    });
-
-
-    ctx.state.entities.push(Entity { 
-        x:300.0,
-        y:500.0, 
-        texture:PIGGY_TEXTURE
-    });
+    ctx.state.tilemap.get_mut(0, 0).unwrap().texture = WALL_TEXTURE;
+    ctx.state.tilemap.get_mut(0, 1).unwrap().texture = FLOOR_TEXTURE;
 }
 
 

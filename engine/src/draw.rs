@@ -3,8 +3,8 @@ use crate::Engine;
 
 impl Engine {
     fn screen_pos(&self, world_pos:Vec2) -> Vec2 {
-        let zoom = self.context.state.camera.zoom;
-        let center = self.context.state.camera.pos;
+        let zoom = self.ctx.state.camera.zoom;
+        let center = self.ctx.state.camera.pos;
         let w = screen_width();
         let h = screen_height();
 
@@ -24,7 +24,7 @@ impl Engine {
     }
 
     fn draw_grid(&mut self) {
-        let size = 64;
+        let size = self.ctx.state.tilemap.size();
         for x in 0..(size+1) {
             let x = x as f32;
             let p1 = self.screen_pos(Vec2::new(x, 0.0));
@@ -38,12 +38,43 @@ impl Engine {
             draw_line(p1.x, p1.y, p2.x, p2.y, 1.0, WHITE);
         }
     }
+
+    pub fn draw_floor(&mut self) {
+        let tilemap = &self.ctx.state.tilemap;
+        for y in 0..tilemap.size() {
+            for x in 0..tilemap.size() {
+                let p1 = self.screen_pos(Vec2::new(x as f32,  y as f32));
+                let p2 = self.screen_pos(Vec2::new(x as f32 + 1.0, y as f32 + 1.0));
+                let w = p2.x - p1.x;
+                let h = p2.y - p1.y;
+
+                if let Some(tile) = tilemap.get(x as i32, y as i32) {
+                    if let Some(tex) = self.textures.get(&tile.texture) {
+                        let a = (1.5 / (tex.width() / tex.height())) - 1.0;
+                        let x = p1.x;
+                        let y = p1.y - a * h;
+                        
+                        
+                        draw_texture_ex(tex.clone(), x, y, WHITE, DrawTextureParams {
+                            dest_size:Some(Vec2::new(w,h + a * h)),
+                            ..Default::default()
+                        });
+                        //draw_rectangle(p1.x, p1.y, w, h, RED);
+                    }
+                }
+
+            }
+        }
+    }
+    
     pub fn draw(&mut self) {
-        if self.context.debug {
+        let dt = get_frame_time();
+        if self.ctx.debug {
             self.draw_grid();
         }
-        let dt = get_frame_time();
-        for e in self.context.state.entities.iter() {
+
+        self.draw_floor();
+        for e in self.ctx.state.entities.iter() {
             let tex = self.textures.get(&e.texture).unwrap();
             let w = tex.width();
             let h = tex.height();

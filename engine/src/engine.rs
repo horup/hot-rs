@@ -9,7 +9,7 @@ pub struct Engine {
     pub game_lib_path: PathBuf,
     pub game_lib: Option<Library>,
     pub game_lib_metadata: Option<Metadata>,
-    pub context:Context,
+    pub ctx:Context,
     pub textures:HashMap<u32, Texture2D>,
     pub flash_timer:f32,
     pub flash_timer_start:f32
@@ -84,7 +84,7 @@ impl Engine {
         if let Some(lib) = self.game_lib.as_mut() {
             unsafe {
                 let update_func:Symbol<fn(state:&mut Context)> = lib.get(b"update").unwrap();
-                update_func(&mut self.context);
+                update_func(&mut self.ctx);
             }
         }
 

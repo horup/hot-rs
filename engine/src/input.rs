@@ -6,7 +6,7 @@ use crate::Engine;
 impl Engine {
     pub fn input(&mut self) {
         if is_key_pressed(KeyCode::F1) {
-            self.context.commands.push(Command::Restart);
+            self.ctx.commands.push(Command::Restart);
         }
     
         let mut x = 0.0;
@@ -26,6 +26,6 @@ impl Engine {
             y += 1.0;
         }
     
-        self.context.player_input = PlayerInput { dir:Vec2::new(x, y), action: action };
+        self.ctx.player_input = PlayerInput { dir:Vec2::new(x, y), action: action };
     }
 }
