@@ -91,6 +91,7 @@ impl Engine {
         self.process_commands().await;
         self.draw();
 
+        self.ui();
     }
 }
 

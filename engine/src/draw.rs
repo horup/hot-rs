@@ -112,7 +112,6 @@ impl Engine {
     }
 
     pub fn draw_map(&mut self) {
-        println!("he");
         let map = &self.ctx.map;
         for y in 0..map.grid.size() {
             for x in 0..map.grid.size() {
