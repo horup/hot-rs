@@ -1,10 +1,14 @@
+use context::Mode;
 use macroquad::prelude::*;
 use crate::Engine;
 
 impl Engine {
-    fn screen_pos(&self, world_pos:Vec2) -> Vec2 {
+    pub fn perspective(&self) -> f32 {
+        return 24.0 / 16.0;
+    }
+
+    pub fn scaler(&self) -> f32 {
         let zoom = self.ctx.state.camera.zoom;
-        let center = self.ctx.state.camera.pos;
         let w = screen_width();
         let h = screen_height();
 
@@ -15,26 +19,66 @@ impl Engine {
         if w < h {
             a = h_a;
         }
+
+        return a;
+    }
+
+    
+    pub fn to_world(&self, screen:Vec2) -> Vec2 {
+        let w = screen_width();
+        let h = screen_height();
+       
+        let center = self.ctx.state.camera.pos;
+        let persp = self.perspective();
+        let p  = Vec2::new(screen.x - w / 2.0, (screen.y - h / 2.0) * persp);
+        let a = self.scaler();
+        let p = p * a;
+        let p = p + center;
+        return p;
+    }
+
+    pub fn to_screen(&self, world:Vec2) -> Vec2 {
+        let w = screen_width();
+        let h = screen_height();
+        let center = self.ctx.state.camera.pos;
+        let a = self.scaler();
         
-        let p = world_pos - center;
+        let p = world - center;
         let p = p / a;
-        let perspective = 24.0 / 16.0;
+        let perspective = self.perspective();
         let p = Vec2::new(p.x + w / 2.0, p.y / perspective + h / 2.0);
         return p;
     }
 
+    fn draw_cursor(&self) {
+       /* let p = self.ctx.input.mouse_pos_world.floor();
+        let p = self.to_screen(p);
+        
+        draw_circle(p.x, p.y, 16.0, WHITE);
+
+        let p = self.ctx.input.mouse_pos_screen;
+        draw_circle(p.x, p.y, 2.0, RED);*/
+
+    }
+
+    fn draw_edit_ui(&mut self) {
+        let space = 16.0;
+       
+    }
+
     fn draw_grid(&mut self) {
+        let o = self.to_world(Vec2::new(0.0, 0.0));
         let size = self.ctx.state.tilemap.size();
         for x in 0..(size+1) {
             let x = x as f32;
-            let p1 = self.screen_pos(Vec2::new(x, 0.0));
-            let p2 = self.screen_pos(Vec2::new(x, size as f32));
+            let p1 = self.to_screen(Vec2::new(x, 0.0));
+            let p2 = self.to_screen(Vec2::new(x, size as f32));
             draw_line(p1.x, p1.y, p2.x, p2.y, 1.0, WHITE);
         }
         for y in 0..size {
             let y = y as f32;
-            let p1 = self.screen_pos(Vec2::new(0.0, y));
-            let p2 = self.screen_pos(Vec2::new(size as f32, y));
+            let p1 = self.to_screen(Vec2::new(0.0, y));
+            let p2 = self.to_screen(Vec2::new(size as f32, y));
             draw_line(p1.x, p1.y, p2.x, p2.y, 1.0, WHITE);
         }
     }
@@ -43,8 +87,8 @@ impl Engine {
         let tilemap = &self.ctx.state.tilemap;
         for y in 0..tilemap.size() {
             for x in 0..tilemap.size() {
-                let p1 = self.screen_pos(Vec2::new(x as f32,  y as f32));
-                let p2 = self.screen_pos(Vec2::new(x as f32 + 1.0, y as f32 + 1.0));
+                let p1 = self.to_screen(Vec2::new(x as f32,  y as f32));
+                let p2 = self.to_screen(Vec2::new(x as f32 + 1.0, y as f32 + 1.0));
                 let w = p2.x - p1.x;
                 let h = p2.y - p1.y;
 
@@ -66,6 +110,62 @@ impl Engine {
             }
         }
     }
+
+    pub fn draw_map(&mut self) {
+        println!("he");
+        let map = &self.ctx.map;
+        for y in 0..map.grid.size() {
+            for x in 0..map.grid.size() {
+                let p1 = self.to_screen(Vec2::new(x as f32,  y as f32));
+                let p2 = self.to_screen(Vec2::new(x as f32 + 1.0, y as f32 + 1.0));
+                let w = p2.x - p1.x;
+                let h = p2.y - p1.y;
+
+                if let Some(cell) = map.grid.get(x as i32, y as i32) {
+                    if let Some(tile) = cell.tile {
+                        if let Some(tex) = self.textures.get(&tile) {
+                            let a = (1.5 / (tex.width() / tex.height())) - 1.0;
+                            let x = p1.x;
+                            let y = p1.y - a * h;
+                            
+                            
+                            draw_texture_ex(tex.clone(), x, y, WHITE, DrawTextureParams {
+                                dest_size:Some(Vec2::new(w,h + a * h)),
+                                ..Default::default()
+                            });
+                            //draw_rectangle(p1.x, p1.y, w, h, RED);
+                        }
+                    }
+                    
+                }
+            }
+        }
+       /* let tilemap = &self.ctx.state.tilemap;
+        for y in 0..tilemap.size() {
+            for x in 0..tilemap.size() {
+                let p1 = self.to_screen(Vec2::new(x as f32,  y as f32));
+                let p2 = self.to_screen(Vec2::new(x as f32 + 1.0, y as f32 + 1.0));
+                let w = p2.x - p1.x;
+                let h = p2.y - p1.y;
+
+                if let Some(tile) = tilemap.get(x as i32, y as i32) {
+                    if let Some(tex) = self.textures.get(&tile.texture) {
+                        let a = (1.5 / (tex.width() / tex.height())) - 1.0;
+                        let x = p1.x;
+                        let y = p1.y - a * h;
+                        
+                        
+                        draw_texture_ex(tex.clone(), x, y, WHITE, DrawTextureParams {
+                            dest_size:Some(Vec2::new(w,h + a * h)),
+                            ..Default::default()
+                        });
+                        //draw_rectangle(p1.x, p1.y, w, h, RED);
+                    }
+                }
+
+            }
+        }*/
+    }
     
     pub fn draw(&mut self) {
         let dt = get_frame_time();
@@ -73,7 +173,11 @@ impl Engine {
             self.draw_grid();
         }
 
-        self.draw_floor();
+        if self.ctx.mode == Mode::Edit {
+            self.draw_map();
+        }
+
+      //  self.draw_floor();
         for e in self.ctx.state.entities.iter() {
             let tex = self.textures.get(&e.texture).unwrap();
             let w = tex.width();
@@ -100,5 +204,8 @@ impl Engine {
             let a = self.flash_timer / self.flash_timer_start;
             draw_rectangle(0.0, 0.0, screen_width(), screen_height(), Color::new(1.0, 1.0, 1.0, a));
         }
+
+        self.draw_cursor();
+        self.draw_edit_ui();
     }
 }

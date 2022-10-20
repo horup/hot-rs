@@ -5,41 +5,41 @@ pub struct Tile {
 }
 
 #[derive(Debug, Clone)]
-pub struct Tilemap {
+pub struct Grid<T:Clone + Default> {
     size:usize,
-    tiles:Vec<Tile>
+    cells:Vec<T>
 }
 
-impl Default for Tilemap {
+impl<T> Default for Grid<T> where T:Default+Clone {
     fn default() -> Self {
         let size = 64;
         Self { 
             size,
-            tiles:vec![Tile::default();size * size]
+            cells:vec![T::default();size * size]
          }
     }
 }
 
-impl Tilemap {
+impl<T> Grid<T> where T:Default+Clone {
     pub fn size(&self)->usize {
         return self.size;
     }
 
-    pub fn get_mut(&mut self, x:i32, y:i32) -> Option<&mut Tile> {
+    pub fn get_mut(&mut self, x:i32, y:i32) -> Option<&mut T> {
         let size = self.size;
         if x >= 0 && y >= 0 {
             let index = y as usize * size + x as usize;
-            return self.tiles.get_mut(index);
+            return self.cells.get_mut(index);
         }
 
         return None;
     }
 
-    pub fn get(&self,x:i32, y:i32) -> Option<&Tile> {
+    pub fn get(&self,x:i32, y:i32) -> Option<&T> {
         let size = self.size;
         if x >= 0 && y >= 0 {
             let index = y as usize * size + x as usize;
-            return self.tiles.get(index);
+            return self.cells.get(index);
         }
 
         return None;
@@ -69,21 +69,43 @@ pub struct State {
     pub camera:Camera,
     pub iterations:u64,
     pub entities:Vec<Entity>,
-    pub tilemap:Tilemap
+    pub tilemap:Grid<Tile>
 }
 
 #[derive(Default)]
 pub struct PlayerInput {
     pub dir:Vec2,
-    pub action:bool
+    pub action:bool,
+    pub mouse_pos_screen:Vec2,
+    pub mouse_pos_world:Vec2,
+    pub mouse_left_down:bool,
+    pub mouse_right_down:bool,
+    pub mouse_left_pressed:bool,
+    pub mouse_right_pressed:bool
+}
+
+
+#[derive(PartialEq, Eq, Clone, Copy)]
+pub enum Mode {
+    Play,
+    Edit
+}
+
+impl Default for Mode {
+    fn default() -> Self {
+        Mode::Play
+    }
 }
 
 #[derive(Default)]
 pub struct Context {
+    pub mode:Mode,
+    pub map:Map,
     pub state:State,
     pub commands:Vec<Command>,
-    pub player_input:PlayerInput,
-    pub debug:bool
+    pub input:PlayerInput,
+    pub debug:bool,
+    pub edit:Edit
 }
 
 impl Context {
@@ -95,6 +117,11 @@ impl Context {
 
 mod command;
 pub use command::*;
+mod map;
+pub use map::*;
+mod edit;
+pub use edit::*;
+
 use glam::Vec2;
 
 pub use glam;

@@ -1,9 +1,54 @@
-use context::{Command, PlayerInput, glam::Vec2};
-use macroquad::prelude::{is_key_pressed, KeyCode, is_key_down};
+use context::{Command, PlayerInput, glam::Vec2, Mode, Tool};
+use macroquad::prelude::{is_key_pressed, KeyCode, is_key_down, mouse_position, is_mouse_button_down, MouseButton, is_mouse_button_pressed};
 
 use crate::Engine;
 
 impl Engine {
+    pub fn num(&self) -> Option<u8> {
+        if is_key_pressed(KeyCode::Key0) { return Some(0); }
+        if is_key_pressed(KeyCode::Key1) { return Some(1); }
+        if is_key_pressed(KeyCode::Key2) { return Some(2); }
+        if is_key_pressed(KeyCode::Key3) { return Some(3); }
+        if is_key_pressed(KeyCode::Key4) { return Some(4); }
+        if is_key_pressed(KeyCode::Key5) { return Some(5); }
+        if is_key_pressed(KeyCode::Key6) { return Some(6); }
+        if is_key_pressed(KeyCode::Key7) { return Some(7); }
+        if is_key_pressed(KeyCode::Key8) { return Some(8); }
+        if is_key_pressed(KeyCode::Key9) { return Some(9); }
+        return None;
+    }
+
+    pub fn edit_input(&mut self) {
+        if is_key_pressed(KeyCode::E) {
+            self.ctx.edit.tool = Tool::Entity;
+        }
+        if is_key_pressed(KeyCode::T) {
+            self.ctx.edit.tool = Tool::Tile;
+        }
+
+        if let Some(num) = self.num() {
+            let t = num as u32;
+            match self.ctx.edit.tool {
+                Tool::Tile => self.ctx.edit.tile_texture = t,
+                Tool::Entity => self.ctx.edit.entity_texture = t,
+            }
+        }
+
+        if is_mouse_button_down(MouseButton::Left) {
+            let cell = self.ctx.input.mouse_pos_world.floor();
+            match self.ctx.edit.tool {
+                Tool::Tile => {
+                    if let Some(cell) = self.ctx.map.grid.get_mut(cell.x as i32, cell.y as i32) {
+                        cell.tile = Some(self.ctx.edit.tile_texture);
+                    }
+                },
+                Tool::Entity => {
+
+                },
+            }
+        }
+    }
+
     pub fn input(&mut self) {
         if is_key_pressed(KeyCode::F1) {
             self.ctx.commands.push(Command::Restart);
@@ -26,6 +71,20 @@ impl Engine {
             y += 1.0;
         }
     
-        self.ctx.player_input = PlayerInput { dir:Vec2::new(x, y), action: action };
+        let m = Vec2::new(mouse_position().0, mouse_position().1);
+        self.ctx.input = PlayerInput { 
+            dir:Vec2::new(x, y), 
+            action: action,
+            mouse_pos_screen:m,
+            mouse_pos_world:self.to_world(m),
+            mouse_left_down:is_mouse_button_down(MouseButton::Left),
+            mouse_right_down:is_mouse_button_down(MouseButton::Right),
+            mouse_left_pressed:is_mouse_button_pressed(MouseButton::Left),
+            mouse_right_pressed:is_mouse_button_pressed(MouseButton::Right)
+        };
+        
+        if self.ctx.mode == Mode::Edit {
+            self.edit_input();
+        }
     }
 }
