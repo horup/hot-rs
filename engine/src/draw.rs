@@ -62,12 +62,12 @@ impl Engine {
     }
 
     fn draw_edit_ui(&mut self) {
-        let space = 16.0;
+        let _space = 16.0;
        
     }
 
     fn draw_grid(&mut self) {
-        let o = self.to_world(Vec2::new(0.0, 0.0));
+        let _o = self.to_world(Vec2::new(0.0, 0.0));
         let size = self.ctx.state.tilemap.size();
         for x in 0..(size+1) {
             let x = x as f32;

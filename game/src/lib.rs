@@ -1,4 +1,4 @@
-use context::{Command, Context, Mode, Tool};
+use context::{Command, Context, Mode};
 
 static PLAYER_TEXTURE: u32 = 1;
 static PIGGY_TEXTURE: u32 = 2;
