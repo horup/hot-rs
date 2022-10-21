@@ -20,8 +20,8 @@ impl Engine {
         .titlebar(true)
         .movable(false)
         .ui(&mut *root_ui(), |ui| {
-            let mut textures = Vec::new();
-            let mut selected = 0;
+            let textures:Vec<u32>;
+            let mut selected:u32;
 
             match self.ctx.edit.tool {
                 Tool::Tile => {
