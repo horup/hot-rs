@@ -111,6 +111,23 @@ impl Engine {
         }
     }
 
+
+    pub fn draw_tex(&self, p:Vec2, tex:&Texture2D) {
+        let p1 = self.to_screen(Vec2::new(p.x as f32,  p.y as f32));
+        let p2 = self.to_screen(Vec2::new(p.x as f32 + 1.0, p.y as f32 + 1.0));
+        let v = p2 - p1;
+        let w = v.x;
+        let h = v.y;
+
+        let a = (1.5 / (tex.width() / tex.height())) - 1.0;
+        let x = p1.x;
+        let y = p1.y - a * h;
+        
+        draw_texture_ex(tex.clone(), x, y, WHITE, DrawTextureParams {
+            dest_size:Some(Vec2::new(w,h + a * h)),
+            ..Default::default()
+        });
+    }
     pub fn draw_map(&mut self) {
         let map = &self.ctx.map;
         for y in 0..map.grid.size() {
@@ -123,16 +140,14 @@ impl Engine {
                 if let Some(cell) = map.grid.get(x as i32, y as i32) {
                     if let Some(tile) = cell.tile {
                         if let Some(tex) = self.textures.get(&tile) {
-                            let a = (1.5 / (tex.width() / tex.height())) - 1.0;
-                            let x = p1.x;
-                            let y = p1.y - a * h;
-                            
-                            
-                            draw_texture_ex(tex.clone(), x, y, WHITE, DrawTextureParams {
-                                dest_size:Some(Vec2::new(w,h + a * h)),
-                                ..Default::default()
-                            });
-                            //draw_rectangle(p1.x, p1.y, w, h, RED);
+                            self.draw_tex(Vec2::new(x as f32, y as f32), tex);
+                        }
+                    }
+
+                    if let Some(entity) = cell.entity {
+                        if let Some(tex) = self.textures.get(&entity) {
+
+                            self.draw_tex(Vec2::new(x as f32, y as f32), tex);
                         }
                     }
                     

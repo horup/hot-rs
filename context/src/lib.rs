@@ -99,6 +99,7 @@ impl Default for Mode {
 
 #[derive(Default)]
 pub struct Context {
+    pub over_ui:bool,
     pub mode:Mode,
     pub map:Map,
     pub state:State,

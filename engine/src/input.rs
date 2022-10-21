@@ -19,6 +19,7 @@ impl Engine {
     }
 
     pub fn edit_input(&mut self) {
+
         if is_key_pressed(KeyCode::E) {
             self.ctx.edit.tool = Tool::Entity;
         }
@@ -34,19 +35,32 @@ impl Engine {
             }
         }
 
-        if is_mouse_button_down(MouseButton::Left) {
+        if self.ctx.over_ui == false {
             let cell = self.ctx.input.mouse_pos_world.floor();
-            match self.ctx.edit.tool {
-                Tool::Tile => {
-                    if let Some(cell) = self.ctx.map.grid.get_mut(cell.x as i32, cell.y as i32) {
-                        cell.tile = Some(self.ctx.edit.tile_texture);
+            if let Some(cell) = self.ctx.map.grid.get_mut(cell.x as i32, cell.y as i32) {
+                if is_mouse_button_down(MouseButton::Left) {
+                    match self.ctx.edit.tool {
+                        Tool::Tile => {
+                            cell.tile = Some(self.ctx.edit.tile_texture);
+                        },
+                        Tool::Entity => {
+                            cell.entity = Some(self.ctx.edit.entity_texture);
+                        },
                     }
-                },
-                Tool::Entity => {
-
-                },
+                }
+                else if is_mouse_button_down(MouseButton::Right) {
+                    match self.ctx.edit.tool {
+                        Tool::Tile => {
+                            cell.tile = None;
+                        },
+                        Tool::Entity => {
+                            cell.entity = None;
+                        },
+                    }
+                }
             }
         }
+    
     }
 
     pub fn input(&mut self) {
