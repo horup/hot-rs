@@ -3,6 +3,7 @@ use std::{fs::Metadata, path::PathBuf, collections::HashMap};
 use context::Context;
 use libloading::{Library, Symbol};
 use macroquad::texture::Texture2D;
+use native_dialog::FileDialog;
 
 #[derive(Default)]
 pub struct Engine {
@@ -20,6 +21,26 @@ impl Engine {
         Self {
             game_lib_path: game_path,
             ..Default::default()
+        }
+    }
+
+    pub fn save_map_to_file(&self) {
+        let path = FileDialog::new()
+        .add_filter("Map file", &["map"])
+        .show_save_single_file().unwrap();
+        if let Some(path) = path {
+            let json = serde_json::to_string(&self.ctx.map).unwrap();
+            std::fs::write(path, json).unwrap();
+        }
+    }
+
+    pub fn load_map_from_file(&mut self) {
+        let path = FileDialog::new()
+        .add_filter("Map file", &["map"])
+        .show_open_single_file().unwrap();
+        if let Some(path) = path {
+            let json = std::fs::read_to_string(path).unwrap();
+            self.ctx.map = serde_json::from_str(&json).unwrap();
         }
     }
 

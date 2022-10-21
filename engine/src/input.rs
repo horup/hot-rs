@@ -20,6 +20,13 @@ impl Engine {
 
     pub fn edit_input(&mut self) {
 
+        if is_key_pressed(KeyCode::F5) {
+            self.save_map_to_file();
+        }
+        if is_key_pressed(KeyCode::F6) {
+            self.load_map_from_file();
+        }
+
         if is_key_pressed(KeyCode::E) {
             self.ctx.edit.tool = Tool::Entity;
         }

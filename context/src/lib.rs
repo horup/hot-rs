@@ -4,7 +4,7 @@ pub struct Tile {
     pub texture:u32
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Grid<T:Clone + Default> {
     size:usize,
     cells:Vec<T>
@@ -126,3 +126,4 @@ pub use edit::*;
 use glam::Vec2;
 
 pub use glam;
+use serde::{Serialize, Deserialize};
