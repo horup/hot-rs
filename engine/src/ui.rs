@@ -6,6 +6,8 @@ use crate::Engine;
 
 impl Engine {
     pub fn ui(&mut self) {
+        self.ctx.over_ui = false;
+        
         let margin = 0.0;
         let h = screen_height() - margin * 2.0;
         let w = 128.0;
