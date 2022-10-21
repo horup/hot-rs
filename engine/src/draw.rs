@@ -134,8 +134,8 @@ impl Engine {
             for x in 0..map.grid.size() {
                 let p1 = self.to_screen(Vec2::new(x as f32,  y as f32));
                 let p2 = self.to_screen(Vec2::new(x as f32 + 1.0, y as f32 + 1.0));
-                let w = p2.x - p1.x;
-                let h = p2.y - p1.y;
+                let _w = p2.x - p1.x;
+                let _h = p2.y - p1.y;
 
                 if let Some(cell) = map.grid.get(x as i32, y as i32) {
                     if let Some(tile) = cell.tile {

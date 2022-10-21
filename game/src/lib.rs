@@ -1,4 +1,4 @@
-use std::ops::Deref;
+
 
 use context::{Command, Context, Mode};
 
