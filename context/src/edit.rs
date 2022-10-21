@@ -10,9 +10,11 @@ impl Default for Tool {
     }
 }
 
-#[derive(Default, Copy, Clone)]
+#[derive(Default, Clone)]
 pub struct Edit {
-    pub tile_texture:u32,
-    pub entity_texture:u32,
+    pub tiles:Vec<u32>,
+    pub entities:Vec<u32>,
+    pub selected_tile:u32,
+    pub selected_entity:u32,
     pub tool:Tool
 }

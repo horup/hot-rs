@@ -30,8 +30,8 @@ impl Engine {
         if let Some(num) = self.num() {
             let t = num as u32;
             match self.ctx.edit.tool {
-                Tool::Tile => self.ctx.edit.tile_texture = t,
-                Tool::Entity => self.ctx.edit.entity_texture = t,
+                Tool::Tile => self.ctx.edit.selected_tile = t,
+                Tool::Entity => self.ctx.edit.selected_entity = t,
             }
         }
 
@@ -41,10 +41,10 @@ impl Engine {
                 if is_mouse_button_down(MouseButton::Left) {
                     match self.ctx.edit.tool {
                         Tool::Tile => {
-                            cell.tile = Some(self.ctx.edit.tile_texture);
+                            cell.tile = Some(self.ctx.edit.selected_tile);
                         },
                         Tool::Entity => {
-                            cell.entity = Some(self.ctx.edit.entity_texture);
+                            cell.entity = Some(self.ctx.edit.selected_entity);
                         },
                     }
                 }
