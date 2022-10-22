@@ -1,4 +1,3 @@
-use context::Mode;
 use macroquad::prelude::*;
 use crate::Engine;
 
@@ -187,7 +186,7 @@ impl Engine {
             self.draw_grid();
         }
 
-        if self.ctx.mode == Mode::Edit {
+        if self.ctx.edit_mode {
             self.draw_map();
         }
 

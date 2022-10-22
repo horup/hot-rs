@@ -1,4 +1,4 @@
-use context::{Command, PlayerInput, glam::Vec2, Mode, Tool};
+use context::{Command, PlayerInput, glam::Vec2, Tool};
 use macroquad::prelude::{is_key_pressed, KeyCode, is_key_down, mouse_position, is_mouse_button_down, MouseButton, is_mouse_button_pressed};
 
 use crate::Engine;
@@ -19,7 +19,6 @@ impl Engine {
     }
 
     pub fn edit_input(&mut self) {
-
         if is_key_pressed(KeyCode::F5) {
             self.save_map_to_file();
         }
@@ -71,6 +70,10 @@ impl Engine {
     }
 
     pub fn input(&mut self) {
+        if is_key_pressed(KeyCode::Tab) {
+            self.ctx.edit_mode = !self.ctx.edit_mode;
+        }
+        
         if is_key_pressed(KeyCode::F1) {
             self.ctx.commands.push(Command::Restart);
         }
@@ -104,7 +107,7 @@ impl Engine {
             mouse_right_pressed:is_mouse_button_pressed(MouseButton::Right)
         };
         
-        if self.ctx.mode == Mode::Edit {
+        if self.ctx.edit_mode {
             self.edit_input();
         }
     }

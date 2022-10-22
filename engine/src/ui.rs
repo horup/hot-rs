@@ -5,8 +5,8 @@ use crate::Engine;
 
 
 impl Engine {
-    pub fn ui(&mut self) {
-        self.ctx.over_ui = false;
+
+    pub fn edit_ui(&mut self) {
         
         let margin = 0.0;
         let h = screen_height() - margin * 2.0;
@@ -58,5 +58,12 @@ impl Engine {
 
             self.ctx.over_ui = ui.is_mouse_over(self.ctx.input.mouse_pos_screen);
         });
+    }
+
+    pub fn ui(&mut self) {
+        self.ctx.over_ui = false;
+        if self.ctx.edit_mode {
+            self.edit_ui();
+        }
     }
 }

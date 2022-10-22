@@ -84,34 +84,22 @@ pub struct PlayerInput {
     pub mouse_right_pressed:bool
 }
 
-
-#[derive(PartialEq, Eq, Clone, Copy)]
-pub enum Mode {
-    Play,
-    Edit
-}
-
-impl Default for Mode {
-    fn default() -> Self {
-        Mode::Play
-    }
-}
-
 #[derive(Default)]
 pub struct Context {
     pub over_ui:bool,
-    pub mode:Mode,
+    pub edit_mode:bool,
     pub map:Map,
     pub state:State,
     pub commands:Vec<Command>,
     pub input:PlayerInput,
     pub debug:bool,
-    pub edit:Edit
+    pub edit:Edit,
+    pub dt:f32
 }
 
 impl Context {
-    pub fn define_texture(&mut self, handle:u32, src:&str) {
-        self.commands.push(Command::DefineTexture { handle: handle, path: src.into() })
+    pub fn define_texture(&mut self, handle: impl Into<u32>, src:&str) {
+        self.commands.push(Command::DefineTexture { handle: handle.into(), path: src.into() })
     }
 }
 

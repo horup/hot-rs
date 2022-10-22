@@ -2,7 +2,7 @@ use std::{fs::Metadata, path::PathBuf, collections::HashMap};
 
 use context::Context;
 use libloading::{Library, Symbol};
-use macroquad::texture::Texture2D;
+use macroquad::{texture::Texture2D, time::get_frame_time};
 use native_dialog::FileDialog;
 
 #[derive(Default)]
@@ -99,13 +99,16 @@ impl Engine {
     }
 
     pub async fn update(&mut self) {
+        self.ctx.dt = get_frame_time();
         self.input();
         self.process_commands().await;
 
-        if let Some(lib) = self.game_lib.as_mut() {
-            unsafe {
-                let update_func:Symbol<fn(state:&mut Context)> = lib.get(b"update").unwrap();
-                update_func(&mut self.ctx);
+        if self.ctx.edit_mode == false {
+            if let Some(lib) = self.game_lib.as_mut() {
+                unsafe {
+                    let update_func:Symbol<fn(state:&mut Context)> = lib.get(b"update").unwrap();
+                    update_func(&mut self.ctx);
+                }
             }
         }
 
