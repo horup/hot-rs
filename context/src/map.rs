@@ -1,21 +1,14 @@
-use enumflags2::{bitflags, BitFlags};
 use serde::{Serialize, Deserialize};
-
 use crate::Grid;
-
-#[bitflags]
-#[repr(u32)]
-#[derive(Copy, Clone, Serialize, Deserialize)]
-pub enum TileFlags {
-    Wall
-}
 
 #[derive(Clone, Copy, Default, Serialize, Deserialize)]
 pub struct MapCell {
+    #[serde(default)]
     pub tile:Option<u32>,
+    #[serde(default)]
     pub entity:Option<u32>,
-    pub blocks:bool,
-    pub tile_flags:BitFlags<TileFlags>
+    #[serde(default)]
+    pub blocks:bool
 }
 
 #[derive(Clone, Default, Serialize, Deserialize)]

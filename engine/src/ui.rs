@@ -25,6 +25,7 @@ impl Engine {
 
             match self.ctx.edit.tool {
                 Tool::Tile => {
+                    ui.label(None, &format!("blocks = {}", self.ctx.edit.blocks));
                     textures = self.ctx.edit.tiles.clone();
                     selected = self.ctx.edit.selected_tile;
                 },

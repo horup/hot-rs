@@ -19,6 +19,11 @@ impl Engine {
     }
 
     pub fn edit_input(&mut self) {
+
+        if is_key_pressed(KeyCode::B) {
+            self.ctx.edit.blocks = !self.ctx.edit.blocks;
+        }
+
         let (_, mw_y) = mouse_wheel();
         self.ctx.state.camera.zoom -= mw_y / 100.0;
         if self.ctx.state.camera.zoom < 2.0 {
@@ -58,6 +63,7 @@ impl Engine {
                     match self.ctx.edit.tool {
                         Tool::Tile => {
                             cell.tile = Some(self.ctx.edit.selected_tile);
+                            cell.blocks = self.ctx.edit.blocks;
                         },
                         Tool::Entity => {
                             cell.entity = Some(self.ctx.edit.selected_entity);
@@ -68,6 +74,7 @@ impl Engine {
                     match self.ctx.edit.tool {
                         Tool::Tile => {
                             cell.tile = None;
+                            cell.blocks = false;
                         },
                         Tool::Entity => {
                             cell.entity = None;
