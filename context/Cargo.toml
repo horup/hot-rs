@@ -9,3 +9,4 @@ edition = "2021"
 macroquad = "0.3"
 glam = "0.21.3"
 serde = { version = "1.0", features = ["derive"] }
+enumflags2 = { version = "0.7.5", features = ["serde"] }

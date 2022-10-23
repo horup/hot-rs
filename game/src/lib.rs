@@ -34,12 +34,6 @@ pub fn init(ctx: &mut Context) {
 
 #[no_mangle]
 pub fn update(engine: &mut Context) {
-    println!("{:?}", 1);
-    engine.state.iterations += 1;
-    let speed = 0.1;
-    engine.state.camera.zoom = 16.0;
-    engine.state.camera.pos += engine.input.dir * speed;
-
     if engine.input.action {
         engine.commands.push(Command::FlashScreen {});
     }
