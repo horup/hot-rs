@@ -1,9 +1,7 @@
 use context::{Command, Context};
 
 pub enum Textures {
-    Player = 1,
     Piggy = 2,
-    Key = 3,
     TiledFloorGray = 6,
     GrassFloor = 7,
     BushWall = 8,
@@ -15,7 +13,9 @@ pub enum Textures {
     Viktor = 14,
     PokemonCard = 15,
     WhiteDoor = 16,
-    WhiteDoorSide = 17
+    WhiteDoorSide = 17,
+    Plant = 18,
+    HappyPoster = 19,
 }
 impl Into<u32> for Textures {
     fn into(self) -> u32 {
@@ -28,9 +28,6 @@ pub fn init(ctx: &mut Context) {
     ctx.edit_mode = true;
     ctx.debug = true;
 
-    ctx.define_texture(Textures::Player, "assets/textures/guy3.png");
-    ctx.define_texture(Textures::Piggy, "assets/textures/piggy4.png");
-    ctx.define_texture(Textures::Key, "assets/textures/key3.png");
     ctx.define_texture(
         Textures::TiledFloorGray,
         "assets/textures/tiled_floor_gray.png",
@@ -47,6 +44,9 @@ pub fn init(ctx: &mut Context) {
     ctx.define_texture(Textures::PokemonCard, "assets/textures/pokemon_card.png");
     ctx.define_texture(Textures::WhiteDoor, "assets/textures/white_door.png");
     ctx.define_texture(Textures::WhiteDoorSide, "assets/textures/white_door_side.png");
+    ctx.define_texture(Textures::Plant, "assets/textures/plant.png");
+    ctx.define_texture(Textures::HappyPoster, "assets/textures/happy_poster.png");
+    ctx.define_texture(Textures::Piggy, "assets/textures/piggy.png");
 
     let edit = &mut ctx.edit;
     edit.entities = [
@@ -54,7 +54,10 @@ pub fn init(ctx: &mut Context) {
         Textures::Viktor.into(),
         Textures::PokemonCard.into(),
         Textures::WhiteDoor.into(),
-        Textures::WhiteDoorSide.into()
+        Textures::WhiteDoorSide.into(),
+        Textures::Plant.into(),
+        Textures::HappyPoster.into(),
+        Textures::Piggy.into()
     ]
     .to_vec()
     .into();
