@@ -1,5 +1,5 @@
 use engine::*;
-use macroquad::prelude::*;
+use macroquad::{prelude::*, window};
 
 #[macroquad::main("Hot!")]
 async fn main() {

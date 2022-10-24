@@ -19,7 +19,7 @@ impl Engine {
     }
 
     pub fn edit_input(&mut self) {
-
+        let before = self.ctx.map.clone();
         if is_key_pressed(KeyCode::B) {
             self.ctx.edit.blocks = !self.ctx.edit.blocks;
         }
@@ -82,6 +82,11 @@ impl Engine {
                     }
                 }
             }
+        }
+
+        let after = self.ctx.map.clone();
+        if after != before {
+            
         }
     
     }

@@ -1,3 +1,5 @@
+use crate::Map;
+
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub enum Tool {
     Tile,
@@ -17,5 +19,6 @@ pub struct Edit {
     pub selected_tile:u32,
     pub selected_entity:u32,
     pub tool:Tool,
-    pub blocks:bool
+    pub blocks:bool,
+    pub history:Vec<Map>
 }

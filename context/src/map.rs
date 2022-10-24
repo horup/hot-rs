@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 use crate::Grid;
 
-#[derive(Clone, Copy, Default, Serialize, Deserialize)]
+#[derive(Clone, Copy, Default, Serialize, Deserialize, PartialEq)]
 pub struct MapCell {
     #[serde(default)]
     pub tile:Option<u32>,
@@ -11,7 +11,7 @@ pub struct MapCell {
     pub blocks:bool
 }
 
-#[derive(Clone, Default, Serialize, Deserialize)]
+#[derive(Clone, Default, Serialize, Deserialize, PartialEq)]
 pub struct Map {
     pub version:u8,
     pub grid:Grid<MapCell>
