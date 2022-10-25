@@ -198,6 +198,23 @@ impl Engine {
         }*/
     }
     
+    pub fn draw_debug(&mut self) {
+        let mut y = 0.0;
+        macro_rules! txt {
+            ($s:expr) => {
+                let size = 16.0;
+                let m = measure_text($s, None, size as u16, 1.0);
+                y += size;
+                let x = screen_width() - m.width - size / 2.0;
+                draw_text($s, x, y, size, WHITE);
+            };
+        }
+
+       txt!(&format!("FPS: {:?}", get_fps()));
+       txt!(&format!("Mouse Pos: {:.2},{:.2}", self.ctx.input.mouse_pos_world.x, self.ctx.input.mouse_pos_world.y));
+       txt!(&format!("Zoom: {:.2}", self.ctx.state.camera.zoom));
+    }
+
     pub fn draw(&mut self) {
         let dt = get_frame_time();
 
@@ -238,5 +255,10 @@ impl Engine {
         }
 
         self.draw_cursor();
+
+        
+        if self.ctx.debug {
+            self.draw_debug();
+        }
     }
 }
