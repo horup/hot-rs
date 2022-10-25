@@ -19,7 +19,9 @@ pub enum Textures {
     GoldDoor = 20,
     GoldKey = 21,
     BlueDoor = 22,
-    BlueKey = 23
+    BlueKey = 23,
+    WaypointMarker = 24,
+    ExitMarker = 25
 }
 impl Into<u32> for Textures {
     fn into(self) -> u32 {
@@ -67,6 +69,8 @@ pub fn init(ctx: &mut Context) {
     def_entity!(Textures::GoldKey, "assets/textures/gold_key.png");
     def_entity!(Textures::BlueDoor, "assets/textures/blue_door.png");
     def_entity!(Textures::BlueKey, "assets/textures/blue_key.png");
+    def_entity!(Textures::WaypointMarker, "assets/textures/waypoint_marker.png");
+    def_entity!(Textures::ExitMarker, "assets/textures/exit_marker.png");
 
     let edit = &mut ctx.edit;
     edit.entities = entities.into();
