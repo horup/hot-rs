@@ -60,11 +60,6 @@ impl Engine {
 
     }
 
-    fn draw_edit_ui(&mut self) {
-        let _space = 16.0;
-       
-    }
-
     fn draw_grid(&mut self) {
         let _o = self.to_world(Vec2::new(0.0, 0.0));
         let size = self.ctx.state.tilemap.size();
@@ -122,8 +117,16 @@ impl Engine {
         let x = p1.x;
         let y = p1.y - a * h;
         
+        let dw = w;
+        let dh = h + a * h;
+
+        let x = x.floor();
+        let y = y.floor();
+        let dw = dw.floor();
+        let dh = dh.floor();
+
         draw_texture_ex(tex.clone(), x, y, WHITE, DrawTextureParams {
-            dest_size:Some(Vec2::new(w,h + a * h)),
+            dest_size:Some(Vec2::new(dw,dh)),
             ..Default::default()
         });
     }
@@ -202,6 +205,7 @@ impl Engine {
     
     pub fn draw(&mut self) {
         let dt = get_frame_time();
+
         if self.ctx.debug {
             self.draw_grid();
         }
@@ -239,6 +243,5 @@ impl Engine {
         }
 
         self.draw_cursor();
-        self.draw_edit_ui();
     }
 }

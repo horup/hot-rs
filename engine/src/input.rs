@@ -30,6 +30,7 @@ impl Engine {
             self.ctx.state.camera.zoom = 2.0;
         }
 
+
         let speed = self.ctx.state.camera.zoom * self.ctx.dt;
         self.ctx.state.camera.pos += self.ctx.input.dir * speed;
 
