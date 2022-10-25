@@ -120,11 +120,6 @@ impl Engine {
         let dw = w;
         let dh = h + a * h;
 
-        let x = x.floor();
-        let y = y.floor();
-        let dw = dw.floor();
-        let dh = dh.floor();
-
         draw_texture_ex(tex.clone(), x, y, WHITE, DrawTextureParams {
             dest_size:Some(Vec2::new(dw,dh)),
             ..Default::default()
