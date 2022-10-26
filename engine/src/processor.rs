@@ -1,6 +1,6 @@
 use context::{Command, Context};
 use libloading::{Symbol};
-use macroquad::texture::{Texture2D, load_texture, FilterMode, build_textures_atlas};
+use macroquad::texture::{Texture2D, load_texture, FilterMode};
 use crate::Engine;
 
 

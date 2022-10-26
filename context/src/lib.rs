@@ -15,6 +15,7 @@ pub struct PlayerInput {
     pub mouse_right_pressed: bool,
 }
 
+#[derive(Default)]
 pub struct Context {
     pub edit_camera: Camera,
     pub game_camera: Camera,
@@ -28,28 +29,8 @@ pub struct Context {
     pub debug: bool,
     pub edit: Edit,
     pub dt: f32,
-    pub game: Box<dyn Any>,
 }
 
-impl Default for Context {
-    fn default() -> Self {
-        Self {
-            edit_camera: Default::default(),
-            game_camera: Default::default(),
-            over_ui: Default::default(),
-            edit_mode: Default::default(),
-            map: Default::default(),
-            entities: Default::default(),
-            tilemap: Default::default(),
-            commands: Default::default(),
-            input: Default::default(),
-            debug: Default::default(),
-            edit: Default::default(),
-            dt: Default::default(),
-            game: Box::new(0),
-        }
-    }
-}
 
 impl Context {
     pub fn define_texture(&mut self, handle: impl Into<u32>, src: &str) {
@@ -61,7 +42,6 @@ impl Context {
 }
 
 mod entity;
-use std::any::Any;
 
 pub use entity::*;
 

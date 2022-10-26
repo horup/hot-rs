@@ -63,7 +63,10 @@ impl Engine {
                 }
             }
 
+            let mut state:Vec<u8> = Vec::new();
             if unload {
+                state = self.call_game_serialize().clone();
+
                 if let Some(lib) = self.game_lib.take() {
                     lib.close().unwrap();
                 }
@@ -82,6 +85,9 @@ impl Engine {
                                 self.game_lib_metadata = Some(metadata);
                                 self.game_lib = Some(lib);
                                 println!("Game lib loaded");
+                                if state.len() > 0 {
+                                    self.call_game_deserialize(&state);
+                                }
                             },
                             Err(err) => {
                                 println!("Could not load game lib with err:{:?}", err);
@@ -108,6 +114,26 @@ impl Engine {
             unsafe {
                 let update_func:Symbol<fn(state:&mut Context)> = lib.get(b"start").unwrap();
                 update_func(&mut self.ctx);
+            }
+        }
+    }
+
+    pub fn call_game_serialize(&mut self) -> Vec<u8> {
+        if let Some(lib) = self.game_lib.as_mut() {
+            unsafe {
+                let f:Symbol<fn()->Vec<u8>> = lib.get(b"serialize").unwrap();
+                return f();
+            }
+        }
+
+        return Vec::new();
+    }
+
+    pub fn call_game_deserialize(&mut self, state:&Vec<u8>) {
+        if let Some(lib) = self.game_lib.as_mut() {
+            unsafe {
+                let f:Symbol<fn(state:&Vec<u8>)> = lib.get(b"deserialize").unwrap();
+                f(state);
             }
         }
     }

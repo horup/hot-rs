@@ -1,10 +1,13 @@
 use context::{Context, Command, generational_arena::{Arena, Index}};
+use serde::{Serialize, Deserialize};
+pub static mut STATE:Option<State> = None;
 
-#[derive(Default)]
+#[derive(Default, Serialize, Deserialize)]
 pub struct State {
     pub iterations:usize,
     pub player:Option<Index>
 }
+
 
 pub enum Textures {
     Piggy = 2,
@@ -37,7 +40,9 @@ impl Into<u32> for Textures {
 
 #[no_mangle]
 pub fn init(ctx: &mut Context) {
-    ctx.game = Box::new(State::default());
+    unsafe {
+        STATE = Some(State::default());
+    }
    // ctx.edit_mode = true;
     ctx.debug = true;
     ctx.edit_camera.zoom = 16.0;
