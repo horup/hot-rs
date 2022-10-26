@@ -7,8 +7,8 @@ pub use input::*;
 mod draw;
 pub use draw::*;
 
-mod process_commands;
-pub use process_commands::*;
+mod processor;
+pub use processor::*;
 
 mod ui;
 pub use ui::*;
