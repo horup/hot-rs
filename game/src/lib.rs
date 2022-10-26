@@ -1,116 +1,43 @@
-use context::{Command, Context, GameState, Entity, glam::Vec2};
+use context::{Command, Context, Entity, glam::{Vec3}, Grid};
 
-pub enum Textures {
-    Piggy = 2,
-    TiledFloorGray = 6,
-    GrassFloor = 7,
-    BushWall = 8,
-    BrickWall = 9,
-    BlackWall = 10,
-    WhiteWall = 11,
-    WoodFloor = 12,
-    William = 13,
-    Viktor = 14,
-    PokemonCard = 15,
-    WhiteDoor = 16,
-    WhiteDoorSide = 17,
-    Plant = 18,
-    HappyPoster = 19,
-    GoldDoor = 20,
-    GoldKey = 21,
-    BlueDoor = 22,
-    BlueKey = 23,
-    WaypointMarker = 24,
-    ExitMarker = 25
-}
-impl Into<u32> for Textures {
-    fn into(self) -> u32 {
-        self as u32
-    }
-}
 
 #[no_mangle]
 pub fn start(ctx:&mut Context) {
-    ctx.game_state = GameState::default();
+    ctx.game = Box::new(State::default());
+    let game = ctx.game.downcast_mut::<State>().unwrap();
 
-    dbg!("Start");
+    ctx.entities.clear();
+    ctx.tilemap = Grid::default();
+
     ctx.map.grid.for_each(|cell, x, y| {
         if let Some(entity) = cell.entity {
             if entity == Textures::William.into() {
                 dbg!("Spawning William");
-                ctx.game_state.entities.push(Entity {
-                    x: x as f32 + 0.5,
-                    y: y as f32 + 0.5,
-                    texture:Textures::William.into(),
+                let player_entity = ctx.entities.insert(Entity {
+                    pos:Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
+                    texture:Textures::William.into()
                 });
+                game.player = Some(player_entity);
             }
         }
     })
 }
 
-#[no_mangle]
-pub fn init(ctx: &mut Context) {
-    ctx.edit_mode = true;
-    ctx.debug = true;
-    ctx.edit_camera.zoom = 16.0;
-   
-    let mut tiles:Vec<u32> = Vec::new();
-    macro_rules! def_tile {
-        ($handle:expr, $path:expr) => {
-            ctx.define_texture($handle, $path);
-            tiles.push($handle.into());
-        };
-    }
-    def_tile!(Textures::TiledFloorGray, "assets/textures/tiled_floor_gray.png");
-    def_tile!(Textures::GrassFloor, "assets/textures/grass_floor.png");
-    def_tile!(Textures::BushWall, "assets/textures/bush_wall.png");
-    def_tile!(Textures::BrickWall, "assets/textures/brick_wall_red.png");
-    def_tile!(Textures::BlackWall, "assets/textures/black_wall.png");
-    def_tile!(Textures::WhiteWall, "assets/textures/white_wall.png");
-    def_tile!(Textures::WoodFloor, "assets/textures/wood_floor.png");
-
-    let mut entities:Vec<u32> = Vec::new();
-    macro_rules! def_entity {
-        ($handle:expr, $path:expr) => {
-            ctx.define_texture($handle, $path);
-            entities.push($handle.into());
-        };
-    }
-    def_entity!(Textures::William, "assets/textures/william.png");
-    def_entity!(Textures::Viktor, "assets/textures/viktor.png");
-    def_entity!(Textures::PokemonCard, "assets/textures/pokemon_card.png");
-    def_entity!(Textures::WhiteDoor, "assets/textures/white_door.png");
-    def_entity!(Textures::WhiteDoorSide, "assets/textures/white_door_side.png");
-    def_entity!(Textures::Plant, "assets/textures/plant.png");
-    def_entity!(Textures::HappyPoster, "assets/textures/happy_poster.png");
-    def_entity!(Textures::Piggy, "assets/textures/piggy.png");
-    def_entity!(Textures::GoldDoor, "assets/textures/gold_door.png");
-    def_entity!(Textures::GoldKey, "assets/textures/gold_key.png");
-    def_entity!(Textures::BlueDoor, "assets/textures/blue_door.png");
-    def_entity!(Textures::BlueKey, "assets/textures/blue_key.png");
-    def_entity!(Textures::WaypointMarker, "assets/textures/waypoint_marker.png");
-    def_entity!(Textures::ExitMarker, "assets/textures/exit_marker.png");
-
-    let edit = &mut ctx.edit;
-    edit.entities = entities.into();
-    edit.tiles = tiles.into();
-
-
-    ctx.commands.push(Command::LoadMap { map_path:"assets/maps/test.map".into()});
-}
 
 #[no_mangle]
 pub fn update(ctx: &mut Context) {
+    let game = ctx.game.downcast_mut::<State>().unwrap();
     let dt = ctx.dt;
-    for e in &mut ctx.game_state.entities {
 
-        let speed = 2.0;
-        let v = ctx.input.dir * speed * dt;
-        e.x += v.x;
-        e.y += v.y;
-        if Textures::William as u32 == e.texture {
-            ctx.game_camera.pos = Vec2::new(e.x, e.y);
+
+    if let Some(index) = game.player {
+        if let Some(e) = ctx.entities.get_mut(index) {
+            let speed = 2.0;
+            let v = ctx.input.dir * speed * dt;
+            e.pos += v.extend(0.0);
             ctx.game_camera.zoom = 8.0;
+            ctx.game_camera.pos = e.pos.truncate();
+            println!("{:?}", e.pos); 
         }
     }
 
@@ -118,3 +45,7 @@ pub fn update(ctx: &mut Context) {
         ctx.commands.push(Command::FlashScreen {});
     }
 }
+
+
+mod init;
+pub use init::*;

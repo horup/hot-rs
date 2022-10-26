@@ -58,7 +58,7 @@ impl Engine {
 
     fn draw_grid(&self) {
         let _o = self.to_world(Vec2::new(0.0, 0.0));
-        let size = self.ctx.game_state.tilemap.size();
+        let size = self.ctx.tilemap.size();
         for x in 0..(size+1) {
             let x = x as f32;
             let p1 = self.to_screen(Vec2::new(x, 0.0));
@@ -74,7 +74,7 @@ impl Engine {
     }
 
     pub fn draw_floor(&self) {
-        let tilemap = &self.ctx.game_state.tilemap;
+        let tilemap = &self.ctx.tilemap;
         for y in 0..tilemap.size() {
             for x in 0..tilemap.size() {
                 let p1 = self.to_screen(Vec2::new(x as f32,  y as f32));
@@ -222,6 +222,10 @@ impl Engine {
         } else {
             let a = self.flash_timer / self.flash_timer_start;
             draw_rectangle(0.0, 0.0, screen_width(), screen_height(), Color::new(1.0, 1.0, 1.0, a));
+        }
+
+        if self.ctx.debug {
+            
         }
     }
 

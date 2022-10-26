@@ -16,6 +16,10 @@ impl Engine {
                             let init_func:Symbol<fn(state:&mut Context)> = lib.get(b"init").unwrap();
                             init_func(&mut self.ctx);
                         }
+
+                        if self.ctx.edit_mode == false {
+                            self.call_game_start();
+                        }
                     }
                 }
                 Command::DefineTexture { handle, path } => {
@@ -29,6 +33,9 @@ impl Engine {
                 }
                 Command::LoadMap { map_path } => {
                     self.load_map_from_path(map_path);
+                    if self.ctx.edit_mode == false {
+                        self.call_game_start();
+                    }
                 }
             }
         }
