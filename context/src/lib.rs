@@ -12,20 +12,9 @@ pub struct Entity {
     pub texture:u32
 }
 
-#[derive(Debug, Clone)]
-pub struct Camera {
-    pub pos:Vec2,
-    pub zoom:f32
-}
-impl Default for Camera {
-    fn default() -> Self {
-        Self { pos: Default::default(), zoom: 1.0 / 8.0 }
-    }
-}
 
 #[derive(Default, Debug, Clone)]
-pub struct State {
-    pub camera:Camera,
+pub struct GameState {
     pub iterations:u64,
     pub entities:Vec<Entity>,
     pub tilemap:Grid<Tile>
@@ -45,10 +34,12 @@ pub struct PlayerInput {
 
 #[derive(Default)]
 pub struct Context {
+    pub edit_camera:Camera,
+    pub game_camera:Camera,
     pub over_ui:bool,
     pub edit_mode:bool,
     pub map:Map,
-    pub state:State,
+    pub game_state:GameState,
     pub commands:Vec<Command>,
     pub input:PlayerInput,
     pub debug:bool,
@@ -71,6 +62,8 @@ mod edit;
 pub use edit::*;
 mod grid;
 pub use grid::*;
+mod camera;
+pub use camera::*;
 
 use glam::Vec2;
 pub use glam;

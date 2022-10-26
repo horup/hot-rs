@@ -25,14 +25,14 @@ impl Engine {
         }
 
         let (_, mw_y) = mouse_wheel();
-        self.ctx.state.camera.zoom -= mw_y / 100.0;
-        if self.ctx.state.camera.zoom < 2.0 {
-            self.ctx.state.camera.zoom = 2.0;
+        self.ctx.edit_camera.zoom -= mw_y / 100.0;
+        if self.ctx.edit_camera.zoom < 2.0 {
+            self.ctx.edit_camera.zoom = 2.0;
         }
 
 
-        let speed = self.ctx.state.camera.zoom * self.ctx.dt;
-        self.ctx.state.camera.pos += self.ctx.input.dir * speed;
+        let speed = self.ctx.edit_camera.zoom * self.ctx.dt;
+        self.ctx.edit_camera.pos += self.ctx.input.dir * speed;
 
 
         if is_key_pressed(KeyCode::F5) {

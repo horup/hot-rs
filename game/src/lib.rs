@@ -1,4 +1,4 @@
-use context::{Command, Context};
+use context::{Command, Context, GameState, Entity, glam::Vec2};
 
 pub enum Textures {
     Piggy = 2,
@@ -31,14 +31,28 @@ impl Into<u32> for Textures {
 
 #[no_mangle]
 pub fn start(ctx:&mut Context) {
-    println!("Starting game");
+    ctx.game_state = GameState::default();
+
+    dbg!("Start");
+    ctx.map.grid.for_each(|cell, x, y| {
+        if let Some(entity) = cell.entity {
+            if entity == Textures::William.into() {
+                dbg!("Spawning William");
+                ctx.game_state.entities.push(Entity {
+                    x: x as f32 + 0.5,
+                    y: y as f32 + 0.5,
+                    texture:Textures::William.into(),
+                });
+            }
+        }
+    })
 }
 
 #[no_mangle]
 pub fn init(ctx: &mut Context) {
     ctx.edit_mode = true;
     ctx.debug = true;
-    ctx.state.camera.zoom = 16.0;
+    ctx.edit_camera.zoom = 16.0;
    
     let mut tiles:Vec<u32> = Vec::new();
     macro_rules! def_tile {
@@ -86,8 +100,21 @@ pub fn init(ctx: &mut Context) {
 }
 
 #[no_mangle]
-pub fn update(engine: &mut Context) {
-    if engine.input.action {
-        engine.commands.push(Command::FlashScreen {});
+pub fn update(ctx: &mut Context) {
+    let dt = ctx.dt;
+    for e in &mut ctx.game_state.entities {
+
+        let speed = 2.0;
+        let v = ctx.input.dir * speed * dt;
+        e.x += v.x;
+        e.y += v.y;
+        if Textures::William as u32 == e.texture {
+            ctx.game_camera.pos = Vec2::new(e.x, e.y);
+            ctx.game_camera.zoom = 8.0;
+        }
+    }
+
+    if ctx.input.action {
+        ctx.commands.push(Command::FlashScreen {});
     }
 }

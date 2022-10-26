@@ -2,12 +2,19 @@ use macroquad::prelude::*;
 use crate::Engine;
 
 impl Engine {
+    pub fn active_camera(&self) -> &context::Camera {
+        if self.ctx.edit_mode {
+            return &self.ctx.edit_camera;
+        }
+
+        return &self.ctx.game_camera;
+    }
     pub fn perspective(&self) -> f32 {
         return 24.0 / 16.0;
     }
 
     pub fn scaler(&self) -> f32 {
-        let zoom = self.ctx.state.camera.zoom;
+        let zoom = self.active_camera().zoom;
         let w = screen_width();
         let h = screen_height();
 
@@ -27,7 +34,7 @@ impl Engine {
         let w = screen_width();
         let h = screen_height();
        
-        let center = self.ctx.state.camera.pos;
+        let center = self.active_camera().pos;
         let persp = self.perspective();
         let p  = Vec2::new(screen.x - w / 2.0, (screen.y - h / 2.0) * persp);
         let a = self.scaler();
@@ -39,7 +46,7 @@ impl Engine {
     pub fn to_screen(&self, world:Vec2) -> Vec2 {
         let w = screen_width();
         let h = screen_height();
-        let center = self.ctx.state.camera.pos;
+        let center = self.active_camera().pos;
         let a = self.scaler();
         
         let p = world - center;
@@ -49,20 +56,9 @@ impl Engine {
         return p;
     }
 
-    fn draw_cursor(&self) {
-       /* let p = self.ctx.input.mouse_pos_world.floor();
-        let p = self.to_screen(p);
-        
-        draw_circle(p.x, p.y, 16.0, WHITE);
-
-        let p = self.ctx.input.mouse_pos_screen;
-        draw_circle(p.x, p.y, 2.0, RED);*/
-
-    }
-
-    fn draw_grid(&mut self) {
+    fn draw_grid(&self) {
         let _o = self.to_world(Vec2::new(0.0, 0.0));
-        let size = self.ctx.state.tilemap.size();
+        let size = self.ctx.game_state.tilemap.size();
         for x in 0..(size+1) {
             let x = x as f32;
             let p1 = self.to_screen(Vec2::new(x, 0.0));
@@ -77,8 +73,8 @@ impl Engine {
         }
     }
 
-    pub fn draw_floor(&mut self) {
-        let tilemap = &self.ctx.state.tilemap;
+    pub fn draw_floor(&self) {
+        let tilemap = &self.ctx.game_state.tilemap;
         for y in 0..tilemap.size() {
             for x in 0..tilemap.size() {
                 let p1 = self.to_screen(Vec2::new(x as f32,  y as f32));
@@ -125,7 +121,7 @@ impl Engine {
             ..Default::default()
         });
     }
-    pub fn draw_map(&mut self) {
+    pub fn draw_map(&self) {
         let map = &self.ctx.map;
         for y in 0..map.grid.size() {
             for x in 0..map.grid.size() {
@@ -212,51 +208,34 @@ impl Engine {
 
        txt!(&format!("FPS: {:?}", get_fps()));
        txt!(&format!("Mouse Pos: {:.2},{:.2}", self.ctx.input.mouse_pos_world.x, self.ctx.input.mouse_pos_world.y));
-       txt!(&format!("Zoom: {:.2}", self.ctx.state.camera.zoom));
+       txt!(&format!("Zoom: {:.2}", self.active_camera().zoom));
     }
 
-    pub fn draw(&mut self) {
-        let dt = get_frame_time();
+    pub fn draw_edit_mode(&self) {
+        self.draw_map();
+    }
 
-        if self.ctx.debug {
-            self.draw_grid();
-        }
-
-        if self.ctx.edit_mode {
-            self.draw_map();
-        }
-
-      //  self.draw_floor();
-        for e in self.ctx.state.entities.iter() {
-            let tex = self.textures.get(&e.texture).unwrap();
-            let w = tex.width();
-            let h = tex.height();
-            //draw_texture(tex.clone(), e.x, e.y, WHITE);
-            let _a = w/h;
-            let _x = e.x;
-            let _y = e.y;
-          /*  draw_texture_ex(tex, x, y, WHITE, 
-                DrawTextureParams { 
-                    dest_size: (), 
-                    source: (), 
-                    rotation: (), 
-                    flip_x: (),
-                    flip_y: (), 
-                    pivot: () });*/
-        }
-
-        self.flash_timer -= dt;
-
+    pub fn draw_game_mode(&mut self) {
+        self.flash_timer -= get_frame_time();
         if self.flash_timer < 0.0 {
             self.flash_timer = 0.0;
         } else {
             let a = self.flash_timer / self.flash_timer_start;
             draw_rectangle(0.0, 0.0, screen_width(), screen_height(), Color::new(1.0, 1.0, 1.0, a));
         }
+    }
 
-        self.draw_cursor();
+    pub fn draw(&mut self) {
+        if self.ctx.debug {
+            self.draw_grid();
+        }
 
-        
+        if self.ctx.edit_mode {
+            self.draw_edit_mode();
+        } else {
+            self.draw_game_mode();
+        }
+
         if self.ctx.debug {
             self.draw_debug();
         }
