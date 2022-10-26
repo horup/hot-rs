@@ -27,6 +27,9 @@ impl Engine {
                     self.flash_timer_start = 0.5;
                     self.flash_timer = self.flash_timer_start;
                 }
+                Command::LoadMap { map_path } => {
+                    self.load_map_from_path(map_path);
+                }
             }
         }
     }

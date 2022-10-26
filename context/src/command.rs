@@ -7,5 +7,8 @@ pub enum Command {
         path:String
     },
     FlashScreen {
+    },
+    LoadMap {
+        map_path:String
     }
 }

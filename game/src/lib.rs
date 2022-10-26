@@ -29,11 +29,16 @@ impl Into<u32> for Textures {
     }
 }
 
+#[no_mangle]
+pub fn start(ctx:&mut Context) {
+    println!("Starting game");
+}
 
 #[no_mangle]
 pub fn init(ctx: &mut Context) {
     ctx.edit_mode = true;
     ctx.debug = true;
+    ctx.state.camera.zoom = 16.0;
    
     let mut tiles:Vec<u32> = Vec::new();
     macro_rules! def_tile {
@@ -75,6 +80,9 @@ pub fn init(ctx: &mut Context) {
     let edit = &mut ctx.edit;
     edit.entities = entities.into();
     edit.tiles = tiles.into();
+
+
+    ctx.commands.push(Command::LoadMap { map_path:"assets/maps/test.map".into()});
 }
 
 #[no_mangle]

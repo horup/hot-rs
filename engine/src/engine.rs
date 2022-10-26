@@ -1,4 +1,4 @@
-use std::{fs::Metadata, path::PathBuf, collections::HashMap};
+use std::{fs::Metadata, path::{PathBuf, Path}, collections::HashMap};
 
 use context::Context;
 use libloading::{Library, Symbol};
@@ -39,9 +39,13 @@ impl Engine {
         .add_filter("Map file", &["map"])
         .show_open_single_file().unwrap();
         if let Some(path) = path {
-            let json = std::fs::read_to_string(path).unwrap();
-            self.ctx.map = serde_json::from_str(&json).unwrap();
+            self.load_map_from_path(path);
         }
+    }
+
+    pub fn load_map_from_path(&mut self, path:impl AsRef<Path>) {
+        let json = std::fs::read_to_string(path).unwrap();
+        self.ctx.map = serde_json::from_str(&json).unwrap();
     }
 
     pub fn poll_game_lib(&mut self) {
@@ -98,18 +102,38 @@ impl Engine {
         
     }
 
+
+    pub fn call_game_start(&mut self) {
+        if let Some(lib) = self.game_lib.as_mut() {
+            unsafe {
+                let update_func:Symbol<fn(state:&mut Context)> = lib.get(b"start").unwrap();
+                update_func(&mut self.ctx);
+            }
+        }
+    }
+
+    pub fn call_game_update(&mut self) {
+        if let Some(lib) = self.game_lib.as_mut() {
+            unsafe {
+                let update_func:Symbol<fn(state:&mut Context)> = lib.get(b"update").unwrap();
+                update_func(&mut self.ctx);
+            }
+        }
+    }
+
+
     pub async fn update(&mut self) {
+        let prev_edit_mode = self.ctx.edit_mode;
         self.ctx.dt = get_frame_time();
         self.input();
         self.process_commands().await;
+        let edit_mode_changed = prev_edit_mode != self.ctx.edit_mode;
 
         if self.ctx.edit_mode == false {
-            if let Some(lib) = self.game_lib.as_mut() {
-                unsafe {
-                    let update_func:Symbol<fn(state:&mut Context)> = lib.get(b"update").unwrap();
-                    update_func(&mut self.ctx);
-                }
+            if edit_mode_changed {
+                self.call_game_start();
             }
+            self.call_game_update();
         }
 
         self.process_commands().await;

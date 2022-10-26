@@ -73,5 +73,4 @@ mod grid;
 pub use grid::*;
 
 use glam::Vec2;
-
 pub use glam;
