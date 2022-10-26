@@ -19,7 +19,7 @@ impl<T> Default for Grid<T> where T:Default+Clone {
 
 impl<T> Grid<T> where T:Default+Clone {
     pub fn size(&self)->usize {
-        return self.size;
+        self.size
     }
 
     pub fn get_mut(&mut self, x:i32, y:i32) -> Option<&mut T> {
@@ -29,7 +29,7 @@ impl<T> Grid<T> where T:Default+Clone {
             return self.cells.get_mut(index);
         }
 
-        return None;
+        None
     }
 
     pub fn get(&self,x:i32, y:i32) -> Option<&T> {
@@ -39,7 +39,7 @@ impl<T> Grid<T> where T:Default+Clone {
             return self.cells.get(index);
         }
 
-        return None;
+        None
     }
 
     pub fn for_each(&self, mut f:impl FnMut(&T,i32,i32)) {

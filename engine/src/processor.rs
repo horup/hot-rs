@@ -17,7 +17,7 @@ impl Engine {
                             init_func(&mut self.ctx);
                         }
 
-                        if self.ctx.edit_mode == false {
+                        if !self.ctx.edit_mode {
                             self.call_game_start();
                         }
                     }
@@ -25,7 +25,7 @@ impl Engine {
                 Command::DefineTexture { handle, path } => {
                     let texture: Texture2D = load_texture(path).await.unwrap();
                     texture.set_filter(FilterMode::Nearest);
-                    self.textures.insert(handle.clone(), texture);
+                    self.textures.insert(*handle, texture);
                 },
                 Command::FlashScreen {  } => {
                     self.flash_timer_start = 0.5;
@@ -33,7 +33,7 @@ impl Engine {
                 }
                 Command::LoadMap { map_path } => {
                     self.load_map_from_path(map_path);
-                    if self.ctx.edit_mode == false {
+                    if !self.ctx.edit_mode {
                         self.call_game_start();
                     }
                 }

@@ -15,7 +15,7 @@ impl Engine {
         if is_key_pressed(KeyCode::Key7) { return Some(7); }
         if is_key_pressed(KeyCode::Key8) { return Some(8); }
         if is_key_pressed(KeyCode::Key9) { return Some(9); }
-        return None;
+        None
     }
 
     pub fn edit_input(&mut self) {
@@ -57,7 +57,7 @@ impl Engine {
             }
         }
 
-        if self.ctx.over_ui == false {
+        if !self.ctx.over_ui {
             let cell = self.ctx.input.mouse_pos_world.floor();
             if let Some(cell) = self.ctx.map.grid.get_mut(cell.x as i32, cell.y as i32) {
                 if is_mouse_button_down(MouseButton::Left) {
@@ -121,7 +121,7 @@ impl Engine {
         let m = Vec2::new(mouse_position().0, mouse_position().1);
         self.ctx.input = PlayerInput { 
             dir:Vec2::new(x, y), 
-            action: action,
+            action,
             mouse_pos_screen:m,
             mouse_pos_world:self.to_world(m),
             mouse_left_down:is_mouse_button_down(MouseButton::Left),

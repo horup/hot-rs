@@ -7,10 +7,10 @@ impl Engine {
             return &self.ctx.edit_camera;
         }
 
-        return &self.ctx.game_camera;
+        &self.ctx.game_camera
     }
     pub fn perspective(&self) -> f32 {
-        return 24.0 / 16.0;
+        24.0 / 16.0
     }
 
     pub fn scaler(&self) -> f32 {
@@ -26,7 +26,7 @@ impl Engine {
             a = h_a;
         }
 
-        return a;
+        a
     }
 
     
@@ -39,8 +39,8 @@ impl Engine {
         let p  = Vec2::new(screen.x - w / 2.0, (screen.y - h / 2.0) * persp);
         let a = self.scaler();
         let p = p * a;
-        let p = p + center;
-        return p;
+        
+        p + center
     }
 
     pub fn to_screen(&self, world:Vec2) -> Vec2 {
@@ -52,8 +52,8 @@ impl Engine {
         let p = world - center;
         let p = p / a;
         let perspective = self.perspective();
-        let p = Vec2::new(p.x + w / 2.0, p.y / perspective + h / 2.0);
-        return p;
+        
+        Vec2::new(p.x + w / 2.0, p.y / perspective + h / 2.0)
     }
 
     fn draw_grid(&self) {
@@ -89,7 +89,7 @@ impl Engine {
                         let y = p1.y - a * h;
                         
                         
-                        draw_texture_ex(tex.clone(), x, y, WHITE, DrawTextureParams {
+                        draw_texture_ex(*tex, x, y, WHITE, DrawTextureParams {
                             dest_size:Some(Vec2::new(w,h + a * h)),
                             ..Default::default()
                         });
@@ -103,8 +103,8 @@ impl Engine {
 
 
     pub fn draw_tex(&self, p:Vec2, tex:&Texture2D) {
-        let p1 = self.to_screen(Vec2::new(p.x as f32,  p.y as f32));
-        let p2 = self.to_screen(Vec2::new(p.x as f32 + 1.0, p.y as f32 + 1.0));
+        let p1 = self.to_screen(Vec2::new(p.x,  p.y));
+        let p2 = self.to_screen(Vec2::new(p.x + 1.0, p.y + 1.0));
         let v = p2 - p1;
         let w = v.x;
         let h = v.y;
@@ -116,7 +116,7 @@ impl Engine {
         let dw = w;
         let dh = h + a * h;
 
-        draw_texture_ex(tex.clone(), x, y, WHITE, DrawTextureParams {
+        draw_texture_ex(*tex, x, y, WHITE, DrawTextureParams {
             dest_size:Some(Vec2::new(dw,dh)),
             ..Default::default()
         });

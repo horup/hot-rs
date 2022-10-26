@@ -65,7 +65,7 @@ impl Engine {
 
             let mut state:Vec<u8> = Vec::new();
             if unload {
-                state = self.call_game_serialize().clone();
+                state = self.call_game_serialize();
 
                 if let Some(lib) = self.game_lib.take() {
                     lib.close().unwrap();
@@ -85,7 +85,7 @@ impl Engine {
                                 self.game_lib_metadata = Some(metadata);
                                 self.game_lib = Some(lib);
                                 println!("Game lib loaded");
-                                if state.len() > 0 {
+                                if !state.is_empty() {
                                     self.call_game_deserialize(&state);
                                 }
                             },
@@ -102,7 +102,7 @@ impl Engine {
 
         } else {
             println!("Could not load metadata of game lib");
-            return;
+            
         }
 
         
@@ -126,7 +126,7 @@ impl Engine {
             }
         }
 
-        return Vec::new();
+        Vec::new()
     }
 
     pub fn call_game_deserialize(&mut self, state:&Vec<u8>) {
@@ -155,7 +155,7 @@ impl Engine {
         self.process_commands().await;
         let edit_mode_changed = prev_edit_mode != self.ctx.edit_mode;
 
-        if self.ctx.edit_mode == false {
+        if !self.ctx.edit_mode {
             if edit_mode_changed {
                 self.call_game_start();
             }

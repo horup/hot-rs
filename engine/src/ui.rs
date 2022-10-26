@@ -19,7 +19,7 @@ impl Engine {
         .label(label)
         .titlebar(true)
         .movable(false)
-        .ui(&mut *root_ui(), |ui| {
+        .ui(&mut root_ui(), |ui| {
             let textures:Vec<u32>;
             let mut selected:u32;
 
@@ -40,8 +40,8 @@ impl Engine {
                 if let Some(tex) = self.textures.get(&tex_id) {
                     let w = w/3.0;
                     let h = w * tex.height() / tex.width();
-                    if ui.texture(tex.clone(), w, h) {
-                        selected = tex_id.clone();
+                    if ui.texture(*tex, w, h) {
+                        selected = tex_id;
                     }
                     ui.same_line(0.0);
                     ui.label(None, if tex_id == selected {"Selected"} else {""});

@@ -8,7 +8,7 @@ pub fn serialize() -> Vec<u8> {
         return v;
     }
 
-    return Vec::new();
+    Vec::new()
 }
 
 #[no_mangle]

@@ -85,8 +85,8 @@ pub fn init(ctx: &mut Context) {
     def_entity!(Textures::ExitMarker, "assets/textures/exit_marker.png");
 
     let edit = &mut ctx.edit;
-    edit.entities = entities.into();
-    edit.tiles = tiles.into();
+    edit.entities = entities;
+    edit.tiles = tiles;
 
     ctx.commands.push(Command::LoadMap { map_path:"assets/maps/test.map".into()});
 }
