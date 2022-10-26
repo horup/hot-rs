@@ -1,4 +1,4 @@
-use context::{Context, Command, generational_arena::{Arena, Index}};
+use context::{Context, Command, generational_arena::{Index}};
 use serde::{Serialize, Deserialize};
 pub static mut STATE:Option<State> = None;
 
