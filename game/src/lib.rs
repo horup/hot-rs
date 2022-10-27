@@ -1,4 +1,8 @@
+mod state;
+pub use state::*;
+
 use context::{Command, Context, Entity, glam::{Vec3}, Grid};
+
 use crate::STATE;
 
 #[no_mangle]
@@ -40,7 +44,6 @@ pub fn start(ctx:&mut Context) {
 pub fn update(ctx: &mut Context) {
     let state = unsafe { STATE.as_mut().unwrap() };
     let dt = ctx.dt; 
-
 
     if let Some(index) = state.player {
         if let Some(e) = ctx.entities.get_mut(index) {

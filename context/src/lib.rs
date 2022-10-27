@@ -1,3 +1,26 @@
+mod entity;
+
+pub use entity::*;
+
+mod command;
+pub use command::*;
+mod map;
+
+pub use map::*;
+mod edit;
+pub use edit::*;
+mod grid;
+pub use grid::*;
+mod camera;
+pub use camera::*;
+
+pub use glam;
+use glam::Vec2;
+
+pub use slotmap;
+use slotmap::{new_key_type, SlotMap};
+
+
 #[derive(Debug, Default, Clone, Copy)]
 pub struct Tile {
     pub texture: u32,
@@ -15,6 +38,8 @@ pub struct PlayerInput {
     pub mouse_right_pressed: bool,
 }
 
+new_key_type! { pub struct EntityKey; }
+
 #[derive(Default)]
 pub struct Context {
     pub edit_camera: Camera,
@@ -22,7 +47,7 @@ pub struct Context {
     pub over_ui: bool,
     pub edit_mode: bool,
     pub map: Map,
-    pub entities: Arena<Entity>,
+    pub entities: SlotMap<EntityKey, Entity>,
     pub tilemap: Grid<Tile>,
     pub commands: Vec<Command>,
     pub input: PlayerInput,
@@ -40,24 +65,3 @@ impl Context {
         })
     }
 }
-
-mod entity;
-
-pub use entity::*;
-
-mod command;
-pub use command::*;
-mod map;
-use generational_arena::Arena;
-pub use map::*;
-mod edit;
-pub use edit::*;
-mod grid;
-pub use grid::*;
-mod camera;
-pub use camera::*;
-
-pub use glam;
-use glam::Vec2;
-
-pub use generational_arena;

@@ -12,7 +12,7 @@
 		{
 			"type": "cargo",
 			"command": "watch",
-			"args": ["-x", "build"],
+			"args": ["-x", "build", "-d", "2.0"],
 			"options": {
 				"cwd":"game"
 			},

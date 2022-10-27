@@ -1,13 +1,5 @@
-use context::{Context, Command, generational_arena::{Index}};
-use serde::{Serialize, Deserialize};
-pub static mut STATE:Option<State> = None;
-
-#[derive(Default, Serialize, Deserialize)]
-pub struct State {
-    pub iterations:usize,
-    pub player:Option<Index>
-}
-
+use context::{Context, Command};
+use crate::{state::STATE, State};
 
 pub enum Textures {
     Piggy = 2,
@@ -43,7 +35,6 @@ pub fn init(ctx: &mut Context) {
     unsafe {
         STATE = Some(State::default());
     }
-   // ctx.edit_mode = true;
     ctx.debug = true;
     ctx.edit_camera.zoom = 16.0;
    
