@@ -1,3 +1,4 @@
+use context::EntityKey;
 use macroquad::prelude::*;
 use crate::Engine;
 
@@ -240,6 +241,13 @@ impl Engine {
         self.draw_map();
     }
 
+    pub fn bounds(&self) -> Rect {
+        let p1 = self.to_world(Vec2::new(0.0, 0.0));
+        let p2 = self.to_world(Vec2::new(screen_width(), screen_height()));
+        let v = p2 - p1;
+        Rect::new(p1.x, p1.y, v.x, v.y)
+    }
+
     pub fn draw_game_mode(&mut self) {
         self.flash_timer -= get_frame_time();
         if self.flash_timer < 0.0 {
@@ -249,9 +257,52 @@ impl Engine {
             draw_rectangle(0.0, 0.0, screen_width(), screen_height(), Color::new(1.0, 1.0, 1.0, a));
         }
 
-        for (_, e) in self.ctx.entities.iter() {
-            if let Some(tex) = self.textures.get(&e.texture) {
-                self.draw_sprite(e.pos.truncate(), tex, false, false);
+        let bounds = self.bounds();
+        let margin = 3.0;
+        let bounds = Rect {
+            x: bounds.x - margin,
+            y: bounds.y - margin,
+            w: bounds.w + margin * 2.0,
+            h: bounds.h + margin * 2.0,
+        };
+        let mut visible_set:Vec<EntityKey> = Vec::with_capacity(self.ctx.entities.len());
+
+        for (key, e) in self.ctx.entities.iter() {
+            if bounds.contains(e.pos.truncate()) {
+                visible_set.push(key);
+            }
+        }
+
+        visible_set.sort_by(|a, b| {
+            if let (Some(a), Some(b)) = (self.ctx.entities.get(*a), self.ctx.entities.get(*b)){
+                if a.pos.y < b.pos.y {
+                    return std::cmp::Ordering::Less;
+                } else if a.pos.y > b.pos.y {
+                    return std::cmp::Ordering::Greater;
+                }
+            }
+
+            std::cmp::Ordering::Equal
+        });
+
+        for cell_y in bounds.top() as i32 .. bounds.bottom() as i32 {
+            for cell_x in bounds.left() as i32 .. bounds.right() as i32 {
+                if let Some(cell) = self.ctx.map.grid.get(cell_x, cell_y) {
+                    if let Some(tile) = cell.tile {
+                        if let Some(tex) = self.textures.get(&tile) {
+                            self.draw_tex(Vec2::new(cell_x as f32, cell_y as f32), tex);
+                        }
+                    }
+                }
+                for key in visible_set.iter() {
+                    if let Some(e) = self.ctx.entities.get(*key) {
+                        if e.pos.y as i32 == cell_y {
+                            if let Some(tex) = self.textures.get(&e.texture) {
+                                self.draw_sprite(e.pos.truncate(), tex, false, false);
+                            }
+                        }
+                    }
+                }
             }
         }
 
