@@ -12,13 +12,10 @@
 		{
 			"type": "cargo",
 			"command": "watch",
-			"args": ["-x", "build", "-d", "2.0"],
+			"args": ["-x", "build", "-d", ".5"],
 			"options": {
 				"cwd":"game"
 			},
-			"problemMatcher": [
-				"$rustc"
-			],
 			"group": "build",
 			"label": "watch game"
 		},

@@ -1,3 +1,5 @@
+use std::f32::consts::PI;
+
 use macroquad::prelude::*;
 use crate::Engine;
 
@@ -101,6 +103,31 @@ impl Engine {
         }
     }
 
+
+    pub fn draw_sprite(&self, p:Vec2, tex:&Texture2D, flip_x:bool, flip_y:bool) {
+        let p1 = self.to_screen(Vec2::new(p.x,  p.y));
+        let p2 = self.to_screen(Vec2::new(p.x + 1.0, p.y + 1.0));
+        let v = p2 - p1;
+        let w = v.x;
+        let h = v.y;
+
+        let a = (1.5 / (tex.width() / tex.height())) - 1.0;
+        let x = p1.x;
+        let y = p1.y - a * h;
+        
+        let dw = w;
+        let dh = h + a * h;
+
+        let x = x - w/2.0;
+        let y = y - h/2.0;
+
+        draw_texture_ex(*tex, x, y, WHITE, DrawTextureParams {
+            dest_size:Some(Vec2::new(dw,dh)),
+            flip_x,
+            flip_y,
+            ..Default::default()
+        });
+    }
 
     pub fn draw_tex(&self, p:Vec2, tex:&Texture2D) {
         let p1 = self.to_screen(Vec2::new(p.x,  p.y));
@@ -224,8 +251,17 @@ impl Engine {
             draw_rectangle(0.0, 0.0, screen_width(), screen_height(), Color::new(1.0, 1.0, 1.0, a));
         }
 
+        for (_, e) in self.ctx.entities.iter() {
+            if let Some(tex) = self.textures.get(&e.texture) {
+                self.draw_sprite(e.pos.truncate(), tex, false, false);
+            }
+        }
+
         if self.ctx.debug {
-            
+            for (_, e) in self.ctx.entities.iter() {
+                let p = self.to_screen(e.pos.truncate());
+                draw_circle(p.x, p.y, 2.0, RED);
+            }
         }
     }
 
