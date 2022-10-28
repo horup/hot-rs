@@ -15,7 +15,7 @@ pub fn update(ctx: &mut Context) {
             ctx.game_camera.zoom = 8.0;
             ctx.game_camera.pos = e.pos.truncate(); 
         }
-    }
+    } 
 
     if ctx.input.action {
         ctx.commands.push(Command::FlashScreen {});

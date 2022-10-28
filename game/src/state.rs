@@ -6,4 +6,4 @@ pub struct State {
     pub player:Option<EntityKey>,
 }
 
-pub static mut STATE:Option<State> = None;
+pub static mut STATE:Option<State> = None; 

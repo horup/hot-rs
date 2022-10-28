@@ -1,4 +1,4 @@
-use std::{fs::Metadata, path::{PathBuf, Path}, collections::HashMap};
+use std::{fs::Metadata, path::{PathBuf, Path}, collections::HashMap, time::Duration};
 
 use context::Context;
 use libloading::{Library, Symbol};
@@ -72,7 +72,7 @@ impl Engine {
                 }
             }
 
-            if load_new {
+            while load_new {
                 let mut to = std::env::current_exe().unwrap();
                 to.pop();
                 to.push("hot.module");
@@ -85,27 +85,26 @@ impl Engine {
                                 self.game_lib_metadata = Some(metadata);
                                 self.game_lib = Some(lib);
                                 println!("Game lib loaded");
-                                if !state.is_empty() {
+                                if unload {
                                     self.call_game_deserialize(&state);
                                 }
+                                break;
                             },
                             Err(err) => {
                                 println!("Could not load game lib with err:{:?}", err);
+                                break;
                             },
                         }
                     }
                 } else {
-                    println!("Could not copy game lib to hot path");
+                    // retry
+                    std::thread::sleep(Duration::from_millis(1000));
+                    continue;
                 }
             }
-
-
         } else {
             println!("Could not load metadata of game lib");
-            
         }
-
-        
     }
 
 

@@ -18,9 +18,6 @@ pub fn deserialize(state:&Vec<u8>) {
     unsafe {STATE = Some(bincode::deserialize::<State>(state).unwrap())}
 }
  
- 
-
-
 mod init;
 pub use init::*;
 
