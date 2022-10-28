@@ -1,4 +1,4 @@
-use context::{Context, Command, glam::Vec2, Entity, slotmap::SlotMap, Map, EntityKey};
+use context::{Context, Command, glam::Vec2, Entity, slotmap::SlotMap, Map, EntityKey, rapier2d::prelude::*};
 
 use crate::STATE;
 
@@ -12,7 +12,19 @@ pub fn update(ctx: &mut Context) {
     let state = unsafe { STATE.as_mut().unwrap() };
     let dt = ctx.dt; 
     let mut entities = ctx.entities.clone();
-   // if let Some(key) = state.player {
+    let mut rigid_body_set = RigidBodySet::new();
+    let mut collider_set = ColliderSet::new();
+
+    let physics_hooks = ();
+    let event_handler = ();
+
+    for (key, e) in ctx.entities.iter_mut() {
+        let body = RigidBodyBuilder::dynamic()
+        .translation([e.pos.x, e.pos.y].into())
+       // .user_data(key.into())
+        .build();
+    }
+
 
     for (key, e) in ctx.entities.iter_mut() {
         let speed = 3.0;
@@ -47,7 +59,7 @@ pub fn update(ctx: &mut Context) {
         }
 
         if v.length() > 0.0 {
-            move_entity(e, v, &mut entities, &ctx.map)
+           // move_entity(e, v, &mut entities, &ctx.map)
         }
         
         if state.player == Some(key) {
@@ -55,6 +67,24 @@ pub fn update(ctx: &mut Context) {
             ctx.game_camera.pos = e.pos.truncate(); 
         }
     }
+
+    
+    ctx.physics.physics_pipeline.step(&[0.0, 0.0].into(), 
+    &IntegrationParameters {
+        dt,
+        ..Default::default()
+    }, 
+    &mut ctx.physics.island_manager, 
+    &mut ctx.physics.broad_phase, 
+    &mut ctx.physics.narrow_phase, 
+    &mut rigid_body_set, 
+    &mut collider_set, 
+    &mut ctx.physics.impulse_joint_set, 
+    &mut ctx.physics.multibody_joint_set, 
+    &mut ctx.physics.ccd_solver, 
+    &physics_hooks, 
+    &event_handler);
+
 
     if ctx.input.action {
         ctx.commands.push(Command::FlashScreen {});
