@@ -5,5 +5,6 @@ use serde::{Serialize, Deserialize};
 pub struct Entity {
     pub pos:Vec3,
     pub dir:f32,
-    pub texture:u32
+    pub texture:u32,
+    pub flip_x:bool
 }

@@ -1,3 +1,5 @@
+use std::f32::consts::PI;
+
 use context::EntityKey;
 use macroquad::prelude::*;
 use crate::Engine;
@@ -103,7 +105,7 @@ impl Engine {
     }
 
 
-    pub fn draw_sprite(&self, p:Vec2, tex:&Texture2D, flip_x:bool, flip_y:bool) {
+    pub fn draw_sprite(&self, p:Vec3, tex:&Texture2D, flip_x:bool, flip_y:bool) {
         let p1 = self.to_screen(Vec2::new(p.x,  p.y));
         let p2 = self.to_screen(Vec2::new(p.x + 1.0, p.y + 1.0));
         let v = p2 - p1;
@@ -113,12 +115,15 @@ impl Engine {
         let a = (1.5 / (tex.width() / tex.height())) - 1.0;
         let x = p1.x;
         let y = p1.y - a * h;
+
+
         
         let dw = w;
         let dh = h + a * h;
 
         let x = x - w/2.0;
         let y = y - h/2.0;
+        let y = y + -p.z * h;
 
         draw_texture_ex(*tex, x, y, WHITE, DrawTextureParams {
             dest_size:Some(Vec2::new(dw,dh)),
@@ -298,7 +303,7 @@ impl Engine {
                     if let Some(e) = self.ctx.entities.get(*key) {
                         if e.pos.y as i32 == cell_y {
                             if let Some(tex) = self.textures.get(&e.texture) {
-                                self.draw_sprite(e.pos.truncate(), tex, false, false);
+                                self.draw_sprite(e.pos, tex, e.flip_x, false);
                             }
                         }
                     }
@@ -310,6 +315,8 @@ impl Engine {
             for (_, e) in self.ctx.entities.iter() {
                 let p = self.to_screen(e.pos.truncate());
                 draw_circle(p.x, p.y, 2.0, RED);
+                let v = Vec2::from_angle(e.dir) * 16.0;
+                draw_line(p.x, p.y, p.x + v.x, p.y - v.y, 1.0, RED);
             }
         }
     }
