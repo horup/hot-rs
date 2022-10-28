@@ -24,7 +24,7 @@ pub fn update(ctx: &mut Context) {
             }
 
             if let Some(walker) = state.walkers.get_mut(key) {
-                let walking = if v.length() > 0.0 { true } else { false };
+                let walking = v.length() > 0.0;
                 if walking {
                     walker.walker += v.length() * 2.0;
                     if walker.walker > 1.0 {

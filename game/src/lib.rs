@@ -16,7 +16,7 @@ pub fn serialize(ctx:&mut Context) -> Vec<u8> {
     if let Some(state) = unsafe { STATE.clone()} {
         let v = bincode::serialize(&S {
             entities:ctx.entities.clone(),
-            state:state.clone()
+            state
         }).unwrap();
         return v;
     }
