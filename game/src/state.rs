@@ -4,7 +4,8 @@ use serde::{Serialize, Deserialize};
 #[derive(Default, Serialize, Deserialize, Clone)]
 pub struct State {
     pub player:Option<EntityKey>,
-    pub walkers:SecondaryMap<EntityKey, Walker>
+    pub walkers:SecondaryMap<EntityKey, Walker>,
+
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Copy)]

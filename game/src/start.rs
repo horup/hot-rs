@@ -16,6 +16,7 @@ pub fn start(ctx:&mut Context) {
                 let player_entity = ctx.entities.insert(Entity {
                     pos:Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
                     texture:Textures::William.into(),
+                    radius:0.4,
                     ..Default::default()
                 });
 

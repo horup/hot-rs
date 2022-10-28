@@ -147,7 +147,6 @@ impl Engine {
         }
     }
 
-
     pub async fn update(&mut self) {
         let prev_edit_mode = self.ctx.edit_mode;
         self.ctx.dt = get_frame_time();
