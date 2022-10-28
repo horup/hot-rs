@@ -66,6 +66,7 @@ impl Engine {
             let mut state:Vec<u8> = Vec::new();
             if unload {
                 state = self.call_game_serialize();
+                self.ctx.entities.clear();
 
                 if let Some(lib) = self.game_lib.take() {
                     lib.close().unwrap();
@@ -120,8 +121,8 @@ impl Engine {
     pub fn call_game_serialize(&mut self) -> Vec<u8> {
         if let Some(lib) = self.game_lib.as_mut() {
             unsafe {
-                let f:Symbol<fn()->Vec<u8>> = lib.get(b"serialize").unwrap();
-                return f();
+                let f:Symbol<fn(ctx:&mut Context)->Vec<u8>> = lib.get(b"serialize").unwrap();
+                return f(&mut self.ctx);
             }
         }
 
@@ -131,8 +132,8 @@ impl Engine {
     pub fn call_game_deserialize(&mut self, state:&Vec<u8>) {
         if let Some(lib) = self.game_lib.as_mut() {
             unsafe {
-                let f:Symbol<fn(state:&Vec<u8>)> = lib.get(b"deserialize").unwrap();
-                f(state);
+                let f:Symbol<fn(ctx:&mut Context, state:&Vec<u8>)> = lib.get(b"deserialize").unwrap();
+                f(&mut self.ctx, state);
             }
         }
     }
