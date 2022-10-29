@@ -1,12 +1,12 @@
-use context::{Context, Command, glam::{Vec2, ivec2, IVec2}, Entity, slotmap::SlotMap, Map, EntityKey};
-use parry2d::{shape::Ball, na::Isometry2, bounding_volume::BoundingVolume, query};
+use context::{Context, Command, glam::{Vec2}, Entity, slotmap::SlotMap, Map, EntityKey};
+use parry2d::{na::Isometry2, bounding_volume::BoundingVolume};
 
 use crate::STATE;
 
 
 fn move_entity(key:EntityKey, e:&mut Entity, v:Vec2, entities:&mut SlotMap<EntityKey, Entity>, map:&Map) {
     const dims:[Vec2;2] = [Vec2::new(0.0, 1.0), Vec2::new(1.0, 0.0)];
-    let step_size = 1.0/16.0;
+    let _step_size = 1.0/16.0;
     for dim in dims {
         let pos_org = e.pos;
         let v = v * dim;
@@ -33,12 +33,11 @@ fn move_entity(key:EntityKey, e:&mut Entity, v:Vec2, entities:&mut SlotMap<Entit
         let v = pos_new - pos_org; 
         let v = v.truncate() * dim;
         let d = v.normalize();
-        //let d = Vec2::new(if v.x > 0.0 {1.0} else if v.x < 0.0 {-1.0} else {0.0}, if v.x > 0.0 {1.0} else if v.x < 0.0 {-1.0} else {0.0});
         let rev_dim = Vec2::new(dim.y, dim.x);
         for i in [-1, 0, 1] {
             let i = i as f32;
             let cp = Vec2::new(i, i) * rev_dim + d + pos_org.truncate();
-            let vvv = cp - pos_org.truncate();
+            let _vvv = cp - pos_org.truncate();
             let np = cp.as_ivec2();
             if let Some(cell) = map.grid.get(np.x, np.y) {
                 if cell.blocks {
@@ -49,17 +48,6 @@ fn move_entity(key:EntityKey, e:&mut Entity, v:Vec2, entities:&mut SlotMap<Entit
                     let s2_pos = Isometry2::translation(np.x as f32 + 0.5, np.y as f32 + 0.5);
                     let aabb2 = s2.aabb(&s2_pos);
  
-                    let pos12 = 
-                    Isometry2::translation(np.x as f32 + 0.5 - pos_new.x, 
-                        np.y as f32 + 0.5 - pos_new.y);
-        
-                   /*  let q = query::contact::contact_cuboid_cuboid(&pos12, &s1, &s2, 0.0);
-                    if let Some(q) = q {
-                        println!("{:?}", q);
-                        pos_new = pos_org;
-                        break;
-                    }*/
-
                     if aabb1.intersects(&aabb2) {
                         pos_new = pos_org;
                         break;
@@ -68,16 +56,9 @@ fn move_entity(key:EntityKey, e:&mut Entity, v:Vec2, entities:&mut SlotMap<Entit
             }
 
         }
-       /*  let nd = IVec2::new(d.x as i32, d.y as i32);
-        let np = ivec2(pos_org.x as i32, pos_org.y as i32);
-        for i in -1..1 {
-
-        }*/
-
-        
+   
         e.pos = pos_new;
-
-        *entities.get_mut(key).unwrap() = e.clone();
+        *entities.get_mut(key).unwrap() = *e;
     }
 }
 
@@ -87,7 +68,7 @@ pub fn update(ctx: &mut Context) {
     let dt = ctx.dt; 
     let mut entities = ctx.entities.clone();
 
-    for (key, e) in ctx.entities.iter_mut() {
+    for (_key, _e) in ctx.entities.iter_mut() {
       
     }
 

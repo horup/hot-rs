@@ -1,6 +1,6 @@
 mod entity;
 
-use std::num::NonZeroU32;
+
 
 pub use entity::*;
 
@@ -19,9 +19,9 @@ pub use camera::*;
 pub use glam;
 use glam::Vec2;
 
-use serde::{Serialize, Deserialize};
+use serde::{Serialize};
 pub use slotmap;
-use slotmap::{new_key_type, SlotMap, Key, KeyData};
+use slotmap::{new_key_type, SlotMap};
 
 #[derive(Debug, Default, Clone, Copy)]
 pub struct Tile {
