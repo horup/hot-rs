@@ -72,7 +72,8 @@ impl Engine {
                     lib.close().unwrap();
                 }
             }
-
+            
+            let load_new = load_new;
             while load_new {
                 let mut to = std::env::current_exe().unwrap();
                 to.pop();

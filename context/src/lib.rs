@@ -19,7 +19,6 @@ pub use camera::*;
 pub use glam;
 use glam::Vec2;
 
-use serde::{Serialize};
 pub use slotmap;
 use slotmap::{new_key_type, SlotMap};
 
