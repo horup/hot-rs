@@ -23,10 +23,6 @@ use serde::{Serialize, Deserialize};
 pub use slotmap;
 use slotmap::{new_key_type, SlotMap, Key, KeyData};
 
-use rapier2d::prelude::*;
-pub use rapier2d;
-
-
 #[derive(Debug, Default, Clone, Copy)]
 pub struct Tile {
     pub texture: u32,
@@ -60,24 +56,6 @@ pub struct Context {
     pub debug: bool,
     pub edit: Edit,
     pub dt: f32,
-    pub physics:Physics
-}
-
-pub struct Physics {
-    pub integration_parameters:IntegrationParameters,
-    pub physics_pipeline: PhysicsPipeline,
-    pub island_manager : IslandManager,
-    pub broad_phase : BroadPhase,
-    pub narrow_phase : NarrowPhase,
-    pub impulse_joint_set : ImpulseJointSet,
-    pub multibody_joint_set : MultibodyJointSet,
-    pub ccd_solver : CCDSolver
-}
-
-impl Default for Physics {
-    fn default() -> Self {
-        Self { integration_parameters: Default::default(), physics_pipeline: Default::default(), island_manager: Default::default(), broad_phase: Default::default(), narrow_phase: Default::default(), impulse_joint_set: Default::default(), multibody_joint_set: Default::default(), ccd_solver: Default::default() }
-    }
 }
 
 impl Context {

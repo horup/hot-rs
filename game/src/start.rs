@@ -11,11 +11,11 @@ pub fn start(ctx:&mut Context) {
     ctx.map.grid.for_each(|cell, x, y| {
         if let Some(entity) = cell.entity { 
 
-            if entity == Textures::William.into() {
-                dbg!("Spawning William");
+            if entity == Textures::Viktor.into() {
+                dbg!("Spawning Player");
                 let player_entity = ctx.entities.insert(Entity {
                     pos:Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
-                    texture:Textures::William.into(),
+                    texture:Textures::Viktor.into(),
                     radius:0.4,
                     ..Default::default()
                 });
