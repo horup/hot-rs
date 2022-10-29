@@ -5,9 +5,9 @@ use crate::STATE;
 
 
 fn move_entity(key:EntityKey, e:&mut Entity, v:Vec2, entities:&mut SlotMap<EntityKey, Entity>, map:&Map) {
-    const dims:[Vec2;2] = [Vec2::new(0.0, 1.0), Vec2::new(1.0, 0.0)];
+    const DIMS:[Vec2;2] = [Vec2::new(0.0, 1.0), Vec2::new(1.0, 0.0)];
     let _step_size = 1.0/16.0;
-    for dim in dims {
+    for dim in DIMS {
         let pos_org = e.pos;
         let v = v * dim;
         if v.length() == 0.0 {
