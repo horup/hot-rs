@@ -1,11 +1,11 @@
-use context::{EntityKey, slotmap::SlotMap, Entity, Map, glam::{Vec2, Vec3}};
+use context::{EntityKey, slotmap::SlotMap, Entity, Map, glam::{Vec2, Vec3}, Command};
 use parry2d::{na::Isometry2, bounding_volume::BoundingVolume};
 
 use crate::Engine;
 
 
 
-fn move_entity(key:EntityKey, e:&mut Entity, v:Vec3, entities:&mut SlotMap<EntityKey, Entity>, map:&Map) {
+fn move_entity(key:EntityKey, e:&mut Entity, v:Vec3, entities:&mut SlotMap<EntityKey, Entity>, map:&Map, commands:&mut Vec<Command>) {
     const DIMS:[Vec2;2] = [Vec2::new(0.0, 1.0), Vec2::new(1.0, 0.0)];
     let _step_size = 1.0/16.0;
     for dim in DIMS {
@@ -26,6 +26,7 @@ fn move_entity(key:EntityKey, e:&mut Entity, v:Vec3, entities:&mut SlotMap<Entit
                     let r = r2 - d.length();
                     let v = d.normalize() * r;
                     pos_new += v;
+                    commands.push(Command::ContactEntity { entity: key.clone(), other: other_key.clone() });
                 }
             }
         }
@@ -51,6 +52,7 @@ fn move_entity(key:EntityKey, e:&mut Entity, v:Vec3, entities:&mut SlotMap<Entit
  
                     if aabb1.intersects(&aabb2) {
                         pos_new = pos_org;
+                        commands.push(Command::ContactTile { entity: key.clone(), tile: np });
                         break;
                     }
                 }
@@ -65,16 +67,18 @@ fn move_entity(key:EntityKey, e:&mut Entity, v:Vec3, entities:&mut SlotMap<Entit
 
 
 impl Engine {
-
     pub fn update(&mut self) {
         let ctx = &mut self.ctx;
         let mut entities = ctx.entities.clone();
 
+        // move entities that have velocity
         for (key, e) in ctx.entities.iter_mut() {
             let v = e.vel;
             if v.length() > 0.0 {
                 let mut left = v.length();
                 let d = v.normalize();
+
+                // max step should be configurable at some point
                 let max_step = 1.0 / 16.0;
                 while left > 0.0 {
                     let mut step = left;
@@ -83,7 +87,7 @@ impl Engine {
                     }
                     let v = d * step;
                     left -= step;
-                    move_entity(key, e, v, &mut entities, &ctx.map);
+                    move_entity(key, e, v, &mut entities, &ctx.map, &mut ctx.commands);
                 }
             }
         }
