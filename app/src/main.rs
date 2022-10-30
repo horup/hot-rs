@@ -11,7 +11,7 @@ async fn main() {
     engine.ctx.commands.push(context::Command::Restart);
     loop {
         engine.poll_game_lib();
-        engine.update().await;
+        engine.tick().await;
         next_frame().await
     }
 }

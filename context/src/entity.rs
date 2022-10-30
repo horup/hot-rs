@@ -4,6 +4,7 @@ use serde::{Serialize, Deserialize};
 #[derive(Debug, Clone, Copy, Default, Serialize, Deserialize)]
 pub struct Entity {
     pub pos:Vec3,
+    pub vel:Vec3,
     pub dir:f32,
     pub texture:u32,
     pub flip_x:bool,

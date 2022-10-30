@@ -142,13 +142,24 @@ impl Engine {
     pub fn call_game_update(&mut self) {
         if let Some(lib) = self.game_lib.as_mut() {
             unsafe {
-                let update_func:Symbol<fn(state:&mut Context)> = lib.get(b"update").unwrap();
-                update_func(&mut self.ctx);
+                if let Ok(f) = lib.get::<fn(state:&mut Context)>(b"update") {
+                    f(&mut self.ctx);
+                }
             }
         }
     }
 
-    pub async fn update(&mut self) {
+    pub fn call_game_post_update(&mut self) {
+        if let Some(lib) = self.game_lib.as_mut() {
+            unsafe {
+                if let Ok(f) = lib.get::<fn(state:&mut Context)>(b"post_update") {
+                    f(&mut self.ctx);
+                }
+            }
+        }
+    }
+
+    pub async fn tick(&mut self) {
         let prev_edit_mode = self.ctx.edit_mode;
         self.ctx.dt = get_frame_time();
         self.input();
@@ -160,6 +171,8 @@ impl Engine {
                 self.call_game_start();
             }
             self.call_game_update();
+            self.update();
+            self.call_game_post_update();
         }
 
         self.process_commands().await;
