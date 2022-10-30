@@ -12,7 +12,7 @@ pub fn start(ctx: &mut Context) {
         if let Some(entity) = cell.entity {
             if let Ok(entity) = Textures::try_from_primitive(entity) {
                 match entity {
-                    Textures::Viktor => {
+                    Textures::William => {
                         dbg!("Spawning Player");
                         let player_entity = ctx.entities.insert(Entity {
                             pos: Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),

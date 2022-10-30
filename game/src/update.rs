@@ -42,7 +42,7 @@ pub fn update(ctx: &mut Context) {
         e.vel = v.extend(0.0);
         
         if state.player == Some(key) {
-            ctx.game_camera.zoom = 8.0;
+            ctx.game_camera.zoom = 12.0;
             ctx.game_camera.pos = e.pos.truncate(); 
         }
     }
