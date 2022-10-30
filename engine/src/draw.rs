@@ -32,6 +32,11 @@ impl Engine {
         a
     }
 
+    pub fn cell_size_screen(&self) -> Vec2 {
+        let p1 = self.to_screen(Vec2::new(0.0, 0.0));
+        let p2 = self.to_screen(Vec2::new(1.0, 1.0));
+        return p2 - p1;
+    } 
     
     pub fn to_world(&self, screen:Vec2) -> Vec2 {
         let w = screen_width();
@@ -313,10 +318,12 @@ impl Engine {
 
         if self.ctx.debug {
             for (_, e) in self.ctx.entities.iter() {
+                let s = self.cell_size_screen() * e.radius;
                 let p = self.to_screen(e.pos.truncate());
-                draw_circle(p.x, p.y, 2.0, RED);
-                let v = Vec2::from_angle(e.dir) * 16.0;
-                draw_line(p.x, p.y, p.x + v.x, p.y - v.y, 1.0, RED);
+                
+                draw_rectangle_lines(p.x - s.x / 2.0, p.y - s.y / 2.0, s.x, s.y, 1.0, RED);
+                let v = Vec2::from_angle(e.dir) * s;
+                draw_line(p.x, p.y, p.x + v.x, p.y - v.y, 1.0, BLUE);
             }
         }
     }
