@@ -26,6 +26,7 @@ pub fn start(ctx:&mut Context) {
                 ctx.entities.insert(Entity {
                     pos:Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
                     texture:entity,
+                    radius:0.5,
                     ..Default::default()
                 });
             }

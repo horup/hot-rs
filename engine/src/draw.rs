@@ -318,11 +318,11 @@ impl Engine {
 
         if self.ctx.debug {
             for (_, e) in self.ctx.entities.iter() {
-                let s = self.cell_size_screen() * e.radius;
+                let s = self.cell_size_screen() * e.radius * 2.0;
                 let p = self.to_screen(e.pos.truncate());
                 
                 draw_rectangle_lines(p.x - s.x / 2.0, p.y - s.y / 2.0, s.x, s.y, 1.0, RED);
-                let v = Vec2::from_angle(e.dir) * s;
+                let v = Vec2::from_angle(e.dir) * s / 2.0;
                 draw_line(p.x, p.y, p.x + v.x, p.y - v.y, 1.0, BLUE);
             }
         }
