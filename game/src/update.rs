@@ -1,4 +1,4 @@
-use context::{Context, Command, glam::{Vec2}};
+use context::{Context, Command, glam::{Vec2}, IgnoreColissions};
 use crate::STATE;
 
 
@@ -47,6 +47,24 @@ pub fn update(ctx: &mut Context) {
         }
     }
 
+    for (key, e) in ctx.entities.iter_mut() {
+        if let Some(door) = state.doors.get_mut(key) {
+            if door.open == true {
+                e.ignore_collisions = IgnoreColissions::WithEntities;
+                e.hidden = true;
+            } else {
+                e.hidden = false;
+            }
+
+            door.close_timer_sec -= dt;
+            if door.close_timer_sec <= 0.0 {
+                door.close_timer_sec = 0.0;
+                e.ignore_collisions = IgnoreColissions::None;
+                door.open = false;
+            }
+        }
+    }
+
     if ctx.input.action {
         ctx.commands.push(Command::FlashScreen {});
     }
@@ -55,10 +73,13 @@ pub fn update(ctx: &mut Context) {
 
 #[no_mangle]
 pub fn post_update(context:&mut Context) {
+    let state = unsafe { STATE.as_mut().unwrap() };
     for c in context.commands.iter() {
         match c {
             Command::ContactEntity { entity, other } => {
-                println!("Contact Entity");
+                if let Some(door) = state.doors.get_mut(*other) {
+                    door.open_door();
+                }
             },
             Command::ContactTile { entity, tile } => {
                 println!("Contact Tile");

@@ -306,6 +306,10 @@ impl Engine {
                 }
                 for key in visible_set.iter() {
                     if let Some(e) = self.ctx.entities.get(*key) {
+                        if e.hidden {
+                            continue;
+                        }
+                        
                         if e.pos.y as i32 == cell_y {
                             if let Some(tex) = self.textures.get(&e.texture) {
                                 self.draw_sprite(e.pos, tex, e.flip_x, false);

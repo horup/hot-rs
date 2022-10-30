@@ -20,7 +20,8 @@ pub struct Entity {
     pub texture:u32,
     pub flip_x:bool,
     pub radius:f32,
-    pub ignore_collisions:IgnoreColissions
+    pub ignore_collisions:IgnoreColissions,
+    pub hidden:bool
 }
 
 impl Entity {

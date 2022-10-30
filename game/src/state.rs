@@ -32,6 +32,7 @@ pub enum Textures {
 pub struct State {
     pub player:Option<EntityKey>,
     pub walkers:SecondaryMap<EntityKey, Walker>,
+    pub doors:SecondaryMap<EntityKey, Door>,
 
 }
 
@@ -39,5 +40,19 @@ pub struct State {
 pub struct Walker {
     pub walker:f32,
 }
+
+#[derive(Default, Serialize, Deserialize, Clone, Copy)]
+pub struct Door {
+    pub open:bool,
+    pub close_timer_sec:f32,
+}
+
+impl Door {
+    pub fn open_door(&mut self) {
+        self.open = true;
+        self.close_timer_sec = 5.0; // close after 5 sec
+    }
+}
+
 
 pub static mut STATE:Option<State> = None; 
