@@ -37,8 +37,8 @@ impl Engine {
                         self.call_game_start();
                     }
                 }
-                Command::ContactEntity { entity, other } => {},
-                Command::ContactTile { entity, tile } => {},
+                Command::ContactEntity { entity: _, other: _ } => {},
+                Command::ContactTile { entity: _, tile: _ } => {},
             }
         }
     }

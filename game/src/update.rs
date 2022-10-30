@@ -76,12 +76,12 @@ pub fn post_update(context:&mut Context) {
     let state = unsafe { STATE.as_mut().unwrap() };
     for c in context.commands.iter() {
         match c {
-            Command::ContactEntity { entity, other } => {
+            Command::ContactEntity { entity: _, other } => {
                 if let Some(door) = state.doors.get_mut(*other) {
                     door.open_door();
                 }
             },
-            Command::ContactTile { entity, tile } => {
+            Command::ContactTile { entity: _, tile: _ } => {
                 println!("Contact Tile");
             },
             _=>{}
