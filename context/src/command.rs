@@ -1,3 +1,7 @@
+use glam::IVec2;
+
+use crate::EntityKey;
+
 
 #[derive(Debug, Clone)]
 pub enum Command {
@@ -10,5 +14,13 @@ pub enum Command {
     },
     LoadMap {
         map_path:String
+    },
+    ContactEntity {
+        entity:EntityKey,
+        other:EntityKey
+    },
+    ContactTile {
+        entity:EntityKey,
+        tile:IVec2
     }
 }
