@@ -1,6 +1,9 @@
 use context::{Context, Command};
+use num_enum::{IntoPrimitive, TryFromPrimitive};
 use crate::{state::STATE, State};
 
+#[derive(TryFromPrimitive, IntoPrimitive)]
+#[repr(u32)]
 pub enum Textures {
     Piggy = 2,
     TiledFloorGray = 6,
@@ -23,11 +26,6 @@ pub enum Textures {
     BlueKey = 23,
     WaypointMarker = 24,
     ExitMarker = 25
-}
-impl Into<u32> for Textures {
-    fn into(self) -> u32 {
-        self as u32
-    }
 }
 
 #[no_mangle]
