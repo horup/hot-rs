@@ -1,7 +1,7 @@
 use context::{Context, Grid, glam::Vec3, Entity, IgnoreColissions};
 use num_enum::TryFromPrimitive;
 
-use crate::{Textures, state::STATE, Walker};
+use crate::{state::STATE, Walker, Textures};
 
 
 #[no_mangle]
