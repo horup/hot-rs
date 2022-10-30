@@ -1,4 +1,4 @@
-use context::{Context, Grid, glam::Vec3, Entity};
+use context::{Context, Grid, glam::Vec3, Entity, IgnoreColissions};
 
 use crate::{Textures, state::STATE, Walker};
 
@@ -27,6 +27,7 @@ pub fn start(ctx:&mut Context) {
                     pos:Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
                     texture:entity,
                     radius:0.5,
+                    ignore_collisions:IgnoreColissions::WithEntities,
                     ..Default::default()
                 });
             }

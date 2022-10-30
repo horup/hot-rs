@@ -1,4 +1,4 @@
-use context::{EntityKey, slotmap::SlotMap, Entity, Map, glam::{Vec2, Vec3}, Command};
+use context::{EntityKey, slotmap::SlotMap, Entity, Map, glam::{Vec2, Vec3}, Command, IgnoreColissions};
 use parry2d::{na::Isometry2, bounding_volume::BoundingVolume};
 
 use crate::Engine;
@@ -19,7 +19,8 @@ fn move_entity(key:EntityKey, e:&mut Entity, v:Vec3, entities:&mut SlotMap<Entit
 
         // collision handling between entities
         for (other_key, other_e) in entities.iter() {
-            if other_key != key {
+            let ignore = e.ignore_collisions == IgnoreColissions::WithEntities || other_e.ignore_collisions == IgnoreColissions::WithEntities;
+            if other_key != key && !ignore {
                 let d = e.pos - other_e.pos;
                 let r2 = e.radius + other_e.radius;
                 if d.length() < r2 {
