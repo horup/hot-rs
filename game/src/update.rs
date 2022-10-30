@@ -106,7 +106,18 @@ pub fn update(ctx: &mut Context) {
         }
 
         if v.length() > 0.0 {
-            move_entity(key, e, v, &mut entities, &ctx.map)
+            let mut left = v.length();
+            let d = v.normalize();
+            let max_step = 1.0 / 16.0;
+            while left > 0.0 {
+                let mut step = left;
+                if step > max_step {
+                    step = max_step;
+                }
+                let v = d * step;
+                left -= step;
+                move_entity(key, e, v, &mut entities, &ctx.map);
+            }
         }
         
         if state.player == Some(key) {
