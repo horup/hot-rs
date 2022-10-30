@@ -7,11 +7,6 @@ pub fn update(ctx: &mut Context) {
     let state = unsafe { STATE.as_mut().unwrap() };
     let dt = ctx.dt; 
 
-    for (_key, _e) in ctx.entities.iter_mut() {
-      
-    }
-
-
     for (key, e) in ctx.entities.iter_mut() {
         let speed = 3.0;
         let mut v = Vec2::default();
