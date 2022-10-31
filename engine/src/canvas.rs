@@ -17,4 +17,15 @@ impl Canvas for Engine {
             });
         }
     }
+
+    fn screen_size(&mut self) -> Vec2 {
+        Vec2::new(screen_width(), screen_height())
+    }
+
+    fn texture_size(&mut self, texture:u32) -> Vec2 {
+        if let Some(tex) = self.textures.get(&texture) {
+            return Vec2::new(tex.width(), tex.height());
+        }
+        Vec2::default()
+    }
 }

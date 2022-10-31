@@ -1,3 +1,5 @@
+use glam::Vec2;
+
 
 #[derive(Default, Clone)]
 pub struct DrawStringParams {
@@ -16,6 +18,8 @@ pub struct DrawTextureParams {
 }
 
 pub trait Canvas {
+    fn screen_size(&mut self) -> Vec2;
+    fn texture_size(&mut self, texture:u32) -> Vec2;
     fn draw_string(&mut self, params:DrawStringParams);
     fn draw_texture(&mut self, params:DrawTextureParams);
 }
