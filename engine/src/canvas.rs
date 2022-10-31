@@ -1,4 +1,4 @@
-use context::Canvas;
+use context::{Canvas, Context};
 use macroquad::prelude::*;
 use crate::Engine;
 
@@ -27,5 +27,9 @@ impl Canvas for Engine {
             return Vec2::new(tex.width(), tex.height());
         }
         Vec2::default()
+    }
+
+    fn ctx_mut(&mut self) -> &mut Context {
+        &mut self.ctx
     }
 }

@@ -1,5 +1,5 @@
 use glam::Vec2;
-
+use crate::Context;
 
 #[derive(Default, Clone)]
 pub struct DrawStringParams {
@@ -18,6 +18,7 @@ pub struct DrawTextureParams {
 }
 
 pub trait Canvas {
+    fn ctx_mut(&mut self) -> &mut Context;
     fn screen_size(&mut self) -> Vec2;
     fn texture_size(&mut self, texture:u32) -> Vec2;
     fn draw_string(&mut self, params:DrawStringParams);
