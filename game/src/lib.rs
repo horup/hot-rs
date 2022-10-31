@@ -39,3 +39,6 @@ pub use start::*;
 
 mod update;
 pub use update::*;
+
+mod draw;
+pub use draw::*;

@@ -330,6 +330,8 @@ impl Engine {
                 draw_line(p.x, p.y, p.x + v.x, p.y - v.y, 1.0, BLUE);
             }
         }
+
+        self.call_game_draw();
     }
 
     pub fn draw(&mut self) {

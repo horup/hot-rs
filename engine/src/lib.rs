@@ -1,3 +1,6 @@
+mod canvas;
+pub use canvas::*;
+
 mod engine;
 pub use engine::*;
 

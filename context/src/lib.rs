@@ -1,7 +1,7 @@
+mod canvas;
+pub use canvas::*;
+
 mod entity;
-
-
-
 pub use entity::*;
 
 mod command;

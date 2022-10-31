@@ -1,6 +1,6 @@
 use std::{fs::Metadata, path::{PathBuf, Path}, collections::HashMap, time::Duration};
 
-use context::Context;
+use context::{Context, Canvas};
 use libloading::{Library, Symbol};
 use macroquad::{texture::Texture2D, time::get_frame_time};
 use native_dialog::FileDialog;
@@ -156,6 +156,19 @@ impl Engine {
                     f(&mut self.ctx);
                 }
             }
+        }
+    }
+
+    pub fn call_game_draw(&mut self) {
+        if let Some(lib) = self.game_lib.take() {
+            unsafe {
+                if let Ok(f) = lib.get::<fn(canvas:&mut dyn Canvas)>(b"draw") {
+                    let canvas:&mut dyn Canvas = self;
+                    f(canvas);
+                }
+            }
+
+            self.game_lib = Some(lib);
         }
     }
 

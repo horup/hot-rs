@@ -82,7 +82,6 @@ pub fn post_update(context:&mut Context) {
                 }
             },
             Command::ContactTile { entity: _, tile: _ } => {
-                println!("Contact Tile");
             },
             _=>{}
         }
