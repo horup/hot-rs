@@ -32,4 +32,13 @@ impl Canvas for Engine {
     fn ctx_mut(&mut self) -> &mut Context {
         &mut self.ctx
     }
+
+    fn draw_rect(&mut self, params:context::DrawRectParams) {
+        draw_rectangle(params.x, params.y, params.w, params.h, Color {
+            r:params.color.r,
+            g:params.color.g,
+            b:params.color.b,
+            a:params.color.a
+        })
+    }
 }

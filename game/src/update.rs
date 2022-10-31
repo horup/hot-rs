@@ -66,7 +66,7 @@ pub fn update(ctx: &mut Context) {
     }
 
     if ctx.input.action {
-        ctx.commands.push(Command::FlashScreen {});
+        state.flash(0.25, 0.5);
     }
 }
 

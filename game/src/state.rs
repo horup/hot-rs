@@ -33,8 +33,19 @@ pub struct State {
     pub player:Option<EntityKey>,
     pub walkers:SecondaryMap<EntityKey, Walker>,
     pub doors:SecondaryMap<EntityKey, Door>,
-
+    pub flash_timer_sec:f32,
+    pub flash_timer_start:f32,
+    pub flash_max:f32,
 }
+
+impl State {
+    pub fn flash(&mut self, duration_sec:f32, flash_max:f32) {
+        self.flash_timer_sec = duration_sec;
+        self.flash_timer_start = duration_sec;
+        self.flash_max = flash_max;
+    }
+}
+
 
 #[derive(Default, Serialize, Deserialize, Clone, Copy)]
 pub struct Walker {
@@ -56,3 +67,9 @@ impl Door {
 
 
 pub static mut STATE:Option<State> = None; 
+
+pub fn state_mut() -> &'static mut State {
+    unsafe {
+        return STATE.as_mut().unwrap();
+    }
+}
