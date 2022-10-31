@@ -27,10 +27,6 @@ impl Engine {
                     texture.set_filter(FilterMode::Nearest);
                     self.textures.insert(*handle, texture);
                 },
-                Command::FlashScreen {  } => {
-                    self.flash_timer_start = 0.5;
-                    self.flash_timer = self.flash_timer_start;
-                }
                 Command::LoadMap { map_path } => {
                     self.load_map_from_path(map_path);
                     if !self.ctx.edit_mode {

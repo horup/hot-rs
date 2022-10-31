@@ -10,8 +10,6 @@ pub enum Command {
         handle:u32,
         path:String
     },
-    FlashScreen {
-    },
     LoadMap {
         map_path:String
     },
