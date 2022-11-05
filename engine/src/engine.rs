@@ -1,12 +1,13 @@
 use std::{fs::Metadata, path::{PathBuf, Path}, collections::HashMap, time::Duration, cell::UnsafeCell, borrow::BorrowMut};
 
-use context::{Context, CanvasOrg, Id, Entity, slotmap::SlotMap, glam::Vec2, Engine};
+use context::{Context, CanvasOrg, Id, Entity, slotmap::SlotMap, glam::Vec2, Engine, Game};
 use libloading::{Library, Symbol};
 use macroquad::{texture::Texture2D, time::get_frame_time, window::{screen_width, screen_height}};
 use native_dialog::FileDialog;
 
 #[derive(Default)]
 pub struct MacroquadEngine {
+    game:Option<Box<dyn Game>>,
     entities: SlotMap<Id, UnsafeCell<Entity>>,
     pub game_lib_path: PathBuf,
     pub game_lib: Option<Library>,
@@ -135,7 +136,7 @@ impl MacroquadEngine {
 
             let mut state:Vec<u8> = Vec::new();
             if unload {
-            //    state = self.call_game_serialize();
+                state = self.game.take().unwrap().serialize();
                 self.ctx.entities.clear();
 
                 if let Some(lib) = self.game_lib.take() {
@@ -157,9 +158,14 @@ impl MacroquadEngine {
                                 self.game_lib_metadata = Some(metadata);
                                 self.game_lib = Some(lib);
                                 println!("Game lib loaded");
+                                let mut s = self.call_game_init().unwrap();
+
                                 if unload {
-                        //            self.call_game_deserialize(&state);
+                                    s.deserialize(&state);
                                 }
+
+                                self.game = Some(s);
+
                                 break;
                             },
                             Err(err) => {
@@ -179,15 +185,19 @@ impl MacroquadEngine {
         }
     }
 
-    pub fn call_game_init(&mut self) {
+    pub fn call_game_init(&mut self) -> Option<Box<dyn Game>> {
         if let Some(lib) = self.game_lib.take() {
             unsafe {
-                if let Ok(f) = lib.get::<fn(state:&mut dyn Engine)>(b"init") {
-                    f(self);
+                if let Ok(f) = lib.get::<fn(state:&mut dyn Engine) -> Box<dyn Game>>(b"init") {
+                    let game = f(self);
+                    self.game_lib = Some(lib);
+                    return Some(game);
                 }
             }
             self.game_lib = Some(lib);
         }
+
+        return None;
     }
 
 
@@ -205,6 +215,12 @@ impl MacroquadEngine {
   //          self.call_game_update();
     //        self.update();
       //      self.call_game_post_update();
+
+            let game = self.game.take();
+            if let Some(mut game) = game {
+                game.tick(self);
+                self.game = Some(game);
+            }
         }
 
         self.process_commands().await;

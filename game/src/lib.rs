@@ -6,11 +6,18 @@ pub struct MyGame {
 
 impl Game for MyGame {
     fn init(&mut self, engine:&mut dyn Engine) {
-        todo!()
+        println!("initializing");
     }
 
     fn tick(&mut self, engine:&mut dyn Engine) {
-        todo!()
+        println!("ticking");
+    }
+
+    fn serialize(&self) -> Vec<u8> {
+        Vec::new()
+    }
+
+    fn deserialize(&mut self, vec:&[u8]) {
     }
 }
 
