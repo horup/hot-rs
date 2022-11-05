@@ -52,6 +52,14 @@ impl Default for Color {
 }
 
 pub trait Canvas {
+    fn screen_size(&self) -> Vec2;
+    fn texture_size(&self, texture:u32) -> Vec2;
+    fn draw_string(&self, params:DrawStringParams);
+    fn draw_texture(&self, params:DrawTextureParams);
+    fn draw_rect(&self, params:DrawRectParams);
+}
+
+pub trait CanvasOrg {
     fn ctx_mut(&mut self) -> &mut Context;
     fn screen_size(&mut self) -> Vec2;
     fn texture_size(&mut self, texture:u32) -> Vec2;

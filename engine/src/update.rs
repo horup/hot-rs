@@ -1,11 +1,11 @@
-use context::{EntityKey, slotmap::SlotMap, Entity, Map, glam::{Vec2, Vec3}, Command, IgnoreColissions};
+use context::{Id, slotmap::SlotMap, Entity, Map, glam::{Vec2, Vec3}, Command, IgnoreColissions};
 use parry2d::{na::Isometry2, bounding_volume::BoundingVolume};
 
 use crate::Engine;
 
 
 
-fn move_entity(key:EntityKey, e:&mut Entity, v:Vec3, entities:&mut SlotMap<EntityKey, Entity>, map:&Map, commands:&mut Vec<Command>) {
+fn move_entity(key:Id, e:&mut Entity, v:Vec3, entities:&mut SlotMap<Id, Entity>, map:&Map, commands:&mut Vec<Command>) {
     const DIMS:[Vec2;2] = [Vec2::new(0.0, 1.0), Vec2::new(1.0, 0.0)];
     let _step_size = 1.0/16.0;
     for dim in DIMS {

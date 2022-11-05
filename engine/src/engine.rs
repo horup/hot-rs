@@ -1,12 +1,13 @@
-use std::{fs::Metadata, path::{PathBuf, Path}, collections::HashMap, time::Duration};
+use std::{fs::Metadata, path::{PathBuf, Path}, collections::HashMap, time::Duration, cell::UnsafeCell, borrow::BorrowMut};
 
-use context::{Context, Canvas};
+use context::{Context, CanvasOrg, Id, Entity, slotmap::SlotMap, glam::Vec2};
 use libloading::{Library, Symbol};
-use macroquad::{texture::Texture2D, time::get_frame_time};
+use macroquad::{texture::Texture2D, time::get_frame_time, window::{screen_width, screen_height}};
 use native_dialog::FileDialog;
 
 #[derive(Default)]
 pub struct Engine {
+    entities: SlotMap<Id, UnsafeCell<Entity>>,
     pub game_lib_path: PathBuf,
     pub game_lib: Option<Library>,
     pub game_lib_metadata: Option<Metadata>,
@@ -14,6 +15,75 @@ pub struct Engine {
     pub textures:HashMap<u32, Texture2D>,
     pub flash_timer:f32,
     pub flash_timer_start:f32
+}
+
+impl context::Engine for Engine {
+    fn spawn_entity(&mut self, entity:Entity) -> Id {
+        let id = self.entities.borrow_mut().insert(UnsafeCell::new(entity));
+        return id;
+    }
+
+    fn despawn_entity(&mut self, id:Id) {
+        self.entities.remove(id);
+    }
+
+    fn clear(&mut self) {
+        self.entities.clear();
+    }
+
+    fn entity(&self, id:Id) -> Option<&Entity> {
+        let e = self.entities.get(id);
+        if let Some(e) = e {
+            unsafe {
+                let e = e.get().as_mut().unwrap();
+                return Some(e);
+            }
+        }
+        return None;
+    }
+
+    fn entity_mut(&self, id:Id) -> Option<&mut Entity> {
+        let e = self.entities.get(id);
+        if let Some(e) = e {
+            unsafe {
+                let e = e.get().as_mut().unwrap();
+                return Some(e);
+            }
+        }
+        return None;
+    }
+
+    fn map(&self) -> &context::Map {
+        &self.ctx.map
+    }
+
+    fn draw_world(&mut self) {
+        self.draw();
+    }
+
+    fn screen_size(&self) -> context::glam::Vec2 {
+        Vec2::new(screen_width(), screen_height())
+    }
+
+    fn texture_size(&self, texture:u32) -> context::glam::Vec2 {
+        if let Some(tex) = self.textures.get(&texture) {
+            return Vec2::new(tex.width(), tex.height());
+        }
+
+        Vec2::new(0.0, 0.0)
+    }
+
+    fn draw_string(&self, params:context::DrawStringParams) {
+        todo!()
+    }
+
+    fn draw_texture(&self, params:context::DrawTextureParams) {
+        todo!()
+    }
+
+    fn draw_rect(&self, params:context::DrawRectParams) {
+        todo!()
+    }
 }
 
 impl Engine {
@@ -140,12 +210,13 @@ impl Engine {
     }
 
     pub fn call_game_update(&mut self) {
-        if let Some(lib) = self.game_lib.as_mut() {
+        if let Some(lib) = self.game_lib.take() {
             unsafe {
-                if let Ok(f) = lib.get::<fn(state:&mut Context)>(b"update") {
-                    f(&mut self.ctx);
+                if let Ok(f) = lib.get::<fn(state:&mut dyn context::Engine)>(b"update") {
+                    f(self);
                 }
             }
+            self.game_lib = Some(lib);
         }
     }
 
@@ -162,8 +233,8 @@ impl Engine {
     pub fn call_game_draw(&mut self) {
         if let Some(lib) = self.game_lib.take() {
             unsafe {
-                if let Ok(f) = lib.get::<fn(canvas:&mut dyn Canvas)>(b"draw") {
-                    let canvas:&mut dyn Canvas = self;
+                if let Ok(f) = lib.get::<fn(canvas:&mut dyn CanvasOrg)>(b"draw") {
+                    let canvas:&mut dyn CanvasOrg = self;
                     f(canvas);
                 }
             }
@@ -194,16 +265,3 @@ impl Engine {
         self.ui();
     }
 }
-
-/*
-fn load_lib(path:&Path) -> Option<Library> {
-    unsafe {
-        let mut to = path.parent().unwrap().to_path_buf();
-        to.push("hot.dll");
-        if std::fs::copy(path, to.clone()).is_ok() {
-            let lib = Some(libloading::Library::new(to).unwrap());
-            return lib;
-        }
-        return None;
-    }
-}*/

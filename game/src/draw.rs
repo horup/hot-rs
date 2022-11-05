@@ -2,7 +2,7 @@ use context::*;
 use crate::{Textures, state_mut};
 
 #[no_mangle]
-pub fn draw(canvas:&mut dyn Canvas) {
+pub fn draw(canvas:&mut dyn CanvasOrg) {
     let dt = canvas.ctx_mut().dt;
     let state = state_mut();
 

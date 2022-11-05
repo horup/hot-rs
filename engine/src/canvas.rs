@@ -1,8 +1,8 @@
-use context::{Canvas, Context};
+use context::{CanvasOrg, Context};
 use macroquad::prelude::*;
 use crate::Engine;
 
-impl Canvas for Engine {
+impl CanvasOrg for Engine {
     fn draw_string(&mut self, p:context::DrawStringParams) {
         draw_text_ex(&p.str, p.x, p.y, TextParams {
             ..Default::default()

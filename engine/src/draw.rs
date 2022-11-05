@@ -1,6 +1,6 @@
 
 
-use context::EntityKey;
+use context::Id;
 use macroquad::prelude::*;
 use crate::Engine;
 
@@ -275,7 +275,7 @@ impl Engine {
             w: bounds.w + margin * 2.0,
             h: bounds.h + margin * 2.0,
         };
-        let mut visible_set:Vec<EntityKey> = Vec::with_capacity(self.ctx.entities.len());
+        let mut visible_set:Vec<Id> = Vec::with_capacity(self.ctx.entities.len());
 
         for (key, e) in self.ctx.entities.iter() {
             if bounds.contains(e.pos.truncate()) {
@@ -334,7 +334,7 @@ impl Engine {
         self.call_game_draw();
     }
 
-    pub fn draw(&mut self) {
+    pub fn draw(&self) {
         if self.ctx.debug {
             self.draw_grid();
         }
@@ -342,11 +342,11 @@ impl Engine {
         if self.ctx.edit_mode {
             self.draw_edit_mode();
         } else {
-            self.draw_game_mode();
+            //self.draw_game_mode();
         }
 
         if self.ctx.debug {
-            self.draw_debug();
+           // self.draw_debug();
         }
     }
 }

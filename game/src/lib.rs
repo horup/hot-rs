@@ -1,5 +1,5 @@
 mod state;
-use context::{Context, slotmap::SlotMap, EntityKey, Entity};
+use context::{Context, slotmap::SlotMap, Id, Entity};
 use serde::{Serialize, Deserialize};
 pub use state::*;
 
@@ -7,7 +7,7 @@ use crate::STATE;
 
 #[derive(Serialize, Deserialize)]
 struct S {
-    pub entities:SlotMap<EntityKey, Entity>,
+    pub entities:SlotMap<Id, Entity>,
     pub state:State
 }
 

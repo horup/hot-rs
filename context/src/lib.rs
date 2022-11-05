@@ -22,6 +22,9 @@ use glam::Vec2;
 pub use slotmap;
 use slotmap::{new_key_type, SlotMap};
 
+mod engine;
+pub use engine::*;
+
 #[derive(Debug, Default, Clone, Copy)]
 pub struct Tile {
     pub texture: u32,
@@ -39,7 +42,7 @@ pub struct PlayerInput {
     pub mouse_right_pressed: bool,
 }
 
-new_key_type! { pub struct EntityKey; }
+new_key_type! { pub struct Id; }
 
 #[derive(Default)]
 pub struct Context {
@@ -48,7 +51,7 @@ pub struct Context {
     pub over_ui: bool,
     pub edit_mode: bool,
     pub map: Map,
-    pub entities: SlotMap<EntityKey, Entity>,
+    pub entities: SlotMap<Id, Entity>,
     pub tilemap: Grid<Tile>,
     pub commands: Vec<Command>,
     pub input: PlayerInput,

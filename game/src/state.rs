@@ -1,4 +1,4 @@
-use context::{EntityKey, slotmap::SecondaryMap};
+use context::{Id, slotmap::SecondaryMap};
 use num_enum::{TryFromPrimitive, IntoPrimitive};
 use serde::{Serialize, Deserialize};
 
@@ -30,9 +30,9 @@ pub enum Textures {
 
 #[derive(Default, Serialize, Deserialize, Clone)]
 pub struct State {
-    pub player:Option<EntityKey>,
-    pub walkers:SecondaryMap<EntityKey, Walker>,
-    pub doors:SecondaryMap<EntityKey, Door>,
+    pub player:Option<Id>,
+    pub walkers:SecondaryMap<Id, Walker>,
+    pub doors:SecondaryMap<Id, Door>,
     pub flash_timer_sec:f32,
     pub flash_timer_start:f32,
     pub flash_max:f32,
