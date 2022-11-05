@@ -4,6 +4,9 @@ pub use canvas::*;
 mod entity;
 pub use entity::*;
 
+mod game;
+pub use game::*;
+
 mod command;
 pub use command::*;
 mod map;

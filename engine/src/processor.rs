@@ -1,10 +1,10 @@
 use context::{Command, Context};
 use libloading::{Symbol};
 use macroquad::texture::{Texture2D, load_texture, FilterMode};
-use crate::Engine;
+use crate::MacroquadEngine;
 
 
-impl Engine {
+impl MacroquadEngine {
     pub async fn process_commands(&mut self) {
         let commands:Vec<Command> = self.ctx.commands.drain(..).collect();
         for command in commands.iter() {
@@ -18,7 +18,7 @@ impl Engine {
                         }
 
                         if !self.ctx.edit_mode {
-                            self.call_game_start();
+                         //   self.call_game_start();
                         }
                     }
                 }
@@ -30,7 +30,7 @@ impl Engine {
                 Command::LoadMap { map_path } => {
                     self.load_map_from_path(map_path);
                     if !self.ctx.edit_mode {
-                        self.call_game_start();
+                     //   self.call_game_start();
                     }
                 }
                 Command::ContactEntity { entity: _, other: _ } => {},

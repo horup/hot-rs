@@ -1,9 +1,9 @@
 use context::{Command, PlayerInput, glam::Vec2, Tool};
 use macroquad::prelude::{is_key_pressed, KeyCode, is_key_down, mouse_position, is_mouse_button_down, MouseButton, is_mouse_button_pressed, mouse_wheel};
 
-use crate::Engine;
+use crate::MacroquadEngine;
 
-impl Engine {
+impl MacroquadEngine {
     pub fn num(&self) -> Option<u8> {
         if is_key_pressed(KeyCode::Key0) { return Some(0); }
         if is_key_pressed(KeyCode::Key1) { return Some(1); }

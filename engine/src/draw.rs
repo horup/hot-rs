@@ -2,9 +2,9 @@
 
 use context::Id;
 use macroquad::prelude::*;
-use crate::Engine;
+use crate::MacroquadEngine;
 
-impl Engine {
+impl MacroquadEngine {
     pub fn active_camera(&self) -> &context::Camera {
         if self.ctx.edit_mode {
             return &self.ctx.edit_camera;
@@ -331,7 +331,7 @@ impl Engine {
             }
         }
 
-        self.call_game_draw();
+      //  self.call_game_draw();
     }
 
     pub fn draw(&self) {

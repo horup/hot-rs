@@ -1,10 +1,10 @@
 use context::Tool;
 use macroquad::{prelude::*, ui::{widgets, root_ui}, hash};
 
-use crate::Engine;
+use crate::MacroquadEngine;
 
 
-impl Engine {
+impl MacroquadEngine {
 
     pub fn edit_ui(&mut self) {
         

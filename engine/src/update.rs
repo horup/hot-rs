@@ -1,7 +1,7 @@
 use context::{Id, slotmap::SlotMap, Entity, Map, glam::{Vec2, Vec3}, Command, IgnoreColissions};
 use parry2d::{na::Isometry2, bounding_volume::BoundingVolume};
 
-use crate::Engine;
+use crate::MacroquadEngine;
 
 
 
@@ -67,7 +67,7 @@ fn move_entity(key:Id, e:&mut Entity, v:Vec3, entities:&mut SlotMap<Id, Entity>,
 }
 
 
-impl Engine {
+impl MacroquadEngine {
     pub fn update(&mut self) {
         let ctx = &mut self.ctx;
         let mut entities = ctx.entities.clone();

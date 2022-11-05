@@ -1,4 +1,28 @@
-mod state;
+use context::*;
+
+pub struct MyGame {
+
+}
+
+impl Game for MyGame {
+    fn init(&mut self, engine:&mut dyn Engine) {
+        todo!()
+    }
+
+    fn tick(&mut self, engine:&mut dyn Engine) {
+        todo!()
+    }
+}
+
+
+#[no_mangle]
+pub fn init(engine:&mut dyn Engine) -> Box<dyn Game> {
+    Box::new(MyGame {
+
+    })
+}
+
+/*mod state;
 use context::{Context, slotmap::SlotMap, Id, Entity};
 use serde::{Serialize, Deserialize};
 pub use state::*;
@@ -44,4 +68,4 @@ mod draw;
 pub use draw::*;
 
 mod post_update;
-pub use post_update::*;
+pub use post_update::*;*/

@@ -1,12 +1,12 @@
 use std::{fs::Metadata, path::{PathBuf, Path}, collections::HashMap, time::Duration, cell::UnsafeCell, borrow::BorrowMut};
 
-use context::{Context, CanvasOrg, Id, Entity, slotmap::SlotMap, glam::Vec2};
+use context::{Context, CanvasOrg, Id, Entity, slotmap::SlotMap, glam::Vec2, Engine};
 use libloading::{Library, Symbol};
 use macroquad::{texture::Texture2D, time::get_frame_time, window::{screen_width, screen_height}};
 use native_dialog::FileDialog;
 
 #[derive(Default)]
-pub struct Engine {
+pub struct MacroquadEngine {
     entities: SlotMap<Id, UnsafeCell<Entity>>,
     pub game_lib_path: PathBuf,
     pub game_lib: Option<Library>,
@@ -17,7 +17,7 @@ pub struct Engine {
     pub flash_timer_start:f32
 }
 
-impl context::Engine for Engine {
+impl context::Engine for MacroquadEngine {
     fn spawn_entity(&mut self, entity:Entity) -> Id {
         let id = self.entities.borrow_mut().insert(UnsafeCell::new(entity));
         return id;
@@ -86,7 +86,7 @@ impl context::Engine for Engine {
     }
 }
 
-impl Engine {
+impl MacroquadEngine {
     pub fn new(game_path: PathBuf) -> Self {
         Self {
             game_lib_path: game_path,
@@ -135,7 +135,7 @@ impl Engine {
 
             let mut state:Vec<u8> = Vec::new();
             if unload {
-                state = self.call_game_serialize();
+            //    state = self.call_game_serialize();
                 self.ctx.entities.clear();
 
                 if let Some(lib) = self.game_lib.take() {
@@ -158,7 +158,7 @@ impl Engine {
                                 self.game_lib = Some(lib);
                                 println!("Game lib loaded");
                                 if unload {
-                                    self.call_game_deserialize(&state);
+                        //            self.call_game_deserialize(&state);
                                 }
                                 break;
                             },
@@ -179,40 +179,10 @@ impl Engine {
         }
     }
 
-
-    pub fn call_game_start(&mut self) {
-        if let Some(lib) = self.game_lib.as_mut() {
-            unsafe {
-                let update_func:Symbol<fn(state:&mut Context)> = lib.get(b"start").unwrap();
-                update_func(&mut self.ctx);
-            }
-        }
-    }
-
-    pub fn call_game_serialize(&mut self) -> Vec<u8> {
-        if let Some(lib) = self.game_lib.as_mut() {
-            unsafe {
-                let f:Symbol<fn(ctx:&mut Context)->Vec<u8>> = lib.get(b"serialize").unwrap();
-                return f(&mut self.ctx);
-            }
-        }
-
-        Vec::new()
-    }
-
-    pub fn call_game_deserialize(&mut self, state:&Vec<u8>) {
-        if let Some(lib) = self.game_lib.as_mut() {
-            unsafe {
-                let f:Symbol<fn(ctx:&mut Context, state:&Vec<u8>)> = lib.get(b"deserialize").unwrap();
-                f(&mut self.ctx, state);
-            }
-        }
-    }
-
-    pub fn call_game_update(&mut self) {
+    pub fn call_game_init(&mut self) {
         if let Some(lib) = self.game_lib.take() {
             unsafe {
-                if let Ok(f) = lib.get::<fn(state:&mut dyn context::Engine)>(b"update") {
+                if let Ok(f) = lib.get::<fn(state:&mut dyn Engine)>(b"init") {
                     f(self);
                 }
             }
@@ -220,28 +190,6 @@ impl Engine {
         }
     }
 
-    pub fn call_game_post_update(&mut self) {
-        if let Some(lib) = self.game_lib.as_mut() {
-            unsafe {
-                if let Ok(f) = lib.get::<fn(state:&mut Context)>(b"post_update") {
-                    f(&mut self.ctx);
-                }
-            }
-        }
-    }
-
-    pub fn call_game_draw(&mut self) {
-        if let Some(lib) = self.game_lib.take() {
-            unsafe {
-                if let Ok(f) = lib.get::<fn(canvas:&mut dyn CanvasOrg)>(b"draw") {
-                    let canvas:&mut dyn CanvasOrg = self;
-                    f(canvas);
-                }
-            }
-
-            self.game_lib = Some(lib);
-        }
-    }
 
     pub async fn tick(&mut self) {
         let prev_edit_mode = self.ctx.edit_mode;
@@ -252,11 +200,11 @@ impl Engine {
 
         if !self.ctx.edit_mode {
             if edit_mode_changed {
-                self.call_game_start();
+//                self.call_game_start();
             }
-            self.call_game_update();
-            self.update();
-            self.call_game_post_update();
+  //          self.call_game_update();
+    //        self.update();
+      //      self.call_game_post_update();
         }
 
         self.process_commands().await;
