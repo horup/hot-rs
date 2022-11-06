@@ -1,6 +1,6 @@
 use std::{fs::Metadata, path::{PathBuf, Path}, collections::HashMap, time::Duration, cell::UnsafeCell, borrow::BorrowMut};
 
-use shared::{Context, CanvasOrg, Id, Entity, slotmap::SlotMap, glam::Vec2, Engine, Game};
+use shared::{Context, CanvasOrg, Id, Entity, slotmap::SlotMap, glam::Vec2, Engine, Game, Camera};
 use libloading::{Library, Symbol};
 use macroquad::{texture::Texture2D, time::get_frame_time, window::{screen_width, screen_height}};
 use native_dialog::FileDialog;
@@ -58,8 +58,9 @@ impl shared::Engine for MacroquadEngine {
         &self.ctx.map
     }
 
-    fn draw_world(&mut self) {
-        self.draw();
+    fn draw_world(&mut self, camera:&Camera) {
+        self.ctx.game_camera = camera.clone();
+        self.draw_game_mode();
     }
 
     fn screen_size(&self) -> shared::glam::Vec2 {

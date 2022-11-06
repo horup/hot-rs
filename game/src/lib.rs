@@ -7,7 +7,7 @@ pub use init::*;
 mod state;
 pub use state::*;
 
-use shared::*;
+use shared::{*, glam::Vec2};
 
 
 #[derive(Default)]
@@ -17,6 +17,11 @@ pub struct MyGame {
 
 impl Game for MyGame {
     fn tick(&mut self, engine:&mut dyn Engine) {
+        let camera = Camera {
+            pos: Vec2::new(0.0, 0.0),
+            zoom: 16.0,
+        };
+        engine.draw_world(&camera);
     }
 
     fn serialize(&self) -> Vec<u8> {
