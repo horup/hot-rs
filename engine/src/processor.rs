@@ -10,17 +10,23 @@ impl MacroquadEngine {
         for command in commands.iter() {
             match command {
                 Command::Restart => {
-                    if let Some(lib) = &self.game_lib {
+                    let game = self.game.take();
+                    if let Some(mut game) = game {
+                        game.init(self);
+                        self.game = Some(game);
+                    }
+
+                   /* if let Some(lib) = &self.game_lib {
                         self.ctx = Context::default();
                         unsafe {
-                            let init_func:Symbol<fn(state:&mut Context)> = lib.get(b"init").unwrap();
-                            init_func(&mut self.ctx);
+                          //  let init_func:Symbol<fn(state:&mut Context)> = lib.get(b"init").unwrap();
+                          //  init_func(&mut self.ctx);
                         }
 
                         if !self.ctx.edit_mode {
                          //   self.call_game_start();
                         }
-                    }
+                    }*/
                 }
                 Command::DefineTexture { handle, path } => {
                     let texture: Texture2D = load_texture(path).await.unwrap();

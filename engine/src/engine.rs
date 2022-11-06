@@ -7,7 +7,7 @@ use native_dialog::FileDialog;
 
 #[derive(Default)]
 pub struct MacroquadEngine {
-    game:Option<Box<dyn Game>>,
+    pub game:Option<Box<dyn Game>>,
     entities: SlotMap<Id, UnsafeCell<Entity>>,
     pub game_lib_path: PathBuf,
     pub game_lib: Option<Library>,
@@ -85,6 +85,10 @@ impl shared::Engine for MacroquadEngine {
     fn draw_rect(&self, params:shared::DrawRectParams) {
         todo!()
     }
+
+    fn push_command(&mut self, command:shared::Command) {
+        self.ctx.commands.push(command);
+    }
 }
 
 impl MacroquadEngine {
@@ -158,7 +162,7 @@ impl MacroquadEngine {
                                 self.game_lib_metadata = Some(metadata);
                                 self.game_lib = Some(lib);
                                 println!("Game lib loaded");
-                                let mut s = self.call_game_init().unwrap();
+                                let mut s = self.call_game_create().unwrap();
 
                                 if unload {
                                     s.deserialize(&state);
@@ -185,10 +189,10 @@ impl MacroquadEngine {
         }
     }
 
-    pub fn call_game_init(&mut self) -> Option<Box<dyn Game>> {
+    pub fn call_game_create(&mut self) -> Option<Box<dyn Game>> {
         if let Some(lib) = self.game_lib.take() {
             unsafe {
-                if let Ok(f) = lib.get::<fn(state:&mut dyn Engine) -> Box<dyn Game>>(b"init") {
+                if let Ok(f) = lib.get::<fn(state:&mut dyn Engine) -> Box<dyn Game>>(b"create") {
                     let game = f(self);
                     self.game_lib = Some(lib);
                     return Some(game);

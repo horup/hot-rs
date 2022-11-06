@@ -1,5 +1,5 @@
 use glam::Vec2;
-use crate::{Id, Entity, Map, DrawStringParams, DrawTextureParams, DrawRectParams};
+use crate::{Id, Entity, Map, DrawStringParams, DrawTextureParams, DrawRectParams, Command};
 
 pub trait Engine {
     fn spawn_entity(&mut self, entity:Entity) -> Id;
@@ -14,4 +14,5 @@ pub trait Engine {
     fn draw_string(&self, params:DrawStringParams);
     fn draw_texture(&self, params:DrawTextureParams);
     fn draw_rect(&self, params:DrawRectParams);
+    fn push_command(&mut self, command:Command);
 }
