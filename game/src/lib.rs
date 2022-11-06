@@ -1,4 +1,4 @@
-use context::*;
+use shared::*;
 
 pub struct MyGame {
 

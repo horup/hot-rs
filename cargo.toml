@@ -2,6 +2,6 @@
 members = [
     "engine",
     "game",
-    "context",
+    "shared",
     "app"
 ]

@@ -1,6 +1,6 @@
 use std::{fs::Metadata, path::{PathBuf, Path}, collections::HashMap, time::Duration, cell::UnsafeCell, borrow::BorrowMut};
 
-use context::{Context, CanvasOrg, Id, Entity, slotmap::SlotMap, glam::Vec2, Engine, Game};
+use shared::{Context, CanvasOrg, Id, Entity, slotmap::SlotMap, glam::Vec2, Engine, Game};
 use libloading::{Library, Symbol};
 use macroquad::{texture::Texture2D, time::get_frame_time, window::{screen_width, screen_height}};
 use native_dialog::FileDialog;
@@ -18,7 +18,7 @@ pub struct MacroquadEngine {
     pub flash_timer_start:f32
 }
 
-impl context::Engine for MacroquadEngine {
+impl shared::Engine for MacroquadEngine {
     fn spawn_entity(&mut self, entity:Entity) -> Id {
         let id = self.entities.borrow_mut().insert(UnsafeCell::new(entity));
         return id;
@@ -54,7 +54,7 @@ impl context::Engine for MacroquadEngine {
         return None;
     }
 
-    fn map(&self) -> &context::Map {
+    fn map(&self) -> &shared::Map {
         &self.ctx.map
     }
 
@@ -62,11 +62,11 @@ impl context::Engine for MacroquadEngine {
         self.draw();
     }
 
-    fn screen_size(&self) -> context::glam::Vec2 {
+    fn screen_size(&self) -> shared::glam::Vec2 {
         Vec2::new(screen_width(), screen_height())
     }
 
-    fn texture_size(&self, texture:u32) -> context::glam::Vec2 {
+    fn texture_size(&self, texture:u32) -> shared::glam::Vec2 {
         if let Some(tex) = self.textures.get(&texture) {
             return Vec2::new(tex.width(), tex.height());
         }
@@ -74,15 +74,15 @@ impl context::Engine for MacroquadEngine {
         Vec2::new(0.0, 0.0)
     }
 
-    fn draw_string(&self, params:context::DrawStringParams) {
+    fn draw_string(&self, params:shared::DrawStringParams) {
         todo!()
     }
 
-    fn draw_texture(&self, params:context::DrawTextureParams) {
+    fn draw_texture(&self, params:shared::DrawTextureParams) {
         todo!()
     }
 
-    fn draw_rect(&self, params:context::DrawRectParams) {
+    fn draw_rect(&self, params:shared::DrawRectParams) {
         todo!()
     }
 }

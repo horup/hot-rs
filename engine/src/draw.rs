@@ -1,11 +1,11 @@
 
 
-use context::Id;
+use shared::Id;
 use macroquad::prelude::*;
 use crate::MacroquadEngine;
 
 impl MacroquadEngine {
-    pub fn active_camera(&self) -> &context::Camera {
+    pub fn active_camera(&self) -> &shared::Camera {
         if self.ctx.edit_mode {
             return &self.ctx.edit_camera;
         }

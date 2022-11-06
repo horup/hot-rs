@@ -1,4 +1,4 @@
-use context::{Command, Context};
+use shared::{Command, Context};
 use libloading::{Symbol};
 use macroquad::texture::{Texture2D, load_texture, FilterMode};
 use crate::MacroquadEngine;

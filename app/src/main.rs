@@ -8,7 +8,7 @@ async fn main() {
     let mut lib_path = current_exe_path.parent().unwrap().to_path_buf();
     lib_path.push("game.dll");
     let mut engine = MacroquadEngine::new(lib_path);
-    engine.ctx.commands.push(context::Command::Restart);
+    engine.ctx.commands.push(shared::Command::Restart);
     loop {
         engine.poll_game_lib();
         engine.tick().await;

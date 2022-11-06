@@ -1,4 +1,4 @@
-use context::{Id, slotmap::SlotMap, Entity, Map, glam::{Vec2, Vec3}, Command, IgnoreColissions};
+use shared::{Id, slotmap::SlotMap, Entity, Map, glam::{Vec2, Vec3}, Command, IgnoreColissions};
 use parry2d::{na::Isometry2, bounding_volume::BoundingVolume};
 
 use crate::MacroquadEngine;
