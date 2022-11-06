@@ -1,18 +1,13 @@
-use context::{Context, Command};
-use crate::{state::STATE, State, Textures};
+use shared::*;
 
-#[no_mangle]
-pub fn init(ctx: &mut Context) {
-    unsafe {
-        STATE = Some(State::default());
-    }
-    ctx.debug = true;
-    ctx.edit_camera.zoom = 16.0;
-   
+use crate::Textures;
+
+
+pub fn init(engine: &mut dyn Engine) {
     let mut tiles:Vec<u32> = Vec::new();
     macro_rules! def_tile {
         ($handle:expr, $path:expr) => {
-            ctx.define_texture($handle, $path);
+            engine.push_command(Command::DefineTexture { handle: $handle.into(), path: $path.into() });
             tiles.push($handle.into());
         };
     }
@@ -23,11 +18,10 @@ pub fn init(ctx: &mut Context) {
     def_tile!(Textures::BlackWall, "assets/textures/black_wall.png");
     def_tile!(Textures::WhiteWall, "assets/textures/white_wall.png");
     def_tile!(Textures::WoodFloor, "assets/textures/wood_floor.png");
-
     let mut entities:Vec<u32> = Vec::new();
     macro_rules! def_entity {
         ($handle:expr, $path:expr) => {
-            ctx.define_texture($handle, $path);
+            engine.push_command(Command::DefineTexture { handle: $handle.into(), path: $path.into() });
             entities.push($handle.into());
         };
     }
@@ -45,10 +39,5 @@ pub fn init(ctx: &mut Context) {
     def_entity!(Textures::BlueKey, "assets/textures/blue_key.png");
     def_entity!(Textures::WaypointMarker, "assets/textures/waypoint_marker.png");
     def_entity!(Textures::ExitMarker, "assets/textures/exit_marker.png");
-
-    let edit = &mut ctx.edit;
-    edit.entities = entities;
-    edit.tiles = tiles;
-
-    ctx.commands.push(Command::LoadMap { map_path:"assets/maps/test.map".into()});
+    engine.push_command(Command::LoadMap { map_path: "assets/maps/test.map".into() });
 }
