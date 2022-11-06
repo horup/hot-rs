@@ -5,12 +5,7 @@ pub struct MyGame {
 }
 
 impl Game for MyGame {
-    fn init(&mut self, engine:&mut dyn Engine) {
-        println!("initializing");
-    }
-
     fn tick(&mut self, engine:&mut dyn Engine) {
-        println!("ticking");
     }
 
     fn serialize(&self) -> Vec<u8> {
@@ -24,6 +19,8 @@ impl Game for MyGame {
 
 #[no_mangle]
 pub fn init(engine:&mut dyn Engine) -> Box<dyn Game> {
+
+    
     Box::new(MyGame {
 
     })
