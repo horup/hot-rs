@@ -1,5 +1,5 @@
 use glam::Vec2;
-use crate::{Id, Entity, Map, Command, Camera};
+use crate::{Id, Entity, Map, Command, Camera, Event};
 
 #[derive(Default, Clone)]
 pub struct DrawStringParams {
@@ -65,4 +65,5 @@ pub trait Context {
     fn draw_texture(&self, params:DrawTextureParams);
     fn draw_rect(&self, params:DrawRectParams);
     fn push_command(&mut self, command:Command);
+    fn events(&mut self) -> Vec<Event>;
 }

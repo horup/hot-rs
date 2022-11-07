@@ -19,6 +19,13 @@ pub struct MyGame {
 
 impl Game for MyGame {
     fn tick(&mut self, engine:&mut dyn Context) {
+        for event in engine.events().iter() {
+            match event {
+                Event::MapLoaded {  } => {
+                    self.start(engine)
+                },
+            }
+        }
         let camera = Camera {
             pos: Vec2::new(5.0, 0.0),
             zoom: 32.0,
@@ -35,7 +42,6 @@ impl Game for MyGame {
 
     fn init(&mut self, engine:&mut dyn Context) {
         init(engine);
-        self.start(engine);
     }
 }
 

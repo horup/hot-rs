@@ -1,7 +1,7 @@
 use std::cell::UnsafeCell;
 
 use macroquad::{prelude::Vec2, window::{screen_width, screen_height}};
-use shared::{Entity, Id, Camera, Context};
+use shared::{Entity, Id, Camera, Context, Event};
 
 use crate::Engine;
 
@@ -77,5 +77,11 @@ impl Context for Engine {
 
     fn push_command(&mut self, command:shared::Command) {
         self.commands.push(command);
+    }
+
+    fn events(&mut self) -> Vec<Event> {
+        let mut events = Vec::new();
+        std::mem::swap(&mut self.events, &mut events);
+        return events;
     }
 }

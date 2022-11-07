@@ -1,4 +1,4 @@
-use shared::{Command};
+use shared::{Command, Event};
 
 use macroquad::texture::{Texture2D, load_texture, FilterMode};
 use crate::Engine;
@@ -32,12 +32,16 @@ impl Engine {
                     let texture: Texture2D = load_texture(path).await.unwrap();
                     texture.set_filter(FilterMode::Nearest);
                     self.textures.insert(*handle, texture);
+
+                    
                 },
                 Command::LoadMap { map_path } => {
                     self.load_map_from_path(map_path);
                     if !self.edit_mode {
                      //   self.call_game_start();
                     }
+
+                    self.events.push(Event::MapLoaded {  });
                 }
                 Command::ContactEntity { entity: _, other: _ } => {},
                 Command::ContactTile { entity: _, tile: _ } => {},

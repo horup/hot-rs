@@ -13,11 +13,12 @@ use macroquad::{
 use native_dialog::FileDialog;
 use shared::{
     slotmap::SlotMap, Camera, Command, Context, Edit, Entity, Game, Id, Map,
-    PlayerInput,
+    PlayerInput, Event,
 };
 
 #[derive(Default)]
 pub struct Engine {
+    pub(crate) events: Vec<Event>,
     pub(crate) over_ui: bool,
     pub(crate) edit: Edit,
     pub(crate) input: PlayerInput,
@@ -138,7 +139,8 @@ impl Engine {
         if let Some(lib) = self.game_lib.take() {
             unsafe {
                 if let Ok(f) = lib.get::<fn(state: &mut dyn Context) -> Box<dyn Game>>(b"create") {
-                    let game = f(self);
+                    let mut game = f(self);
+                    game.init(self);
                     self.game_lib = Some(lib);
                     return Some(game);
                 }
