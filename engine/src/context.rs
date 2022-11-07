@@ -1,6 +1,6 @@
-use std::cell::UnsafeCell;
+use std::{cell::UnsafeCell, mem::transmute};
 
-use macroquad::{prelude::{Vec2, KeyCode}, window::{screen_width, screen_height}};
+use macroquad::{prelude::{Vec2, KeyCode, is_key_pressed, is_key_down, get_last_key_pressed}, window::{screen_width, screen_height}};
 use shared::{Entity, Id, Camera, Context, Event};
 
 use crate::Engine;
@@ -85,12 +85,23 @@ impl Context for Engine {
         return events;
     }
 
-    fn key_pressed(&self, key_code:u32) -> bool {
+    fn is_key_pressed(&self, key_code:u8) -> bool {
+        let key_code:KeyCode = unsafe {transmute(key_code)};
         
-        todo!()
+        return is_key_pressed(key_code);
     }
 
-    fn key_down(&self, key_code:u32) -> bool {
-        todo!()
+    fn is_key_down(&self, key_code:u8) -> bool {
+        let key_code:KeyCode = unsafe {transmute(key_code)};
+        return is_key_down(key_code);
     }
+
+    fn last_key_pressed(&self) -> Option<u8> {
+        if let Some(key_code) = get_last_key_pressed() {
+            let k:u8 = unsafe { transmute(key_code) };
+            return Some(k);
+        }
+        None
+    }
+    
 }

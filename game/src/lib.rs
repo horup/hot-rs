@@ -28,6 +28,10 @@ impl Game for MyGame {
             }
         }
 
+        if let Some(key) = engine.last_key_pressed() {
+            println!("{}", key);
+        }
+
         let camera = Camera {
             pos: Vec2::new(5.0, 0.0),
             zoom: 16.0,
