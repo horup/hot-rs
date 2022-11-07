@@ -9,4 +9,3 @@ edition = "2021"
 glam = { version = "0.21.3", features = ["serde"] }
 serde = { version = "1.0", features = ["derive"] }
 slotmap = { version = "1.0", features = ["serde"] }
-macroquad = "0.3"

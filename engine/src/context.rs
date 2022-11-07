@@ -85,11 +85,12 @@ impl Context for Engine {
         return events;
     }
 
-    fn key_pressed(&self, key_code:KeyCode) -> bool {
+    fn key_pressed(&self, key_code:u32) -> bool {
+        
         todo!()
     }
 
-    fn key_down(&self, key_code:KeyCode) -> bool {
+    fn key_down(&self, key_code:u32) -> bool {
         todo!()
     }
 }
