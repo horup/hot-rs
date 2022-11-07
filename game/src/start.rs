@@ -1,4 +1,4 @@
-use shared::{glam::Vec3, Context, Entity, Grid, IgnoreColissions};
+use shared::{glam::Vec3, Context, Entity, IgnoreColissions};
 use num_enum::TryFromPrimitive;
 use crate::{Textures, Walker, Door, MyGame};
 

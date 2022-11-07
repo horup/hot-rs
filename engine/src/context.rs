@@ -63,15 +63,15 @@ impl Context for Engine {
         Vec2::new(0.0, 0.0)
     }
 
-    fn draw_string(&self, params:shared::DrawStringParams) {
+    fn draw_string(&self, _params:shared::DrawStringParams) {
         todo!()
     }
 
-    fn draw_texture(&self, params:shared::DrawTextureParams) {
+    fn draw_texture(&self, _params:shared::DrawTextureParams) {
         todo!()
     }
 
-    fn draw_rect(&self, params:shared::DrawRectParams) {
+    fn draw_rect(&self, _params:shared::DrawRectParams) {
         todo!()
     }
 

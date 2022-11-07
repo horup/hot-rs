@@ -31,7 +31,7 @@ impl Game for MyGame {
         Vec::new()
     }
 
-    fn deserialize(&mut self, vec:&[u8]) {
+    fn deserialize(&mut self, _vec:&[u8]) {
     }
 
     fn init(&mut self, engine:&mut dyn Context) {
@@ -42,7 +42,7 @@ impl Game for MyGame {
 
 
 #[no_mangle]
-pub fn create(engine:&mut dyn Context) -> Box<dyn Game> {
+pub fn create(_engine:&mut dyn Context) -> Box<dyn Game> {
     Box::new(MyGame::default())
 }
 

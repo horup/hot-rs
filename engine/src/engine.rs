@@ -1,5 +1,4 @@
 use std::{
-    borrow::BorrowMut,
     cell::UnsafeCell,
     collections::HashMap,
     fs::Metadata,
@@ -7,15 +6,13 @@ use std::{
     time::Duration,
 };
 
-use libloading::{Library, Symbol};
+use libloading::{Library};
 use macroquad::{
     texture::Texture2D,
-    time::get_frame_time,
-    window::{screen_height, screen_width},
 };
 use native_dialog::FileDialog;
 use shared::{
-    glam::Vec2, slotmap::SlotMap, Camera, Command, Context, Edit, Entity, Game, Id, Map,
+    slotmap::SlotMap, Camera, Command, Context, Edit, Entity, Game, Id, Map,
     PlayerInput,
 };
 

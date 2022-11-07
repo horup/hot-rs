@@ -23,7 +23,7 @@ pub use glam;
 use glam::Vec2;
 
 pub use slotmap;
-use slotmap::{new_key_type, SlotMap};
+use slotmap::{new_key_type};
 
 mod context;
 pub use context::*;
