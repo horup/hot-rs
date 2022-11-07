@@ -42,7 +42,17 @@ impl<T> Grid<T> where T:Default+Clone {
         None
     }
 
-    pub fn for_each(&self, mut f:impl FnMut(&T,i32,i32)) {
+    pub fn for_each_mut(&self, mut f:impl FnMut(&T,i32,i32)) {
+        for y in 0..self.size as i32 {
+            for x in 0..self.size as i32 {
+                if let Some(t) = self.get(x, y) {
+                    f(t, x, y);
+                }
+            }
+        }
+    }
+
+    pub fn for_each(&self, f:impl Fn(&T,i32,i32)) {
         for y in 0..self.size as i32 {
             for x in 0..self.size as i32 {
                 if let Some(t) = self.get(x, y) {

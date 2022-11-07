@@ -7,6 +7,9 @@ pub use init::*;
 mod state;
 pub use state::*;
 
+mod start;
+pub use start::*;
+
 use shared::{*, glam::Vec2};
 
 
@@ -33,6 +36,7 @@ impl Game for MyGame {
 
     fn init(&mut self, engine:&mut dyn Engine) {
         init(engine);
+        self.start(engine);
     }
 }
 
