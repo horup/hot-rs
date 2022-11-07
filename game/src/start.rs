@@ -18,7 +18,6 @@ impl MyGame {
                                 radius: 0.25,
                                 ..Default::default()
                             });
-                            
     
                             state.player = Some(player_entity);
                             state.walkers.insert(player_entity, Walker::default());

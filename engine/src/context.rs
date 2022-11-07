@@ -1,6 +1,6 @@
 use std::cell::UnsafeCell;
 
-use macroquad::{prelude::Vec2, window::{screen_width, screen_height}};
+use macroquad::{prelude::{Vec2, KeyCode}, window::{screen_width, screen_height}};
 use shared::{Entity, Id, Camera, Context, Event};
 
 use crate::Engine;
@@ -85,11 +85,11 @@ impl Context for Engine {
         return events;
     }
 
-    fn key_pressed(&self, key_code:i32) -> bool {
+    fn key_pressed(&self, key_code:KeyCode) -> bool {
         todo!()
     }
 
-    fn key_down(&self, key_code:i32) -> bool {
+    fn key_down(&self, key_code:KeyCode) -> bool {
         todo!()
     }
 }

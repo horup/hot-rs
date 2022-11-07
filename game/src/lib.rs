@@ -16,7 +16,7 @@ use shared::{*, glam::Vec2};
 pub struct MyGame {
     pub state:State
 }
-
+ 
 impl Game for MyGame {
     fn tick(&mut self, engine:&mut dyn Context) {
         for event in engine.events().iter() {
@@ -28,10 +28,9 @@ impl Game for MyGame {
             }
         }
 
-
         let camera = Camera {
             pos: Vec2::new(5.0, 0.0),
-            zoom: 32.0,
+            zoom: 16.0,
         };
         engine.draw_world(&camera);
     }
