@@ -163,7 +163,6 @@ impl Engine {
             let game = self.game.take();
             if let Some(mut game) = game {
                 if edit_mode_changed {
-                    game.init(self);
                 }
 
                 game.tick(self);

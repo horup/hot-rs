@@ -52,6 +52,8 @@ impl Default for Color {
 }
 
 pub trait Context {
+    fn key_pressed(&self, key_code:i32) -> bool;
+    fn key_down(&self, key_code:i32) -> bool;
     fn spawn_entity(&mut self, entity:Entity) -> Id;
     fn despawn_entity(&mut self, id:Id);
     fn clear(&mut self);

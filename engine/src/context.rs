@@ -84,4 +84,12 @@ impl Context for Engine {
         std::mem::swap(&mut self.events, &mut events);
         return events;
     }
+
+    fn key_pressed(&self, key_code:i32) -> bool {
+        todo!()
+    }
+
+    fn key_down(&self, key_code:i32) -> bool {
+        todo!()
+    }
 }
