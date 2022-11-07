@@ -10,9 +10,6 @@ pub use command::*;
 mod map;
 pub use map::*;
 
-mod edit;
-pub use edit::*;
-
 mod grid;
 pub use grid::*;
 

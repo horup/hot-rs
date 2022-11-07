@@ -12,9 +12,11 @@ use macroquad::{
 };
 use native_dialog::FileDialog;
 use shared::{
-    slotmap::SlotMap, Camera, Command, Context, Edit, Entity, Game, Id, Map,
+    slotmap::SlotMap, Camera, Command, Context, Entity, Game, Id, Map,
     PlayerInput, Event,
 };
+
+use crate::Edit;
 
 #[derive(Default)]
 pub struct Engine {
