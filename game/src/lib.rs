@@ -12,31 +12,33 @@ pub use start::*;
 
 use shared::{*, glam::Vec2};
 
+mod input;
+pub use input::*;
+
+mod update;
+pub use update::*;
+
+mod draw;
+pub use draw::*;
+
 #[derive(Default)]
 pub struct MyGame {
-    pub state:State
+    pub state:State,
+    pub dir:Vec2
 }
  
 impl Game for MyGame {
-    fn tick(&mut self, engine:&mut dyn Context) {
-        for event in engine.events().iter() {
-            match event {
-                Event::MapLoaded {  } => {
-                    self.start(engine);
-                    return;
-                },
-            }
-        }
+    fn tick(&mut self, ctx:&mut dyn Context) {
+        self.poll_input(ctx);
+        self.process_events(ctx);
 
-        if let Some(key) = engine.last_key_pressed() {
-            println!("{}", key);
-        }
-
+        self.update(ctx);
+        self.draw(ctx);
         let camera = Camera {
             pos: Vec2::new(5.0, 0.0),
             zoom: 16.0,
         };
-        engine.draw_world(&camera);
+        ctx.draw_world(&camera);
     }
 
     fn serialize(&self) -> Vec<u8> {
@@ -51,6 +53,17 @@ impl Game for MyGame {
     }
 }
 
+impl MyGame {
+    fn process_events(&mut self, engine: &mut dyn Context) {
+        for event in engine.events().iter() {
+            match event {
+                Event::MapLoaded {  } => {
+                    self.start(engine);
+                },
+            }
+        }
+    }
+}
 
 #[no_mangle]
 pub fn create(_engine:&mut dyn Context) -> Box<dyn Game> {

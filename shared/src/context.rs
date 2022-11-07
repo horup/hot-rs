@@ -59,6 +59,8 @@ pub trait Context {
     fn despawn_entity(&mut self, id:Id);
     fn clear(&mut self);
     fn entity(&self, id:Id) -> Option<&Entity>;
+    fn entities(&self) -> Vec<Id>;
+    fn dt(&self) -> f32;
     fn entity_mut(&self, id:Id) -> Option<&mut Entity>;
     fn map(&self) -> &Map;
     fn draw_world(&mut self, camera:&Camera);

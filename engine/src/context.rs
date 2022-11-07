@@ -1,6 +1,6 @@
 use std::{cell::UnsafeCell, mem::transmute};
 
-use macroquad::{prelude::{Vec2, KeyCode, is_key_pressed, is_key_down, get_last_key_pressed}, window::{screen_width, screen_height}};
+use macroquad::{prelude::{Vec2, KeyCode, is_key_pressed, is_key_down, get_last_key_pressed}, window::{screen_width, screen_height}, time::get_frame_time};
 use shared::{Entity, Id, Camera, Context, Event};
 
 use crate::Engine;
@@ -102,6 +102,15 @@ impl Context for Engine {
             return Some(k);
         }
         None
+    }
+
+    fn entities(&self) -> Vec<Id> {
+        let v:Vec<Id> = self.entities.keys().collect();
+        v
+    }
+
+    fn dt(&self) -> f32 {
+        get_frame_time()
     }
     
 }
