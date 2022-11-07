@@ -3,7 +3,7 @@ use shared::*;
 use crate::Textures;
 
 
-pub fn init(engine: &mut dyn Engine) {
+pub fn init(engine: &mut dyn Context) {
     let mut tiles:Vec<u32> = Vec::new();
     macro_rules! def_tile {
         ($handle:expr, $path:expr) => {

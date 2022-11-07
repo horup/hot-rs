@@ -1,5 +1,5 @@
-mod canvas;
-pub use canvas::*;
+//mod canvas;
+//pub use canvas::*;
 
 mod engine;
 pub use engine::*;
@@ -19,4 +19,8 @@ pub use ui::*;
 mod update;
 pub use update::*;
 
+mod context;
+pub use context::*;
+
 pub use shared;
+pub use shared::*;

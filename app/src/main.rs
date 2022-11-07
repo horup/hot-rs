@@ -7,8 +7,8 @@ async fn main() {
     let current_exe_path = std::env::current_exe().unwrap();
     let mut lib_path = current_exe_path.parent().unwrap().to_path_buf();
     lib_path.push("game.dll");
-    let mut engine = MacroquadEngine::new(lib_path);
-    engine.ctx.commands.push(shared::Command::Restart);
+    let mut engine = Engine::new(lib_path);
+    engine.push_command(Command::Restart);
     loop {
         engine.poll_game_lib();
         engine.tick().await;

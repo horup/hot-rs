@@ -1,9 +1,9 @@
 use shared::{Command, PlayerInput, glam::Vec2, Tool};
-use macroquad::prelude::{is_key_pressed, KeyCode, is_key_down, mouse_position, is_mouse_button_down, MouseButton, is_mouse_button_pressed, mouse_wheel};
+use macroquad::{prelude::{is_key_pressed, KeyCode, is_key_down, mouse_position, is_mouse_button_down, MouseButton, is_mouse_button_pressed, mouse_wheel}, time::get_frame_time};
 
-use crate::MacroquadEngine;
+use crate::Engine;
 
-impl MacroquadEngine {
+impl Engine {
     pub fn num(&self) -> Option<u8> {
         if is_key_pressed(KeyCode::Key0) { return Some(0); }
         if is_key_pressed(KeyCode::Key1) { return Some(1); }
@@ -19,20 +19,20 @@ impl MacroquadEngine {
     }
 
     pub fn edit_input(&mut self) {
-        let before = self.ctx.map.clone();
+        let before = self.map.clone();
         if is_key_pressed(KeyCode::B) {
-            self.ctx.edit.blocks = !self.ctx.edit.blocks;
+            self.edit.blocks = !self.edit.blocks;
         }
 
         let (_, mw_y) = mouse_wheel();
-        self.ctx.edit_camera.zoom -= mw_y / 100.0;
-        if self.ctx.edit_camera.zoom < 2.0 {
-            self.ctx.edit_camera.zoom = 2.0;
+        self.edit_camera.zoom -= mw_y / 100.0;
+        if self.edit_camera.zoom < 2.0 {
+            self.edit_camera.zoom = 2.0;
         }
 
 
-        let speed = self.ctx.edit_camera.zoom * self.ctx.dt;
-        self.ctx.edit_camera.pos += self.ctx.input.dir * speed;
+        let speed = self.edit_camera.zoom * get_frame_time();
+        self.edit_camera.pos += self.input.dir * speed;
 
 
         if is_key_pressed(KeyCode::F5) {
@@ -43,36 +43,36 @@ impl MacroquadEngine {
         }
 
         if is_key_pressed(KeyCode::E) {
-            self.ctx.edit.tool = Tool::Entity;
+            self.edit.tool = Tool::Entity;
         }
         if is_key_pressed(KeyCode::T) {
-            self.ctx.edit.tool = Tool::Tile;
+            self.edit.tool = Tool::Tile;
         }
 
         if let Some(num) = self.num() {
             let t = num as u32;
-            match self.ctx.edit.tool {
-                Tool::Tile => self.ctx.edit.selected_tile = t,
-                Tool::Entity => self.ctx.edit.selected_entity = t,
+            match self.edit.tool {
+                Tool::Tile => self.edit.selected_tile = t,
+                Tool::Entity => self.edit.selected_entity = t,
             }
         }
 
-        if !self.ctx.over_ui {
-            let cell = self.ctx.input.mouse_pos_world.floor();
-            if let Some(cell) = self.ctx.map.grid.get_mut(cell.x as i32, cell.y as i32) {
+        if !self.over_ui {
+            let cell = self.input.mouse_pos_world.floor();
+            if let Some(cell) = self.map.grid.get_mut(cell.x as i32, cell.y as i32) {
                 if is_mouse_button_down(MouseButton::Left) {
-                    match self.ctx.edit.tool {
+                    match self.edit.tool {
                         Tool::Tile => {
-                            cell.tile = Some(self.ctx.edit.selected_tile);
-                            cell.blocks = self.ctx.edit.blocks;
+                            cell.tile = Some(self.edit.selected_tile);
+                            cell.blocks = self.edit.blocks;
                         },
                         Tool::Entity => {
-                            cell.entity = Some(self.ctx.edit.selected_entity);
+                            cell.entity = Some(self.edit.selected_entity);
                         },
                     }
                 }
                 else if is_mouse_button_down(MouseButton::Right) {
-                    match self.ctx.edit.tool {
+                    match self.edit.tool {
                         Tool::Tile => {
                             cell.tile = None;
                             cell.blocks = false;
@@ -85,7 +85,7 @@ impl MacroquadEngine {
             }
         }
 
-        let after = self.ctx.map.clone();
+        let after = self.map.clone();
         if after != before {
             
         }
@@ -94,11 +94,11 @@ impl MacroquadEngine {
 
     pub fn input(&mut self) {
         if is_key_pressed(KeyCode::Tab) {
-            self.ctx.edit_mode = !self.ctx.edit_mode;
+            self.edit_mode = !self.edit_mode;
         }
 
         if is_key_pressed(KeyCode::F1) {
-            self.ctx.commands.push(Command::Restart);
+            self.commands.push(Command::Restart);
         }
     
         let mut x = 0.0;
@@ -119,7 +119,7 @@ impl MacroquadEngine {
         }
     
         let m = Vec2::new(mouse_position().0, mouse_position().1);
-        self.ctx.input = PlayerInput { 
+        self.input = PlayerInput { 
             dir:Vec2::new(x, y), 
             action,
             mouse_pos_screen:m,
@@ -130,7 +130,7 @@ impl MacroquadEngine {
             mouse_right_pressed:is_mouse_button_pressed(MouseButton::Right)
         };
         
-        if self.ctx.edit_mode {
+        if self.edit_mode {
             self.edit_input();
         }
     }

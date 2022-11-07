@@ -1,8 +1,8 @@
-use crate::Engine;
+use crate::Context;
 
 pub trait Game {
-    fn init(&mut self, engine:&mut dyn Engine);
-    fn tick(&mut self, engine:&mut dyn Engine);
+    fn init(&mut self, ctx:&mut dyn Context);
+    fn tick(&mut self, ctx:&mut dyn Context);
     fn serialize(&self) -> Vec<u8>;
     fn deserialize(&mut self, vec:&[u8]);
 }

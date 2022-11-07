@@ -1,98 +1,43 @@
-use std::{fs::Metadata, path::{PathBuf, Path}, collections::HashMap, time::Duration, cell::UnsafeCell, borrow::BorrowMut};
+use std::{
+    borrow::BorrowMut,
+    cell::UnsafeCell,
+    collections::HashMap,
+    fs::Metadata,
+    path::{Path, PathBuf},
+    time::Duration,
+};
 
-use shared::{Context, CanvasOrg, Id, Entity, slotmap::SlotMap, glam::Vec2, Engine, Game, Camera};
 use libloading::{Library, Symbol};
-use macroquad::{texture::Texture2D, time::get_frame_time, window::{screen_width, screen_height}};
+use macroquad::{
+    texture::Texture2D,
+    time::get_frame_time,
+    window::{screen_height, screen_width},
+};
 use native_dialog::FileDialog;
+use shared::{
+    glam::Vec2, slotmap::SlotMap, Camera, Command, Context, Edit, Entity, Game, Id, Map,
+    PlayerInput,
+};
 
 #[derive(Default)]
-pub struct MacroquadEngine {
-    pub game:Option<Box<dyn Game>>,
-    entities: SlotMap<Id, UnsafeCell<Entity>>,
-    pub game_lib_path: PathBuf,
-    pub game_lib: Option<Library>,
-    pub game_lib_metadata: Option<Metadata>,
-    pub ctx:Context,
-    pub textures:HashMap<u32, Texture2D>,
-    pub flash_timer:f32,
-    pub flash_timer_start:f32
+pub struct Engine {
+    pub(crate) over_ui: bool,
+    pub(crate) edit: Edit,
+    pub(crate) input: PlayerInput,
+    pub(crate) commands: Vec<Command>,
+    pub(crate) game_camera: Camera,
+    pub(crate) edit_camera: Camera,
+    pub(crate) edit_mode: bool,
+    pub(crate) map: Map,
+    pub(crate) game: Option<Box<dyn Game>>,
+    pub(crate) entities: SlotMap<Id, UnsafeCell<Entity>>,
+    pub(crate) game_lib_path: PathBuf,
+    pub(crate) game_lib: Option<Library>,
+    pub(crate) game_lib_metadata: Option<Metadata>,
+    pub(crate) textures: HashMap<u32, Texture2D>,
 }
 
-impl shared::Engine for MacroquadEngine {
-    fn spawn_entity(&mut self, entity:Entity) -> Id {
-        let id = self.entities.borrow_mut().insert(UnsafeCell::new(entity));
-        return id;
-    }
-
-    fn despawn_entity(&mut self, id:Id) {
-        self.entities.remove(id);
-    }
-
-    fn clear(&mut self) {
-        self.entities.clear();
-    }
-
-    fn entity(&self, id:Id) -> Option<&Entity> {
-        let e = self.entities.get(id);
-        if let Some(e) = e {
-            unsafe {
-                let e = e.get().as_mut().unwrap();
-                return Some(e);
-            }
-        }
-        return None;
-    }
-
-    fn entity_mut(&self, id:Id) -> Option<&mut Entity> {
-        let e = self.entities.get(id);
-        if let Some(e) = e {
-            unsafe {
-                let e = e.get().as_mut().unwrap();
-                return Some(e);
-            }
-        }
-        return None;
-    }
-
-    fn map(&self) -> &shared::Map {
-        &self.ctx.map
-    }
-
-    fn draw_world(&mut self, camera:&Camera) {
-        self.ctx.game_camera = camera.clone();
-        self.draw_game_mode();
-    }
-
-    fn screen_size(&self) -> shared::glam::Vec2 {
-        Vec2::new(screen_width(), screen_height())
-    }
-
-    fn texture_size(&self, texture:u32) -> shared::glam::Vec2 {
-        if let Some(tex) = self.textures.get(&texture) {
-            return Vec2::new(tex.width(), tex.height());
-        }
-
-        Vec2::new(0.0, 0.0)
-    }
-
-    fn draw_string(&self, params:shared::DrawStringParams) {
-        todo!()
-    }
-
-    fn draw_texture(&self, params:shared::DrawTextureParams) {
-        todo!()
-    }
-
-    fn draw_rect(&self, params:shared::DrawRectParams) {
-        todo!()
-    }
-
-    fn push_command(&mut self, command:shared::Command) {
-        self.ctx.commands.push(command);
-    }
-}
-
-impl MacroquadEngine {
+impl Engine {
     pub fn new(game_path: PathBuf) -> Self {
         Self {
             game_lib_path: game_path,
@@ -102,26 +47,28 @@ impl MacroquadEngine {
 
     pub fn save_map_to_file(&self) {
         let path = FileDialog::new()
-        .add_filter("Map file", &["map"])
-        .show_save_single_file().unwrap();
+            .add_filter("Map file", &["map"])
+            .show_save_single_file()
+            .unwrap();
         if let Some(path) = path {
-            let json = serde_json::to_string(&self.ctx.map).unwrap();
+            let json = serde_json::to_string(&self.map).unwrap();
             std::fs::write(path, json).unwrap();
         }
     }
 
     pub fn load_map_from_file(&mut self) {
         let path = FileDialog::new()
-        .add_filter("Map file", &["map"])
-        .show_open_single_file().unwrap();
+            .add_filter("Map file", &["map"])
+            .show_open_single_file()
+            .unwrap();
         if let Some(path) = path {
             self.load_map_from_path(path);
         }
     }
 
-    pub fn load_map_from_path(&mut self, path:impl AsRef<Path>) {
+    pub fn load_map_from_path(&mut self, path: impl AsRef<Path>) {
         let json = std::fs::read_to_string(path).unwrap();
-        self.ctx.map = serde_json::from_str(&json).unwrap();
+        self.map = serde_json::from_str(&json).unwrap();
     }
 
     pub fn poll_game_lib(&mut self) {
@@ -139,22 +86,22 @@ impl MacroquadEngine {
                 }
             }
 
-            let mut state:Vec<u8> = Vec::new();
+            let mut state: Vec<u8> = Vec::new();
             if unload {
                 state = self.game.take().unwrap().serialize();
-                self.ctx.entities.clear();
+                self.entities.clear();
 
                 if let Some(lib) = self.game_lib.take() {
                     lib.close().unwrap();
                 }
             }
-            
+
             let load_new = load_new;
             while load_new {
                 let mut to = std::env::current_exe().unwrap();
                 to.pop();
                 to.push("hot.module");
-                
+
                 if std::fs::copy(&self.game_lib_path.clone(), to.clone()).is_ok() {
                     unsafe {
                         let lib = libloading::Library::new(to.clone());
@@ -172,11 +119,11 @@ impl MacroquadEngine {
                                 self.game = Some(s);
 
                                 break;
-                            },
+                            }
                             Err(err) => {
                                 println!("Could not load game lib with err:{:?}", err);
                                 break;
-                            },
+                            }
                         }
                     }
                 } else {
@@ -193,7 +140,7 @@ impl MacroquadEngine {
     pub fn call_game_create(&mut self) -> Option<Box<dyn Game>> {
         if let Some(lib) = self.game_lib.take() {
             unsafe {
-                if let Ok(f) = lib.get::<fn(state:&mut dyn Engine) -> Box<dyn Game>>(b"create") {
+                if let Ok(f) = lib.get::<fn(state: &mut dyn Context) -> Box<dyn Game>>(b"create") {
                     let game = f(self);
                     self.game_lib = Some(lib);
                     return Some(game);
@@ -205,31 +152,27 @@ impl MacroquadEngine {
         return None;
     }
 
-
     pub async fn tick(&mut self) {
-        let prev_edit_mode = self.ctx.edit_mode;
-        self.ctx.dt = get_frame_time();
+        let prev_edit_mode = self.edit_mode;
         self.input();
         self.process_commands().await;
-        let edit_mode_changed = prev_edit_mode != self.ctx.edit_mode;
+        let edit_mode_changed = prev_edit_mode != self.edit_mode;
 
-        if !self.ctx.edit_mode {
-            if edit_mode_changed {
-//                self.call_game_start();
-            }
-  //          self.call_game_update();
-    //        self.update();
-      //      self.call_game_post_update();
-
+        if !self.edit_mode {
             let game = self.game.take();
             if let Some(mut game) = game {
+                if edit_mode_changed {
+                    //                self.call_game_start();
+                }
+
                 game.tick(self);
                 self.game = Some(game);
             }
+        } else {
+            self.draw_edit_mode();
         }
 
         self.process_commands().await;
-        self.draw();
 
         self.ui();
     }

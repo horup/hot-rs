@@ -1,11 +1,9 @@
 use shared::{glam::Vec3, Context, Entity, Grid, IgnoreColissions};
 use num_enum::TryFromPrimitive;
-use shared::Engine;
-
 use crate::{Textures, Walker, Door, MyGame};
 
 impl MyGame {
-    pub fn start(&mut self, engine:&mut dyn Engine) {
+    pub fn start(&mut self, engine:&mut dyn Context) {
         engine.clear();
         let state = &mut self.state;
         engine.map().clone().grid.for_each_mut(|cell, x, y| {

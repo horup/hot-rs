@@ -1,5 +1,5 @@
 use glam::Vec2;
-use crate::Context;
+use crate::{Id, Entity, Map, Command, Camera};
 
 #[derive(Default, Clone)]
 pub struct DrawStringParams {
@@ -51,19 +51,18 @@ impl Default for Color {
     }
 }
 
-pub trait Canvas {
+pub trait Context {
+    fn spawn_entity(&mut self, entity:Entity) -> Id;
+    fn despawn_entity(&mut self, id:Id);
+    fn clear(&mut self);
+    fn entity(&self, id:Id) -> Option<&Entity>;
+    fn entity_mut(&self, id:Id) -> Option<&mut Entity>;
+    fn map(&self) -> &Map;
+    fn draw_world(&mut self, camera:&Camera);
     fn screen_size(&self) -> Vec2;
     fn texture_size(&self, texture:u32) -> Vec2;
     fn draw_string(&self, params:DrawStringParams);
     fn draw_texture(&self, params:DrawTextureParams);
     fn draw_rect(&self, params:DrawRectParams);
-}
-
-pub trait CanvasOrg {
-    fn ctx_mut(&mut self) -> &mut Context;
-    fn screen_size(&mut self) -> Vec2;
-    fn texture_size(&mut self, texture:u32) -> Vec2;
-    fn draw_string(&mut self, params:DrawStringParams);
-    fn draw_texture(&mut self, params:DrawTextureParams);
-    fn draw_rect(&mut self, params:DrawRectParams);
+    fn push_command(&mut self, command:Command);
 }

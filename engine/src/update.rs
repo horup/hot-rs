@@ -1,9 +1,7 @@
 use shared::{Id, slotmap::SlotMap, Entity, Map, glam::{Vec2, Vec3}, Command, IgnoreColissions};
 use parry2d::{na::Isometry2, bounding_volume::BoundingVolume};
 
-use crate::MacroquadEngine;
-
-
+use crate::Engine;
 
 fn move_entity(key:Id, e:&mut Entity, v:Vec3, entities:&mut SlotMap<Id, Entity>, map:&Map, commands:&mut Vec<Command>) {
     const DIMS:[Vec2;2] = [Vec2::new(0.0, 1.0), Vec2::new(1.0, 0.0)];
@@ -67,9 +65,9 @@ fn move_entity(key:Id, e:&mut Entity, v:Vec3, entities:&mut SlotMap<Id, Entity>,
 }
 
 
-impl MacroquadEngine {
+impl Engine {
     pub fn update(&mut self) {
-        let ctx = &mut self.ctx;
+      /*/  let ctx = &mut self.ctx;
         let mut entities = ctx.entities.clone();
 
         // move entities that have velocity
@@ -91,6 +89,6 @@ impl MacroquadEngine {
                     move_entity(key, e, v, &mut entities, &ctx.map, &mut ctx.commands);
                 }
             }
-        }
+        }*/
     }
 }

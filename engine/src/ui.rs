@@ -1,17 +1,17 @@
 use shared::Tool;
 use macroquad::{prelude::*, ui::{widgets, root_ui}, hash};
 
-use crate::MacroquadEngine;
+use crate::Engine;
 
 
-impl MacroquadEngine {
+impl Engine {
 
     pub fn edit_ui(&mut self) {
         
         let margin = 0.0;
         let h = screen_height() - margin * 2.0;
         let w = 128.0;
-        let label = match self.ctx.edit.tool {
+        let label = match self.edit.tool {
             Tool::Tile => "Tiles",
             Tool::Entity => "Entities",
         };
@@ -23,16 +23,16 @@ impl MacroquadEngine {
             let textures:Vec<u32>;
             let mut selected:u32;
 
-            match self.ctx.edit.tool {
+            match self.edit.tool {
                 Tool::Tile => {
-                    ui.label(None, &format!("blocks = {}", self.ctx.edit.blocks));
-                    textures = self.ctx.edit.tiles.clone();
-                    selected = self.ctx.edit.selected_tile;
+                    ui.label(None, &format!("blocks = {}", self.edit.blocks));
+                    textures = self.edit.tiles.clone();
+                    selected = self.edit.selected_tile;
                 },
 
                 Tool::Entity => {
-                    textures = self.ctx.edit.entities.clone();
-                    selected = self.ctx.edit.selected_entity;
+                    textures = self.edit.entities.clone();
+                    selected = self.edit.selected_entity;
                 },
             }
 
@@ -48,22 +48,22 @@ impl MacroquadEngine {
                 }
             }
 
-            match self.ctx.edit.tool {
+            match self.edit.tool {
                 Tool::Tile => {
-                    self.ctx.edit.selected_tile = selected;
+                    self.edit.selected_tile = selected;
                 },
                 Tool::Entity => {
-                    self.ctx.edit.selected_entity = selected;
+                    self.edit.selected_entity = selected;
                 },
             }
 
-            self.ctx.over_ui = ui.is_mouse_over(self.ctx.input.mouse_pos_screen);
+            self.over_ui = ui.is_mouse_over(self.input.mouse_pos_screen);
         });
     }
 
     pub fn ui(&mut self) {
-        self.ctx.over_ui = false;
-        if self.ctx.edit_mode {
+        self.over_ui = false;
+        if self.edit_mode {
             self.edit_ui();
         }
     }

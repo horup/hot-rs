@@ -19,10 +19,10 @@ pub struct MyGame {
 }
 
 impl Game for MyGame {
-    fn tick(&mut self, engine:&mut dyn Engine) {
+    fn tick(&mut self, engine:&mut dyn Context) {
         let camera = Camera {
-            pos: Vec2::new(0.0, 0.0),
-            zoom: 16.0,
+            pos: Vec2::new(5.0, 0.0),
+            zoom: 32.0,
         };
         engine.draw_world(&camera);
     }
@@ -34,7 +34,7 @@ impl Game for MyGame {
     fn deserialize(&mut self, vec:&[u8]) {
     }
 
-    fn init(&mut self, engine:&mut dyn Engine) {
+    fn init(&mut self, engine:&mut dyn Context) {
         init(engine);
         self.start(engine);
     }
@@ -42,7 +42,7 @@ impl Game for MyGame {
 
 
 #[no_mangle]
-pub fn create(engine:&mut dyn Engine) -> Box<dyn Game> {
+pub fn create(engine:&mut dyn Context) -> Box<dyn Game> {
     Box::new(MyGame::default())
 }
 
