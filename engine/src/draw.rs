@@ -1,5 +1,3 @@
-
-
 use shared::Id;
 use macroquad::prelude::*;
 use crate::Engine;
