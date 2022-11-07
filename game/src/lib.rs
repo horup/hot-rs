@@ -22,10 +22,13 @@ impl Game for MyGame {
         for event in engine.events().iter() {
             match event {
                 Event::MapLoaded {  } => {
-                    self.start(engine)
+                    self.start(engine);
+                    return;
                 },
             }
         }
+
+
         let camera = Camera {
             pos: Vec2::new(5.0, 0.0),
             zoom: 32.0,
