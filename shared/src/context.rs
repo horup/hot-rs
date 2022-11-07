@@ -51,6 +51,7 @@ impl Default for Color {
     }
 }
 
+
 pub trait Context {
     fn is_key_pressed(&self, key_code:u8) -> bool;
     fn is_key_down(&self, key_code:u8) -> bool;

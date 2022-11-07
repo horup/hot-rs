@@ -5,7 +5,6 @@ use shared::{Entity, Id, Camera, Context, Event};
 
 use crate::Engine;
 
-
 impl Context for Engine {
     fn spawn_entity(&mut self, entity:Entity) -> Id {
         let id = self.entities.insert(UnsafeCell::new(entity));
