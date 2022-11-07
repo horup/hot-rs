@@ -12,7 +12,6 @@ pub use start::*;
 
 use shared::{*, glam::Vec2};
 
-
 #[derive(Default)]
 pub struct MyGame {
     pub state:State
@@ -45,51 +44,3 @@ impl Game for MyGame {
 pub fn create(_engine:&mut dyn Context) -> Box<dyn Game> {
     Box::new(MyGame::default())
 }
-
-/*mod state;
-use context::{Context, slotmap::SlotMap, Id, Entity};
-use serde::{Serialize, Deserialize};
-pub use state::*;
-
-use crate::STATE;
-
-#[derive(Serialize, Deserialize)]
-struct S {
-    pub entities:SlotMap<Id, Entity>,
-    pub state:State
-}
-
-#[no_mangle]
-pub fn serialize(ctx:&mut Context) -> Vec<u8> {
-    if let Some(state) = unsafe { STATE.clone()} {
-        let v = bincode::serialize(&S {
-            entities:ctx.entities.clone(),
-            state
-        }).unwrap();
-        return v;
-    }
- 
-    Vec::new()
-}
-
-#[no_mangle]
-pub fn deserialize(ctx:&mut Context, state:&Vec<u8>) {
-    let s:S = bincode::deserialize(state).unwrap(); 
-    ctx.entities = s.entities;
-    unsafe {STATE = Some(s.state)}
-}
- 
-mod init;
-pub use init::*;
-
-mod start;
-pub use start::*;
-
-mod update;
-pub use update::*;
-
-mod draw;
-pub use draw::*;
-
-mod post_update;
-pub use post_update::*;*/

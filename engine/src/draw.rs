@@ -245,7 +245,7 @@ impl Engine {
             }
         }
 
-         visible_set.sort_by(|a, b| {
+        visible_set.sort_by(|a, b| {
             if let (Some(a), Some(b)) = (self.entities.get(*a), self.entities.get(*b)){
                 let a = unsafe { &*a.get() } ;
                 let b = unsafe { &*b.get() } ;
