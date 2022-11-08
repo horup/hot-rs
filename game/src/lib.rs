@@ -34,11 +34,7 @@ impl Game for MyGame {
 
         self.update(ctx);
         self.draw(ctx);
-        let camera = Camera {
-            pos: Vec2::new(5.0, 0.0),
-            zoom: 16.0,
-        };
-        ctx.draw_world(&camera);
+        ctx.draw_world(&self.state.camera);
     }
 
     fn serialize(&self) -> Vec<u8> {

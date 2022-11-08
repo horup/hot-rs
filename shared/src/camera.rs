@@ -1,6 +1,7 @@
 use glam::Vec2;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Camera {
     pub pos:Vec2,
     pub zoom:f32

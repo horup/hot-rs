@@ -5,7 +5,6 @@ impl MyGame {
     pub fn update(&mut self, ctx: &mut dyn Context) {
         let state = &mut self.state;
         let dt = ctx.dt(); 
-        let mut camera = Camera::default();
  
         for (key, e) in ctx.entities().iter_mut() {
             let speed = 3.0;
@@ -42,8 +41,8 @@ impl MyGame {
             e.vel = v.extend(0.0);
             
             if state.player == Some(key) {
-                camera.zoom = 12.0;
-                camera.pos = e.pos.truncate(); 
+                state.camera.zoom = 12.0;
+                state.camera.pos = e.pos.truncate(); 
             }
         }
     
