@@ -2,7 +2,7 @@ use shared::Context;
 use crate::MyGame;
 
 impl MyGame {
-    pub fn draw(&mut self, ctx:&mut dyn Context) {
+    pub fn draw(&mut self, _ctx:&mut dyn Context) {
         /*let dt = canvas.ctx_mut().dt;
         let state = state_mut();
     

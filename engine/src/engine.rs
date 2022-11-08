@@ -1,5 +1,4 @@
 use std::{
-    cell::UnsafeCell,
     collections::HashMap,
     fs::Metadata,
     path::{Path, PathBuf},
@@ -12,7 +11,7 @@ use macroquad::{
 };
 use native_dialog::FileDialog;
 use shared::{
-    slotmap::SlotMap, Camera, Command, Context, Entity, Game, Id, Map,
+    Camera, Command, Context, Game, Map,
     PlayerInput, Event, Entities,
 };
 

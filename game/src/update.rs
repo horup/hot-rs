@@ -1,4 +1,4 @@
-use shared::{Context, glam::Vec2, Camera, IgnoreColissions};
+use shared::{Context, glam::Vec2, IgnoreColissions};
 use crate::MyGame;
 
 impl MyGame {
