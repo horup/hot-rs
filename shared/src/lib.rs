@@ -30,4 +30,7 @@ pub use input::*;
 mod event;
 pub use event::*;
 
+mod entities;
+pub use entities::*;
+
 new_key_type! { pub struct Id; }
