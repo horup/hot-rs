@@ -12,7 +12,7 @@ impl MyGame {
                     match entity {
                         Textures::William => {
                             dbg!("Spawning Player");
-                            let player_entity = engine.spawn_entity(Entity {
+                            let player_entity = engine.entities_mut().spawn_entity(Entity {
                                 pos: Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
                                 texture: entity.into(),
                                 radius: 0.25,
@@ -26,7 +26,7 @@ impl MyGame {
                         | Textures::WhiteDoorSide
                         | Textures::BlueDoor
                         | Textures::GoldDoor => {
-                            let door = engine.spawn_entity(Entity {
+                            let door = engine.entities_mut().spawn_entity(Entity {
                                 pos: Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
                                 texture: entity.into(),
                                 radius: 0.5,
@@ -36,7 +36,7 @@ impl MyGame {
                             state.doors.insert(door, Door::default());
                         }
                         _ => {
-                            engine.spawn_entity(Entity {
+                            engine.entities_mut().spawn_entity(Entity {
                                 pos: Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
                                 texture: entity.into(),
                                 radius: 0.5,

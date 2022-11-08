@@ -1,46 +1,11 @@
 use std::{cell::UnsafeCell, mem::transmute};
 
 use macroquad::{prelude::{Vec2, KeyCode, is_key_pressed, is_key_down, get_last_key_pressed}, window::{screen_width, screen_height}, time::get_frame_time};
-use shared::{Entity, Id, Camera, Context, Event, EntityIter};
+use shared::{Entity, Id, Camera, Context, Event, EntityIter, Entities};
 
 use crate::Engine;
 
 impl Context for Engine {
-    fn spawn_entity(&mut self, entity:Entity) -> Id {
-        let id = self.entities.insert(UnsafeCell::new(entity));
-        return id;
-    }
-
-    fn despawn_entity(&mut self, id:Id) {
-        self.entities.remove(id);
-    }
-
-    fn clear(&mut self) {
-        self.entities.clear();
-    }
-
-    fn entity(&self, id:Id) -> Option<&Entity> {
-        let e = self.entities.get(id);
-        if let Some(e) = e {
-            unsafe {
-                let e = e.get().as_mut().unwrap();
-                return Some(e);
-            }
-        }
-        return None;
-    }
-
-    fn entity_mut(&self, id:Id) -> Option<&mut Entity> {
-        let e = self.entities.get(id);
-        if let Some(e) = e {
-            unsafe {
-                let e = e.get().as_mut().unwrap();
-                return Some(e);
-            }
-        }
-        return None;
-    }
-
     fn map(&self) -> &shared::Map {
         &self.map
     }
@@ -103,21 +68,16 @@ impl Context for Engine {
         None
     }
 
-    fn entities(&self) -> Vec<Id> {
-        let v:Vec<Id> = self.entities.keys().collect();
-        v
+    fn entities(&self) -> &Entities {
+        &self.entities
     }
 
     fn dt(&self) -> f32 {
         get_frame_time()
     }
 
-    fn entities_iter_mut(&self) -> EntityIter {
-        let iter = self.entities.iter();
-        EntityIter {
-            entities:&self.entities,
-            iter:iter
-        }
+    fn entities_mut(&mut self) -> &mut Entities {
+        &mut self.entities
     }
     
 }

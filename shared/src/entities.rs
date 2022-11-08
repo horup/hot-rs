@@ -33,9 +33,33 @@ impl Entities {
         self.inner.remove(id);
     }
 
-    pub fn iter(&self) -> Iter {
+    pub fn iter_mut(&self) -> Iter {
         Iter {
             iter:self.inner.iter()
         }
+    }
+
+    pub fn clear(&mut self) {
+        self.inner.clear();
+    }
+
+    pub fn get(&self, id:Id) -> Option<&Entity> {
+        if let Some(e) = self.inner.get(id) {
+            return Some(unsafe {& *e.get()});
+        }
+
+        None
+    }
+
+    pub fn get_mut(&self, id:Id) -> Option<&mut Entity> {
+        if let Some(e) = self.inner.get(id) {
+            return Some(unsafe {&mut *e.get()});
+        }
+
+        None
+    } 
+
+    pub fn len(&self) -> usize {
+        self.inner.len()
     }
 }

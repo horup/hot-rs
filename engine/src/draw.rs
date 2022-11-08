@@ -238,15 +238,13 @@ impl Engine {
         let mut visible_set:Vec<Id> = Vec::with_capacity(self.entities.len());
 
         for (key, e) in self.entities.iter_mut() {
-            if bounds.contains(e.get_mut().pos.truncate()) {
+            if bounds.contains(e.pos.truncate()) {
                 visible_set.push(key);
             }
         }
 
         visible_set.sort_by(|a, b| {
             if let (Some(a), Some(b)) = (self.entities.get(*a), self.entities.get(*b)){
-                let a = unsafe { &*a.get() } ;
-                let b = unsafe { &*b.get() } ;
                 if a.pos.y < b.pos.y {
                     return std::cmp::Ordering::Less;
                 } else if a.pos.y > b.pos.y {
@@ -268,7 +266,6 @@ impl Engine {
                 }
                 for key in visible_set.iter() {
                     if let Some(e) = self.entities.get(*key) {
-                        let e = unsafe { &*e.get() } ;
                         if e.hidden {
                             continue;
                         }
@@ -283,8 +280,7 @@ impl Engine {
             }
         }
 
-        for (_, e) in self.entities.iter() {
-            let e = unsafe { &*e.get() } ;
+        for (_, e) in self.entities.iter_mut() {
             let s = self.cell_size_screen() * e.radius * 2.0;
             let p = self.to_screen(e.pos.truncate());
             draw_rectangle_lines(p.x - s.x / 2.0, p.y - s.y / 2.0, s.x, s.y, 1.0, RED);

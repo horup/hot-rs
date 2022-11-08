@@ -13,7 +13,7 @@ use macroquad::{
 use native_dialog::FileDialog;
 use shared::{
     slotmap::SlotMap, Camera, Command, Context, Entity, Game, Id, Map,
-    PlayerInput, Event,
+    PlayerInput, Event, Entities,
 };
 
 use crate::Edit;
@@ -30,7 +30,7 @@ pub struct Engine {
     pub(crate) edit_mode: bool,
     pub(crate) map: Map,
     pub(crate) game: Option<Box<dyn Game>>,
-    pub(crate) entities: SlotMap<Id, UnsafeCell<Entity>>,
+    pub(crate) entities: Entities,
     pub(crate) game_lib_path: PathBuf,
     pub(crate) game_lib: Option<Library>,
     pub(crate) game_lib_metadata: Option<Metadata>,

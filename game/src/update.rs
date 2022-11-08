@@ -6,11 +6,10 @@ impl MyGame {
         let state = &mut self.state;
         let dt = ctx.dt(); 
 
-        for id in ctx.entities().iter() {
-            let e = ctx.entity_mut(*id).unwrap();
+        for (id, e) in ctx.entities().iter_mut() {
+           // e.pos.y += dt;
         }
 
-        ctx.entities_iter_mut();
     /* 
         for (key, e) in ctx.entities.iter_mut() {
             let speed = 3.0;
