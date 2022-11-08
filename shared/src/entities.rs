@@ -7,11 +7,11 @@ pub struct Entities {
     inner:SlotMap<Id, UnsafeCell<Entity>>
 }
 
-pub struct Iter<'a> {
+pub struct IterMut<'a> {
     iter:slotmap::basic::Iter<'a, Id, UnsafeCell<Entity>>
 }
 
-impl<'a> Iterator for Iter<'a> {
+impl<'a> Iterator for IterMut<'a> {
     type Item = (Id, &'a mut Entity);
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -24,6 +24,24 @@ impl<'a> Iterator for Iter<'a> {
     }
 }
 
+pub struct Iter<'a> {
+    iter:slotmap::basic::Iter<'a, Id, UnsafeCell<Entity>>
+}
+
+impl<'a> Iterator for Iter<'a> {
+    type Item = (Id, &'a Entity);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if let Some((id, e)) = self.iter.next() {
+            let e = unsafe { & *e.get() };
+            return Some((id, e));
+        }
+
+        None
+    }
+}
+
+
 impl Entities {
     pub fn spawn_entity(&mut self, entity:Entity) -> Id {
         self.inner.insert(UnsafeCell::new(entity))
@@ -33,7 +51,13 @@ impl Entities {
         self.inner.remove(id);
     }
 
-    pub fn iter_mut(&self) -> Iter {
+    pub fn iter_mut(&self) -> IterMut {
+        IterMut {
+            iter:self.inner.iter()
+        }
+    }
+
+    pub fn iter(&self) -> Iter {
         Iter {
             iter:self.inner.iter()
         }
