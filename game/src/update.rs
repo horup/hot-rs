@@ -9,6 +9,8 @@ impl MyGame {
         for id in ctx.entities().iter() {
             let e = ctx.entity_mut(*id).unwrap();
         }
+
+        ctx.entities_iter_mut();
     /* 
         for (key, e) in ctx.entities.iter_mut() {
             let speed = 3.0;

@@ -1,4 +1,7 @@
+use std::cell::UnsafeCell;
+
 use glam::Vec2;
+use slotmap::SlotMap;
 use crate::{Id, Entity, Map, Command, Camera, Event};
 
 #[derive(Default, Clone)]
@@ -51,6 +54,20 @@ impl Default for Color {
     }
 }
 
+pub struct EntityIter<'a> {
+    pub entities:&'a SlotMap<Id, UnsafeCell<Entity>>,
+    pub iter:slotmap::basic::Iter<'a, Id, UnsafeCell<Entity>>
+}
+
+impl<'a> Iterator for EntityIter<'a> {
+    type Item = (Id, &'a mut Entity);
+
+    fn next(&mut self) -> Option<Self::Item> {
+       
+        None
+    }
+}
+
 
 pub trait Context {
     fn is_key_pressed(&self, key_code:u8) -> bool;
@@ -72,4 +89,6 @@ pub trait Context {
     fn draw_rect(&self, params:DrawRectParams);
     fn push_command(&mut self, command:Command);
     fn events(&mut self) -> Vec<Event>;
+    fn entities_iter_mut(&self) -> EntityIter;
+
 }

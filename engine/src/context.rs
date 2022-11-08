@@ -1,7 +1,7 @@
 use std::{cell::UnsafeCell, mem::transmute};
 
 use macroquad::{prelude::{Vec2, KeyCode, is_key_pressed, is_key_down, get_last_key_pressed}, window::{screen_width, screen_height}, time::get_frame_time};
-use shared::{Entity, Id, Camera, Context, Event};
+use shared::{Entity, Id, Camera, Context, Event, EntityIter};
 
 use crate::Engine;
 
@@ -110,6 +110,14 @@ impl Context for Engine {
 
     fn dt(&self) -> f32 {
         get_frame_time()
+    }
+
+    fn entities_iter_mut(&self) -> EntityIter {
+        let iter = self.entities.iter();
+        EntityIter {
+            entities:&self.entities,
+            iter:iter
+        }
     }
     
 }
