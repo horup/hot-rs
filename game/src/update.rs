@@ -1,21 +1,17 @@
-use shared::Context;
+use shared::{Context, glam::Vec2, Camera, IgnoreColissions};
 use crate::MyGame;
 
 impl MyGame {
     pub fn update(&mut self, ctx: &mut dyn Context) {
         let state = &mut self.state;
         let dt = ctx.dt(); 
-
-        for (id, e) in ctx.entities().iter_mut() {
-           // e.pos.y += dt;
-        }
-
-    /* 
-        for (key, e) in ctx.entities.iter_mut() {
+        let mut camera = Camera::default();
+ 
+        for (key, e) in ctx.entities().iter_mut() {
             let speed = 3.0;
             let mut v = Vec2::default();
             if state.player == Some(key) {
-                v = ctx.input.dir * speed * dt;
+                v = self.dir * speed * dt;
             }
     
             if v.x > 0.0 {
@@ -46,12 +42,12 @@ impl MyGame {
             e.vel = v.extend(0.0);
             
             if state.player == Some(key) {
-                ctx.game_camera.zoom = 12.0;
-                ctx.game_camera.pos = e.pos.truncate(); 
+                camera.zoom = 12.0;
+                camera.pos = e.pos.truncate(); 
             }
         }
     
-        for (key, e) in ctx.entities.iter_mut() {
+        for (key, e) in ctx.entities().iter_mut() {
             if let Some(door) = state.doors.get_mut(key) {
                 if door.open == true {
                     e.ignore_collisions = IgnoreColissions::WithEntities;
@@ -68,10 +64,6 @@ impl MyGame {
                 }
             }
         }
-    
-        if ctx.input.action {
-            state.flash(0.25, 0.5);
-        }*/
     }
     
 }
