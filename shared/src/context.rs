@@ -1,7 +1,7 @@
 use std::cell::UnsafeCell;
 
 use crate::{Camera, Command, Entities, Entity, Event, Id, Map};
-use glam::Vec2;
+use glam::{Vec2, Vec3, IVec2};
 use slotmap::SlotMap;
 
 #[derive(Default, Clone)]
@@ -67,10 +67,16 @@ impl<'a> Iterator for EntityIter<'a> {
     }
 }
 
+pub enum Collision {
+    None,
+    Entity(Id),
+    Tile(IVec2)
+}
+
 pub trait Context {
+    fn clip_move(&self, id:Id, target:Vec3) -> Collision;
     fn entities(&self) -> &Entities;
     fn entities_mut(&mut self) -> &mut Entities;
-
     fn is_key_pressed(&self, key_code: u8) -> bool;
     fn is_key_down(&self, key_code: u8) -> bool;
     fn last_key_pressed(&self) -> Option<u8>;

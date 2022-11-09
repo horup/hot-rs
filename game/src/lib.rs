@@ -56,6 +56,7 @@ impl MyGame {
                 Event::MapLoaded {  } => {
                     self.start(engine);
                 },
+                _=>{}
             }
         }
     }
