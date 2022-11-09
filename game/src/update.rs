@@ -39,15 +39,10 @@ impl MyGame {
             }
     
             let v = v.extend(0.0);
-            match ctx.clip_move(key, e.pos + v) {
-                shared::Collision::None => {},
-                shared::Collision::Entity(other_id) => {
-                    println!("blah");
-                },
-                shared::Collision::Tile(_) => {},
+            let col = ctx.clip_move(key, e.pos + v);
+            if let Some(other_id) = col.other_entity {
+                println!("{:?}", other_id);
             }
-            //e.vel = v.extend(0.0);
-
             
             if state.player == Some(key) {
                 state.camera.zoom = 12.0;

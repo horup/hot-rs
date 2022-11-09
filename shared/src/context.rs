@@ -67,10 +67,10 @@ impl<'a> Iterator for EntityIter<'a> {
     }
 }
 
-pub enum Collision {
-    None,
-    Entity(Id),
-    Tile(IVec2)
+#[derive(Default)]
+pub struct Collision {
+    pub other_entity:Option<Id>,
+    pub tile:Option<IVec2>
 }
 
 pub trait Context {

@@ -85,33 +85,14 @@ impl Context for Engine {
     }
 
     fn clip_move(&self, id: Id, target: Vec3) -> Collision {
-        /*  let v = e.vel;
-                if v.length() > 0.0 {
-                    let mut left = v.length();
-                    let d = v.normalize();
-
-                    // max step should be configurable at some point
-                    let max_step = 1.0 / 16.0;
-                    while left > 0.0 {
-                        let mut step = left;
-                        if step > max_step {
-                            step = max_step;
-                        }
-                        let v = d * step;
-                        left -= step;
-                        move_entity(key, e, v, &mut entities, &ctx.map, &mut ctx.commands);
-                    }
-                }
-        */
-
-        let mut col = Collision::None;
+        let mut col = Collision::default();
         if let Some(e) = self.entities.get_mut(id) {
             let v = target - e.pos;
             if v.length() > 0.0 {
                 let mut left = v.length();
                 let d = v.normalize();
 
-                // max step should be configurable at some point
+                // FIXME: max step should be configurable at some point
                 let max_step = 1.0 / 16.0;
                 const DIMS: [Vec2; 2] = [Vec2::new(0.0, 1.0), Vec2::new(1.0, 0.0)];
                 while left > 0.0 {
@@ -144,7 +125,7 @@ impl Context for Engine {
                                     pos_new += v;
 
                                     // FIXME: last collision is saved, even though multiple might exist
-                                    col = Collision::Entity(other_id);
+                                    col.other_entity = Some(other_id);
                                 }
                             }
                         }
@@ -175,7 +156,7 @@ impl Context for Engine {
                                         pos_new = pos_org;
 
                                         // FIXME: might override the entity collision which occured before
-                                        col = Collision::Tile(np);
+                                        col.tile = Some(np);
                                         break;
                                     }
                                 }
