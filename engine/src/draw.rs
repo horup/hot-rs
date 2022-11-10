@@ -1,4 +1,3 @@
-use shared::Id;
 use macroquad::prelude::*;
 use crate::Engine;
 
@@ -171,31 +170,6 @@ impl Engine {
                 }
             }
         }
-       /* let tilemap = &self.ctx.state.tilemap;
-        for y in 0..tilemap.size() {
-            for x in 0..tilemap.size() {
-                let p1 = self.to_screen(Vec2::new(x as f32,  y as f32));
-                let p2 = self.to_screen(Vec2::new(x as f32 + 1.0, y as f32 + 1.0));
-                let w = p2.x - p1.x;
-                let h = p2.y - p1.y;
-
-                if let Some(tile) = tilemap.get(x as i32, y as i32) {
-                    if let Some(tex) = self.textures.get(&tile.texture) {
-                        let a = (1.5 / (tex.width() / tex.height())) - 1.0;
-                        let x = p1.x;
-                        let y = p1.y - a * h;
-                        
-                        
-                        draw_texture_ex(tex.clone(), x, y, WHITE, DrawTextureParams {
-                            dest_size:Some(Vec2::new(w,h + a * h)),
-                            ..Default::default()
-                        });
-                        //draw_rectangle(p1.x, p1.y, w, h, RED);
-                    }
-                }
-
-            }
-        }*/
     }
     
     pub fn draw_debug(&mut self) {
@@ -224,73 +198,5 @@ impl Engine {
         let p2 = self.to_world(Vec2::new(screen_width(), screen_height()));
         let v = p2 - p1;
         Rect::new(p1.x, p1.y, v.x, v.y)
-    }
-
-    pub fn draw_game_mode(&mut self) {
-        let bounds = self.bounds();
-        let margin = 3.0;
-        let bounds = Rect {
-            x: bounds.x - margin,
-            y: bounds.y - margin,
-            w: bounds.w + margin * 2.0,
-            h: bounds.h + margin * 2.0,
-        };
-        let mut visible_set:Vec<Id> = Vec::with_capacity(self.entities.len());
-
-        for (key, e) in self.entities.iter_mut() {
-            if bounds.contains(e.pos.truncate()) {
-                visible_set.push(key);
-            }
-        }
-
-        visible_set.sort_by(|a, b| {
-            if let (Some(a), Some(b)) = (self.entities.get(*a), self.entities.get(*b)){
-                if a.pos.y < b.pos.y {
-                    return std::cmp::Ordering::Less;
-                } else if a.pos.y > b.pos.y {
-                    return std::cmp::Ordering::Greater;
-                }
-            }
-
-            std::cmp::Ordering::Equal
-        });
-
-        for cell_y in bounds.top() as i32 .. bounds.bottom() as i32 {
-            for cell_x in bounds.left() as i32 .. bounds.right() as i32 {
-                if let Some(cell) = self.map.grid.get(cell_x, cell_y) {
-                    if let Some(tile) = cell.tile {
-                        if let Some(tex) = self.textures.get(&tile) {
-                            self.draw_tex(Vec2::new(cell_x as f32, cell_y as f32), tex);
-                        }
-                    }
-                }
-                for key in visible_set.iter() {
-                    if let Some(e) = self.entities.get(*key) {
-                        if e.hidden {
-                            continue;
-                        }
-
-                        if e.pos.y as i32 == cell_y {
-                            if let Some(tex) = self.textures.get(&e.texture) {
-                                self.draw_sprite(e.pos, tex, e.flip_x, false);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        for (_, e) in self.entities.iter_mut() {
-            let s = self.cell_size_screen() * e.radius * 2.0;
-            let p = self.to_screen(e.pos.truncate());
-            draw_rectangle_lines(p.x - s.x / 2.0, p.y - s.y / 2.0, s.x, s.y, 1.0, RED);
-            let v = Vec2::from_angle(e.dir) * s / 2.0;
-            draw_line(p.x, p.y, p.x + v.x, p.y - v.y, 1.0, BLUE);
-        }
-
-      //  self.call_game_draw();
-    }
-
-    pub fn draw(&self) {
     }
 }

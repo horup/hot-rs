@@ -2,9 +2,9 @@ use std::mem::transmute;
 
 
 use macroquad::{
-    prelude::{get_last_key_pressed, is_key_down, is_key_pressed, KeyCode, Vec2, Vec3},
+    prelude::*,
     time::get_frame_time,
-    window::{screen_height, screen_width},
+    window::{screen_height, screen_width}, shapes::{draw_line, draw_rectangle_lines},
 };
 use parry2d::{bounding_volume::BoundingVolume, na::Isometry2};
 use shared::{Camera, Collision, Context, Entities, Event, Id, IgnoreColissions};
@@ -18,7 +18,66 @@ impl Context for Engine {
 
     fn draw_world(&mut self, camera: &Camera) {
         self.game_camera = camera.clone();
-        self.draw_game_mode();
+        let bounds = self.bounds();
+        let margin = 3.0;
+        let bounds = Rect {
+            x: bounds.x - margin,
+            y: bounds.y - margin,
+            w: bounds.w + margin * 2.0,
+            h: bounds.h + margin * 2.0,
+        };
+        let mut visible_set:Vec<Id> = Vec::with_capacity(self.entities.len());
+
+        for (key, e) in self.entities.iter_mut() {
+            if bounds.contains(e.pos.truncate()) {
+                visible_set.push(key);
+            }
+        }
+
+        visible_set.sort_by(|a, b| {
+            if let (Some(a), Some(b)) = (self.entities.get(*a), self.entities.get(*b)){
+                if a.pos.y < b.pos.y {
+                    return std::cmp::Ordering::Less;
+                } else if a.pos.y > b.pos.y {
+                    return std::cmp::Ordering::Greater;
+                }
+            }
+
+            std::cmp::Ordering::Equal
+        });
+
+        for cell_y in bounds.top() as i32 .. bounds.bottom() as i32 {
+            for cell_x in bounds.left() as i32 .. bounds.right() as i32 {
+                if let Some(cell) = self.map.grid.get(cell_x, cell_y) {
+                    if let Some(tile) = cell.tile {
+                        if let Some(tex) = self.textures.get(&tile) {
+                            self.draw_tex(Vec2::new(cell_x as f32, cell_y as f32), tex);
+                        }
+                    }
+                }
+                for key in visible_set.iter() {
+                    if let Some(e) = self.entities.get(*key) {
+                        if e.hidden {
+                            continue;
+                        }
+
+                        if e.pos.y as i32 == cell_y {
+                            if let Some(tex) = self.textures.get(&e.texture) {
+                                self.draw_sprite(e.pos, tex, e.flip_x, false);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        for (_, e) in self.entities.iter_mut() {
+            let s = self.cell_size_screen() * e.radius * 2.0;
+            let p = self.to_screen(e.pos.truncate());
+            draw_rectangle_lines(p.x - s.x / 2.0, p.y - s.y / 2.0, s.x, s.y, 1.0, RED);
+            let v = Vec2::from_angle(e.dir) * s / 2.0;
+            draw_line(p.x, p.y, p.x + v.x, p.y - v.y, 1.0, BLUE);
+        }
     }
 
     fn screen_size(&self) -> shared::glam::Vec2 {
