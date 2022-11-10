@@ -1,4 +1,4 @@
-use shared::{Id, slotmap::SecondaryMap, Camera, Components};
+use shared::{Id, Camera, Components};
 use serde::{Serialize, Deserialize};
 
 #[derive(Default, Serialize, Deserialize, Clone)]

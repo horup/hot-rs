@@ -1,7 +1,7 @@
 use std::mem::transmute;
 
 use macroquad::{
-    prelude::{get_last_key_pressed, is_key_down, is_key_pressed, IVec2, KeyCode, Vec2, Vec3},
+    prelude::{get_last_key_pressed, is_key_down, is_key_pressed, KeyCode, Vec2, Vec3},
     time::get_frame_time,
     window::{screen_height, screen_width},
 };

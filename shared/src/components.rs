@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize, de::DeserializeOwned};
-use slotmap::{SlotMap, SecondaryMap};
-use crate::{Id, Entity, CSDUnsafeCell};
+use slotmap::{SecondaryMap};
+use crate::{Id, CSDUnsafeCell};
 
 
 #[derive(Default, Serialize, Clone)]

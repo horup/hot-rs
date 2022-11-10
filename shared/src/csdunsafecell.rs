@@ -1,6 +1,6 @@
 use std::{cell::UnsafeCell, ops::{Deref, DerefMut}};
 
-use serde::{Serialize, Deserialize, de::DeserializeOwned};
+use serde::{Serialize, Deserialize};
 
 
 #[derive(Default)]
