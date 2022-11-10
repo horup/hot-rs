@@ -20,7 +20,7 @@ impl MyGame {
                             });
     
                             state.player = Some(player_entity);
-                            state.walkers.insert(player_entity, Walker::default());
+                            state.walkers.attach(player_entity, Walker::default());
                         }
                         Textures::WhiteDoor
                         | Textures::WhiteDoorSide
@@ -33,7 +33,7 @@ impl MyGame {
                                 ..Default::default()
                             });
     
-                            state.doors.insert(door, Door::default());
+                            state.doors.attach(door, Door::default());
                         }
                         _ => {
                             engine.entities_mut().spawn_entity(Entity {

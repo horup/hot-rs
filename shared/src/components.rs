@@ -4,7 +4,7 @@ use crate::{Id, Entity, CSDUnsafeCell};
 
 
 #[derive(Default, Serialize, Clone)]
-pub struct Components<T : Copy + Clone + Serialize + Deserialize<'static>> {
+pub struct Components<T : 'static + Copy + Clone + Serialize + Deserialize<'static>> {
     inner:SecondaryMap<Id, CSDUnsafeCell<T>>
 }
 

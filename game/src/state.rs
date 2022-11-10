@@ -1,12 +1,12 @@
-use shared::{Id, slotmap::SecondaryMap, Camera};
+use shared::{Id, slotmap::SecondaryMap, Camera, Components};
 use serde::{Serialize, Deserialize};
 
 #[derive(Default, Serialize, Deserialize, Clone)]
 pub struct State {
     pub camera:Camera,
     pub player:Option<Id>,
-    pub walkers:SecondaryMap<Id, Walker>,
-    pub doors:SecondaryMap<Id, Door>,
+    pub walkers:Components<Walker>,
+    pub doors:Components<Door>,
     pub flash_timer_sec:f32,
     pub flash_timer_start:f32,
     pub flash_max:f32,
