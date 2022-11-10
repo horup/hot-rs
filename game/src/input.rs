@@ -8,7 +8,7 @@ impl MyGame {
         self.dir.x = if engine.is_key_down(18) {-1.0} else if engine.is_key_down(21) {1.0} else {0.0};
 
         
-        if let Some(key) = engine.last_key_pressed() {
+        if let Some(_key) = engine.last_key_pressed() {
         //    println!("{}", key);
         }
     }
