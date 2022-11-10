@@ -1,14 +1,14 @@
 use serde::{Serialize, Deserialize};
-use slotmap::SlotMap;
+use slotmap::{SlotMap, SecondaryMap};
 use crate::{Id, Entity, CSDUnsafeCell};
 
 
 #[derive(Default, Serialize, Clone)]
 pub struct Components<T : Copy + Clone + Serialize + Deserialize<'static>> {
-    inner:SlotMap<Id, CSDUnsafeCell<T>>
+    inner:SecondaryMap<Id, CSDUnsafeCell<T>>
 }
 
-type E<T> = SlotMap<Id, CSDUnsafeCell<T>>;
+type E<T> = SecondaryMap<Id, CSDUnsafeCell<T>>;
 
 impl<T : Copy + Clone + Serialize + Deserialize<'static>> Deserialize<'static> for Components<T> {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
@@ -28,7 +28,7 @@ impl<T : Copy + Clone + Serialize + Deserialize<'static>> Deserialize<'static> f
 }
 
 pub struct IterMut<'a, T : Serialize + Deserialize<'static> + Copy + Clone> {
-    iter:slotmap::basic::Iter<'a, Id, CSDUnsafeCell<T>>
+    iter:slotmap::secondary::Iter<'a, Id, CSDUnsafeCell<T>>
 }
 
 impl<'a, T : Serialize + Deserialize<'static> + Copy + Clone> Iterator for IterMut<'a, T> {
@@ -45,7 +45,7 @@ impl<'a, T : Serialize + Deserialize<'static> + Copy + Clone> Iterator for IterM
 }
 
 pub struct Iter<'a, T : Serialize + Deserialize<'static> + Copy + Clone> {
-    iter:slotmap::basic::Iter<'a, Id, CSDUnsafeCell<T>>
+    iter:slotmap::secondary::Iter<'a, Id, CSDUnsafeCell<T>>
 }
 
 impl<'a, T : Serialize + Deserialize<'static> + Copy + Clone> Iterator for Iter<'a, T> {
@@ -63,11 +63,11 @@ impl<'a, T : Serialize + Deserialize<'static> + Copy + Clone> Iterator for Iter<
 
 
 impl<T : Copy + Clone + Serialize + Deserialize<'static>> Components<T> {
-    pub fn spawn_entity(&mut self, entity:T) -> Id {
-        self.inner.insert(CSDUnsafeCell::new(entity))
+    pub fn attach(&mut self, id:Id, cmp:T) {
+        self.inner.insert(id, CSDUnsafeCell::new(cmp));
     }
 
-    pub fn despawn_entity(&mut self, id:Id) {
+    pub fn detach(&mut self, id:Id) {
         self.inner.remove(id);
     }
 
