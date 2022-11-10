@@ -1,19 +1,19 @@
-use serde::{Serialize, Deserialize};
+use serde::{Serialize, Deserialize, de::DeserializeOwned};
 use slotmap::{SlotMap, SecondaryMap};
 use crate::{Id, Entity, CSDUnsafeCell};
 
 
 #[derive(Default, Serialize, Clone)]
-pub struct Components<T : 'static + Copy + Clone + Serialize + Deserialize<'static>> {
+pub struct Components<T : Copy + Clone> {
     inner:SecondaryMap<Id, CSDUnsafeCell<T>>
 }
 
 type E<T> = SecondaryMap<Id, CSDUnsafeCell<T>>;
 
-impl<T : Copy + Clone + Serialize + Deserialize<'static>> Deserialize<'static> for Components<T> {
+impl<'de, T : Copy + Clone + Serialize + Deserialize<'de>> Deserialize<'de> for Components<T> {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
-        D: serde::Deserializer<'static> {
+        D: serde::Deserializer<'de> {
         match E::deserialize(deserializer) {
             Ok(inner) => {
                 return Ok(Components {
@@ -27,11 +27,11 @@ impl<T : Copy + Clone + Serialize + Deserialize<'static>> Deserialize<'static> f
     }
 }
 
-pub struct IterMut<'a, T : Serialize + Deserialize<'static> + Copy + Clone> {
+pub struct IterMut<'a, T : Copy + Clone> {
     iter:slotmap::secondary::Iter<'a, Id, CSDUnsafeCell<T>>
 }
 
-impl<'a, T : Serialize + Deserialize<'static> + Copy + Clone> Iterator for IterMut<'a, T> {
+impl<'a, T : Copy + Clone> Iterator for IterMut<'a, T> {
     type Item = (Id, &'a mut T);
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -44,11 +44,11 @@ impl<'a, T : Serialize + Deserialize<'static> + Copy + Clone> Iterator for IterM
     }
 }
 
-pub struct Iter<'a, T : Serialize + Deserialize<'static> + Copy + Clone> {
+pub struct Iter<'a, T : Copy + Clone> {
     iter:slotmap::secondary::Iter<'a, Id, CSDUnsafeCell<T>>
 }
 
-impl<'a, T : Serialize + Deserialize<'static> + Copy + Clone> Iterator for Iter<'a, T> {
+impl<'a, T : Serialize + DeserializeOwned + Copy + Clone> Iterator for Iter<'a, T> {
     type Item = (Id, &'a T);
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -62,7 +62,7 @@ impl<'a, T : Serialize + Deserialize<'static> + Copy + Clone> Iterator for Iter<
 }
 
 
-impl<T : Copy + Clone + Serialize + Deserialize<'static>> Components<T> {
+impl<T : Copy + Clone> Components<T> {
     pub fn attach(&mut self, id:Id, cmp:T) {
         self.inner.insert(id, CSDUnsafeCell::new(cmp));
     }
