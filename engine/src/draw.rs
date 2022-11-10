@@ -61,7 +61,7 @@ impl Engine {
         Vec2::new(p.x + w / 2.0, p.y / perspective + h / 2.0)
     }
 
-    fn draw_grid(&self) {
+    fn _draw_grid(&self) {
         let _o = self.to_world(Vec2::new(0.0, 0.0));
         let size = self.map.grid.size();
         for x in 0..(size+1) {
