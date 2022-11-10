@@ -11,7 +11,7 @@ impl Engine {
             match command {
                 Command::Restart => {
                     let game = self.game.take();
-                    if let Some(mut game) = game {
+                    if let Some(game) = game {
                         self.game = Some(game);
                     }
 

@@ -144,7 +144,7 @@ impl Engine {
         if let Some(lib) = self.game_lib.take() {
             unsafe {
                 if let Ok(f) = lib.get::<fn(state: &mut dyn Context) -> Box<dyn Game>>(b"create") {
-                    let mut game = f(self);
+                    let game = f(self);
                     self.game_lib = Some(lib);
                     return Some(game);
                 }
