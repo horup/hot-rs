@@ -12,13 +12,5 @@ pub enum Command {
     },
     LoadMap {
         map_path:String
-    },
-    ContactEntity {
-        entity:Id,
-        other:Id
-    },
-    ContactTile {
-        entity:Id,
-        tile:IVec2
     }
 }

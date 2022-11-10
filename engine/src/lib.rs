@@ -16,9 +16,6 @@ pub use processor::*;
 mod ui;
 pub use ui::*;
 
-mod update;
-pub use update::*;
-
 mod context;
 pub use context::*;
 

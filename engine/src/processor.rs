@@ -42,8 +42,6 @@ impl Engine {
 
                     self.events.push(Event::MapLoaded {  });
                 }
-                Command::ContactEntity { entity: _, other: _ } => {},
-                Command::ContactTile { entity: _, tile: _ } => {},
             }
         }
     }
