@@ -10,10 +10,10 @@ pub struct Entities {
 
 type E = SlotMap<Id, CSDUnsafeCell<Entity>>;
 
-impl Deserialize<'static> for Entities {
+impl<'de> Deserialize<'de> for Entities {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
-        D: serde::Deserializer<'static> {
+        D: serde::Deserializer<'de> {
         match E::deserialize(deserializer) {
             Ok(inner) => {
                 return Ok(Entities {

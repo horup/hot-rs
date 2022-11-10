@@ -88,6 +88,8 @@ pub trait Context {
     fn draw_string(&self, params: DrawStringParams);
     fn draw_texture(&self, params: DrawTextureParams);
     fn draw_rect(&self, params: DrawRectParams);
+    fn serialize(&self) -> Vec<u8>;
+    fn deserialize(&mut self, bytes:&[u8]);
     fn push_command(&mut self, command: Command);
     fn events(&mut self) -> Vec<Event>;
 

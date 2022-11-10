@@ -1,5 +1,6 @@
 use std::mem::transmute;
 
+use bincode::deserialize;
 use macroquad::{
     prelude::{get_last_key_pressed, is_key_down, is_key_pressed, KeyCode, Vec2, Vec3},
     time::get_frame_time,
@@ -155,7 +156,6 @@ impl Context for Engine {
                                     if aabb1.intersects(&aabb2) {
                                         pos_new = pos_org;
 
-                                        // FIXME: might override the entity collision which occured before
                                         col.tile = Some(np);
                                         break;
                                     }
@@ -170,5 +170,27 @@ impl Context for Engine {
         }
         
         col
+    }
+
+    fn serialize(&self) -> Vec<u8> {
+        let mut s:(Entities, Vec<u8>) = (self.entities.clone(), Vec::new());
+        if let Some(game) = &self.game {
+            s.1 = game.serialize().clone();
+        }
+
+        return bincode::serialize(&s).unwrap();
+    }
+
+    fn deserialize(&mut self, bytes:&[u8]) {
+        if bytes.len() > 0 {
+            let s:(Entities, Vec<u8>) = bincode::deserialize(bytes).unwrap();
+            let (entities, game_bytes) = s;
+            self.entities = entities;
+            if game_bytes.len() > 0 {
+                if let Some(game) = &mut self.game {
+                    game.deserialize(&game_bytes);
+                }
+            }
+        }
     }
 }

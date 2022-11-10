@@ -29,24 +29,26 @@ pub struct MyGame {
  
 impl Game for MyGame {
     fn tick(&mut self, ctx:&mut dyn Context) {
-        self.poll_input(ctx);
+        self.poll_input(ctx); 
         self.process_events(ctx);
-
         self.update(ctx);
-        self.draw(ctx);
-        ctx.draw_world(&self.state.camera);
+        self.draw(ctx);  
+        ctx.draw_world(&self.state.camera); 
     }
-
+  
     fn serialize(&self) -> Vec<u8> {
-        Vec::new()
+        bincode::serialize(&self.state).unwrap()
     }
 
-    fn deserialize(&mut self, _vec:&[u8]) {
+    fn deserialize(&mut self, bytes:&[u8]) {
+        dbg!("deserialize start");
+        self.state = bincode::deserialize(bytes).unwrap();
+        dbg!("deserialize");
     }
 
     fn init(&mut self, engine:&mut dyn Context) {
         init(engine);
-    }
+    } 
 }
 
 impl MyGame {

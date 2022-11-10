@@ -87,9 +87,9 @@ impl Engine {
 
             let mut state: Vec<u8> = Vec::new();
             if unload {
-                state = self.game.take().unwrap().serialize();
+                state = self.serialize();
                 self.entities.clear();
-
+                self.game = None;
                 if let Some(lib) = self.game_lib.take() {
                     lib.close().unwrap();
                 }
@@ -109,13 +109,13 @@ impl Engine {
                                 self.game_lib_metadata = Some(metadata);
                                 self.game_lib = Some(lib);
                                 println!("Game lib loaded");
-                                let mut s = self.call_game_create().unwrap();
+                                let s = self.call_game_create().unwrap();
+                                self.game = Some(s);
 
                                 if unload {
-                                    s.deserialize(&state);
+                                    self.deserialize(&state);
+                                    dbg!(state.len());
                                 }
-
-                                self.game = Some(s);
 
                                 break;
                             }
