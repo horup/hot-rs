@@ -100,7 +100,7 @@ impl Context for Engine {
 
     fn draw_texture(&self, p: shared::DrawTextureParams) {
         if let Some(tex) = self.textures.get(&p.texture) {
-            draw_texture_ex(tex.clone(), p.x, p.y, WHITE, DrawTextureParams {
+            draw_texture_ex(*tex, p.x, p.y, WHITE, DrawTextureParams {
                 dest_size:Some(Vec2::new(p.w, p.h)),
                 ..Default::default()
             });
@@ -123,17 +123,17 @@ impl Context for Engine {
     fn events(&mut self) -> Vec<Event> {
         let mut events = Vec::with_capacity(self.events.len());
         std::mem::swap(&mut self.events, &mut events);
-        return events;
+        events
     }
 
     fn is_key_pressed(&self, key_code: u8) -> bool {
         let key_code: KeyCode = unsafe { transmute(key_code) };
-        return is_key_pressed(key_code);
+        is_key_pressed(key_code)
     }
 
     fn is_key_down(&self, key_code: u8) -> bool {
         let key_code: KeyCode = unsafe { transmute(key_code) };
-        return is_key_down(key_code);
+        is_key_down(key_code)
     }
 
     fn last_key_pressed(&self) -> Option<u8> {
@@ -246,18 +246,18 @@ impl Context for Engine {
     fn serialize(&self) -> Vec<u8> {
         let mut s:(Entities, Vec<u8>) = (self.entities.clone(), Vec::new());
         if let Some(game) = &self.game {
-            s.1 = game.serialize().clone();
+            s.1 = game.serialize();
         }
 
-        return bincode::serialize(&s).unwrap();
+        bincode::serialize(&s).unwrap()
     }
 
     fn deserialize(&mut self, bytes:&[u8]) {
-        if bytes.len() > 0 {
+        if !bytes.is_empty() {
             let s:(Entities, Vec<u8>) = bincode::deserialize(bytes).unwrap();
             let (entities, game_bytes) = s;
             self.entities = entities;
-            if game_bytes.len() > 0 {
+            if !game_bytes.is_empty() {
                 if let Some(game) = &mut self.game {
                     game.deserialize(&game_bytes);
                 }

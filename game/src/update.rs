@@ -54,7 +54,7 @@ impl MyGame {
     
         for (key, e) in ctx.entities().iter_mut() {
             if let Some(door) = state.doors.get_mut(key) {
-                if door.open == true {
+                if door.open {
                     e.ignore_collisions = IgnoreColissions::WithEntities;
                     e.hidden = true;
                 } else {

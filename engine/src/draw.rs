@@ -32,7 +32,7 @@ impl Engine {
     pub fn cell_size_screen(&self) -> Vec2 {
         let p1 = self.to_screen(Vec2::new(0.0, 0.0));
         let p2 = self.to_screen(Vec2::new(1.0, 1.0));
-        return p2 - p1;
+        p2 - p1
     } 
     
     pub fn to_world(&self, screen:Vec2) -> Vec2 {

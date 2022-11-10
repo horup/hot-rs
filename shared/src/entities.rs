@@ -16,12 +16,12 @@ impl<'de> Deserialize<'de> for Entities {
         D: serde::Deserializer<'de> {
         match E::deserialize(deserializer) {
             Ok(inner) => {
-                return Ok(Entities {
+                Ok(Entities {
                     inner
-                });
+                })
             },
             Err(err) => {
-                return Err(err);
+                Err(err)
             },
         }
     }

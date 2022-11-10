@@ -152,7 +152,7 @@ impl Engine {
             self.game_lib = Some(lib);
         }
 
-        return None;
+        None
     }
 
     pub async fn tick(&mut self) {

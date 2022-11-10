@@ -18,7 +18,7 @@ impl<T : Clone + Copy> Clone for CSDUnsafeCell<T> {
             &*self.0.get()
         };
 
-        CSDUnsafeCell(UnsafeCell::new(e.clone()))
+        CSDUnsafeCell(UnsafeCell::new(*e))
     }
 }
 
@@ -30,7 +30,7 @@ impl<T : Clone + Copy + Serialize> Serialize for CSDUnsafeCell<T> {
             &*self.0.get()
         };
 
-        return e.serialize(serializer)
+        e.serialize(serializer)
     }
 }
 
@@ -40,10 +40,10 @@ impl<'de, T : Clone + Copy + Deserialize<'de>> Deserialize<'de> for CSDUnsafeCel
         D: serde::Deserializer<'de> {
         match T::deserialize(deserializer) {
             Ok(t) => {
-                return Ok(Self(UnsafeCell::new(t)));
+                Ok(Self(UnsafeCell::new(t)))
             },
             Err(err) => {
-                return Err(err)
+                Err(err)
             },
         }
 

@@ -16,12 +16,12 @@ impl<'de, T : Copy + Clone + Serialize + Deserialize<'de>> Deserialize<'de> for 
         D: serde::Deserializer<'de> {
         match E::deserialize(deserializer) {
             Ok(inner) => {
-                return Ok(Components {
+                Ok(Components {
                     inner
-                });
+                })
             },
             Err(err) => {
-                return Err(err);
+                Err(err)
             },
         }
     }
