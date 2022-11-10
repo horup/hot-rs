@@ -9,9 +9,7 @@ impl MyGame {
 
         
         if let Some(key) = engine.last_key_pressed() {
-            println!("{}", key);
+        //    println!("{}", key);
         }
-
-        
     }
 }

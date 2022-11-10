@@ -41,7 +41,9 @@ impl MyGame {
             let v = v.extend(0.0);
             let col = ctx.clip_move(key, e.pos + v);
             if let Some(other_id) = col.other_entity {
-                println!("{:?}", other_id);
+                if let Some(door) = state.doors.get_mut(other_id) {
+                    door.open_door();
+                }
             }
             
             if state.player == Some(key) {
