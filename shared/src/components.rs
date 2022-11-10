@@ -1,18 +1,38 @@
-use std::cell::UnsafeCell;
-use slotmap::{SecondaryMap};
-use crate::{Id, Entity};
+use serde::{Serialize, Deserialize};
+use slotmap::SlotMap;
+use crate::{Id, Entity, CSDUnsafeCell};
 
-#[derive(Default)]
-pub struct Components<T> where T:Copy {
-    inner:SecondaryMap<Id, UnsafeCell<T>>
+
+#[derive(Default, Serialize, Clone)]
+pub struct Components<T : Copy + Clone + Serialize + Deserialize<'static>> {
+    inner:SlotMap<Id, CSDUnsafeCell<T>>
 }
 
-pub struct IterMut<'a> {
-    iter:slotmap::basic::Iter<'a, Id, UnsafeCell<Entity>>
+type E<T> = SlotMap<Id, CSDUnsafeCell<T>>;
+
+impl<T : Copy + Clone + Serialize + Deserialize<'static>> Deserialize<'static> for Components<T> {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'static> {
+        match E::deserialize(deserializer) {
+            Ok(inner) => {
+                return Ok(Components {
+                    inner
+                });
+            },
+            Err(err) => {
+                return Err(err);
+            },
+        }
+    }
 }
 
-impl<'a> Iterator for IterMut<'a> {
-    type Item = (Id, &'a mut Entity);
+pub struct IterMut<'a, T : Serialize + Deserialize<'static> + Copy + Clone> {
+    iter:slotmap::basic::Iter<'a, Id, CSDUnsafeCell<T>>
+}
+
+impl<'a, T : Serialize + Deserialize<'static> + Copy + Clone> Iterator for IterMut<'a, T> {
+    type Item = (Id, &'a mut T);
 
     fn next(&mut self) -> Option<Self::Item> {
         if let Some((id, e)) = self.iter.next() {
@@ -24,12 +44,12 @@ impl<'a> Iterator for IterMut<'a> {
     }
 }
 
-pub struct Iter<'a> {
-    iter:slotmap::secondary::Iter<'a, Id, UnsafeCell<Entity>>
+pub struct Iter<'a, T : Serialize + Deserialize<'static> + Copy + Clone> {
+    iter:slotmap::basic::Iter<'a, Id, CSDUnsafeCell<T>>
 }
 
-impl<'a> Iterator for Iter<'a> {
-    type Item = (Id, &'a Entity);
+impl<'a, T : Serialize + Deserialize<'static> + Copy + Clone> Iterator for Iter<'a, T> {
+    type Item = (Id, &'a T);
 
     fn next(&mut self) -> Option<Self::Item> {
         if let Some((id, e)) = self.iter.next() {
@@ -42,22 +62,22 @@ impl<'a> Iterator for Iter<'a> {
 }
 
 
-impl<T> Components<T> where T:Copy {
-    pub fn insert(&mut self, id:Id, t:T) {
-        self.inner.insert(id, UnsafeCell::new(t));
+impl<T : Copy + Clone + Serialize + Deserialize<'static>> Components<T> {
+    pub fn spawn_entity(&mut self, entity:T) -> Id {
+        self.inner.insert(CSDUnsafeCell::new(entity))
     }
 
-    pub fn remove(&mut self, id:Id) {
+    pub fn despawn_entity(&mut self, id:Id) {
         self.inner.remove(id);
     }
 
-   /* pub fn iter_mut(&self) -> IterMut {
+    pub fn iter_mut(&self) -> IterMut<T> {
         IterMut {
             iter:self.inner.iter()
         }
     }
 
-    pub fn iter(&self) -> Iter {
+    pub fn iter(&self) -> Iter<T> {
         Iter {
             iter:self.inner.iter()
         }
@@ -67,7 +87,7 @@ impl<T> Components<T> where T:Copy {
         self.inner.clear();
     }
 
-    pub fn get(&self, id:Id) -> Option<&Entity> {
+    pub fn get(&self, id:Id) -> Option<&T> {
         if let Some(e) = self.inner.get(id) {
             return Some(unsafe {& *e.get()});
         }
@@ -75,7 +95,7 @@ impl<T> Components<T> where T:Copy {
         None
     }
 
-    pub fn get_mut(&self, id:Id) -> Option<&mut Entity> {
+    pub fn get_mut(&self, id:Id) -> Option<&mut T> {
         if let Some(e) = self.inner.get(id) {
             return Some(unsafe {&mut *e.get()});
         }
@@ -85,5 +105,5 @@ impl<T> Components<T> where T:Copy {
 
     pub fn len(&self) -> usize {
         self.inner.len()
-    }*/
+    }
 }
