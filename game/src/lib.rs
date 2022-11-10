@@ -48,6 +48,10 @@ impl Game for MyGame {
 
     fn init(&mut self, engine:&mut dyn Context) {
         init(engine);
+        if self.state.loaded == false {
+            engine.push_command(Command::LoadMap { map_path: "assets/maps/test.map".into() });
+            self.state.loaded = true; 
+        }
     } 
 }
 

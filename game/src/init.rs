@@ -39,5 +39,4 @@ pub fn init(engine: &mut dyn Context) {
     def_entity!(Textures::BlueKey, "assets/textures/blue_key.png");
     def_entity!(Textures::WaypointMarker, "assets/textures/waypoint_marker.png");
     def_entity!(Textures::ExitMarker, "assets/textures/exit_marker.png");
-    engine.push_command(Command::LoadMap { map_path: "assets/maps/test.map".into() });
 }

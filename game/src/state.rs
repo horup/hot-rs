@@ -10,6 +10,7 @@ pub struct State {
     pub flash_timer_sec:f32,
     pub flash_timer_start:f32,
     pub flash_max:f32,
+    pub loaded:bool
 }
 
 impl State {
