@@ -38,23 +38,13 @@ impl Game for MyGame {
   
     fn serialize(&self) -> Vec<u8> {
         bincode::serialize(&self.state).unwrap()
-    }
+    } 
 
     fn deserialize(&mut self, bytes:&[u8]) {
-        dbg!("deserialize start");
         self.state = bincode::deserialize(bytes).unwrap();
-        dbg!("deserialize");
     }
-
-    fn init(&mut self, engine:&mut dyn Context) {
-        init(engine);
-        if self.state.loaded == false {
-            engine.push_command(Command::LoadMap { map_path: "assets/maps/test.map".into() });
-            self.state.loaded = true; 
-        }
-    } 
 }
-
+  
 impl MyGame {
     fn process_events(&mut self, engine: &mut dyn Context) {
         for event in engine.events().iter() {
@@ -62,6 +52,9 @@ impl MyGame {
                 Event::MapLoaded {  } => {
                     self.start(engine);
                 },
+                Event::Start {} => {
+                    engine.push_command(Command::LoadMap { map_path: "assets/maps/test.map".into() });
+                }
                 _=>{}
             }
         }
@@ -69,6 +62,7 @@ impl MyGame {
 }
 
 #[no_mangle]
-pub fn create(_engine:&mut dyn Context) -> Box<dyn Game> {
+pub fn create(engine:&mut dyn Context) -> Box<dyn Game> {
+    init(engine);
     Box::new(MyGame::default())
 }

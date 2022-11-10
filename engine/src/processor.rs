@@ -12,7 +12,6 @@ impl Engine {
                 Command::Restart => {
                     let game = self.game.take();
                     if let Some(mut game) = game {
-                        game.init(self);
                         self.game = Some(game);
                     }
 

@@ -131,6 +131,10 @@ impl Engine {
                     continue;
                 }
             }
+
+            if load_new && !unload {
+                self.events.push(Event::Start);
+            }
         } else {
             println!("Could not load metadata of game lib");
         }
@@ -141,7 +145,6 @@ impl Engine {
             unsafe {
                 if let Ok(f) = lib.get::<fn(state: &mut dyn Context) -> Box<dyn Game>>(b"create") {
                     let mut game = f(self);
-                    game.init(self);
                     self.game_lib = Some(lib);
                     return Some(game);
                 }
