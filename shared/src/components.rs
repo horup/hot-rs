@@ -1,34 +1,14 @@
-use serde::{Serialize, Deserialize};
-use slotmap::SlotMap;
-use crate::{Id, Entity, CSDUnsafeCell};
+use std::cell::UnsafeCell;
+use slotmap::{SecondaryMap};
+use crate::{Id, Entity};
 
-
-#[derive(Default, Serialize, Clone)]
-pub struct Entities {
-    inner:SlotMap<Id, CSDUnsafeCell<Entity>>
-}
-
-type E = SlotMap<Id, CSDUnsafeCell<Entity>>;
-
-impl Deserialize<'static> for Entities {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'static> {
-        match E::deserialize(deserializer) {
-            Ok(inner) => {
-                return Ok(Entities {
-                    inner
-                });
-            },
-            Err(err) => {
-                return Err(err);
-            },
-        }
-    }
+#[derive(Default)]
+pub struct Components<T> where T:Copy {
+    inner:SecondaryMap<Id, UnsafeCell<T>>
 }
 
 pub struct IterMut<'a> {
-    iter:slotmap::basic::Iter<'a, Id, CSDUnsafeCell<Entity>>
+    iter:slotmap::basic::Iter<'a, Id, UnsafeCell<Entity>>
 }
 
 impl<'a> Iterator for IterMut<'a> {
@@ -45,7 +25,7 @@ impl<'a> Iterator for IterMut<'a> {
 }
 
 pub struct Iter<'a> {
-    iter:slotmap::basic::Iter<'a, Id, CSDUnsafeCell<Entity>>
+    iter:slotmap::secondary::Iter<'a, Id, UnsafeCell<Entity>>
 }
 
 impl<'a> Iterator for Iter<'a> {
@@ -62,16 +42,16 @@ impl<'a> Iterator for Iter<'a> {
 }
 
 
-impl Entities {
-    pub fn spawn_entity(&mut self, entity:Entity) -> Id {
-        self.inner.insert(CSDUnsafeCell::new(entity))
+impl<T> Components<T> where T:Copy {
+    pub fn insert(&mut self, id:Id, t:T) {
+        self.inner.insert(id, UnsafeCell::new(t));
     }
 
-    pub fn despawn_entity(&mut self, id:Id) {
+    pub fn remove(&mut self, id:Id) {
         self.inner.remove(id);
     }
 
-    pub fn iter_mut(&self) -> IterMut {
+   /* pub fn iter_mut(&self) -> IterMut {
         IterMut {
             iter:self.inner.iter()
         }
@@ -105,5 +85,5 @@ impl Entities {
 
     pub fn len(&self) -> usize {
         self.inner.len()
-    }
+    }*/
 }
