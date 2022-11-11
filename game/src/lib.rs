@@ -33,7 +33,7 @@ impl Game for MyGame {
         self.process_events(ctx);
         self.update(ctx);
         self.draw(ctx);  
-        ctx.draw_world(&self.state.camera); 
+       
     }
   
     fn serialize(&self) -> Vec<u8> {
