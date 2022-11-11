@@ -79,6 +79,8 @@ impl MyGame {
                             ctx.push_command(Command::DespawnEntity{
                                 id:other_id
                             });
+
+                            state.flash(0.2, 0.5);
                         }
                     }
                 });
