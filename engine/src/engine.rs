@@ -2,7 +2,7 @@ use std::{
     collections::HashMap,
     fs::Metadata,
     path::{Path, PathBuf},
-    time::Duration,
+    time::Duration, cell::RefCell,
 };
 
 use libloading::{Library};
@@ -23,7 +23,7 @@ pub struct Engine {
     pub(crate) over_ui: bool,
     pub(crate) edit: Edit,
     pub(crate) input: PlayerInput,
-    pub(crate) commands: Vec<Command>,
+    pub(crate) commands: RefCell<Vec<Command>>,
     pub(crate) game_camera: Camera,
     pub(crate) edit_camera: Camera,
     pub(crate) edit_mode: bool,

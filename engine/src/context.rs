@@ -116,8 +116,8 @@ impl Context for Engine {
         })
     }
 
-    fn push_command(&mut self, command: shared::Command) {
-        self.commands.push(command);
+    fn push_command(&self, command: shared::Command) {
+        self.commands.borrow_mut().push(command);
     }
 
     fn events(&mut self) -> Vec<Event> {

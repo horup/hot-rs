@@ -7,10 +7,10 @@ pub struct State {
     pub player:Option<Id>,
     pub walkers:Components<Walker>,
     pub doors:Components<Door>,
+    pub items:Components<Item>,
     pub flash_timer_sec:f32,
     pub flash_timer_start:f32,
     pub flash_max:f32,
-    pub loaded:bool
 }
 
 impl State {
@@ -30,6 +30,11 @@ pub struct Walker {
 pub struct Door {
     pub open:bool,
     pub close_timer_sec:f32,
+}
+
+#[derive(Default, Serialize, Deserialize, Clone, Copy)]
+pub struct Item {
+    pub pickup:bool
 }
 
 impl Door {

@@ -1,11 +1,10 @@
-use shared::{Context, glam::Vec2, IgnoreColissions};
+use shared::{Context, glam::{Vec2, Vec3}, IgnoreColissions, Command};
 use crate::MyGame;
 
 impl MyGame {
     pub fn update(&mut self, ctx: &mut dyn Context) {
         let state = &mut self.state;
         let dt = ctx.dt(); 
- 
         for (key, e) in ctx.entities().iter_mut() {
             let speed = 3.0;
             let mut v = Vec2::default();
@@ -69,6 +68,22 @@ impl MyGame {
                 }
             }
         }
+
+        if let Some(player_id) = state.player {
+            if let Some(player) = ctx.entities().get(player_id) {
+                ctx.entities().iter().filter(|e| {e.0 != player_id}).for_each(|(other_id, other_entity)| {
+                    let v = player.pos - other_entity.pos;
+                    let r2 = player.radius + other_entity.radius;
+                    if v.length() < r2 {
+                        if let Some(item) = state.items.get(other_id) {
+                            ctx.push_command(Command::DespawnEntity{
+                                id:other_id
+                            });
+                        }
+                    }
+                });
+            }
+        } 
     }
     
 }

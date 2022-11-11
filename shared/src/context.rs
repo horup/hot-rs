@@ -90,7 +90,7 @@ pub trait Context {
     fn draw_rect(&self, params: DrawRectParams);
     fn serialize(&self) -> Vec<u8>;
     fn deserialize(&mut self, bytes:&[u8]);
-    fn push_command(&mut self, command: Command);
+    fn push_command(&self, command: Command);
     fn events(&mut self) -> Vec<Event>;
 
     fn clear(&mut self) {

@@ -1,7 +1,4 @@
-
-
-
-
+use crate::Id;
 
 #[derive(Debug, Clone)]
 pub enum Command {
@@ -12,5 +9,8 @@ pub enum Command {
     },
     LoadMap {
         map_path:String
+    },
+    DespawnEntity {
+        id:Id
     }
 }

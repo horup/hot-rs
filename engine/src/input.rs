@@ -1,4 +1,4 @@
-use shared::{Command, PlayerInput, glam::Vec2};
+use shared::{Command, PlayerInput, glam::Vec2, Context};
 use macroquad::{prelude::{is_key_pressed, KeyCode, is_key_down, mouse_position, is_mouse_button_down, MouseButton, is_mouse_button_pressed, mouse_wheel}, time::get_frame_time};
 
 use crate::{Engine, Tool};
@@ -98,7 +98,7 @@ impl Engine {
         }
 
         if is_key_pressed(KeyCode::F1) {
-            self.commands.push(Command::Restart);
+            self.push_command(Command::Restart);
         }
     
         let mut x = 0.0;

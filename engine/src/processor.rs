@@ -6,7 +6,7 @@ use crate::Engine;
 
 impl Engine {
     pub async fn process_commands(&mut self) {
-        let commands:Vec<Command> = self.commands.drain(..).collect();
+        let commands:Vec<Command> = self.commands.borrow_mut().drain(..).collect();
         for command in commands.iter() {
             match command {
                 Command::Restart => {
@@ -42,6 +42,9 @@ impl Engine {
 
                     self.events.push(Event::MapLoaded {  });
                 }
+                Command::DespawnEntity { id } => {
+                    self.entities.despawn_entity(*id);
+                },
             }
         }
     }
