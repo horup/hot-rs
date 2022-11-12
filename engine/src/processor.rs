@@ -46,7 +46,7 @@ impl Engine {
                     self.entities.despawn_entity(*id);
                 },
                 Command::DefineSound { handle, path } => {
-                    let sound = load_sound(&path).await.unwrap();
+                    let sound = load_sound(path).await.unwrap();
                     self.sounds.insert(*handle, sound);
                 },
             }

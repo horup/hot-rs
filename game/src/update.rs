@@ -1,4 +1,4 @@
-use shared::{Context, glam::{Vec2, Vec3}, IgnoreColissions, Command};
+use shared::{Context, glam::{Vec2}, IgnoreColissions, Command};
 use crate::MyGame;
 
 impl MyGame {
@@ -75,7 +75,7 @@ impl MyGame {
                     let v = player.pos - other_entity.pos;
                     let r2 = player.radius + other_entity.radius;
                     if v.length() < r2 {
-                        if let Some(item) = state.items.get(other_id) {
+                        if let Some(_item) = state.items.get(other_id) {
                             ctx.push_command(Command::DespawnEntity{
                                 id:other_id
                             });

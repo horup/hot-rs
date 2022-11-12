@@ -7,7 +7,7 @@ use std::{
 
 use libloading::{Library};
 use macroquad::{
-    texture::Texture2D, audio::{play_sound, Sound},
+    texture::Texture2D, audio::{Sound},
 };
 use native_dialog::FileDialog;
 use shared::{
