@@ -11,7 +11,7 @@ impl MyGame {
             if let Some(entity) = cell.entity {
                 if let Ok(entity) = Textures::try_from_primitive(entity) {
                     match entity {
-                        Textures::William => {
+                        Textures::Viktor => {
                             dbg!("Spawning Player");
                             let player_entity = engine.entities_mut().spawn_entity(Entity {
                                 pos: Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),

@@ -7,7 +7,7 @@ use std::{
 
 use libloading::{Library};
 use macroquad::{
-    texture::Texture2D,
+    texture::Texture2D, audio::{play_sound, Sound},
 };
 use native_dialog::FileDialog;
 use shared::{
@@ -34,6 +34,7 @@ pub struct Engine {
     pub(crate) game_lib: Option<Library>,
     pub(crate) game_lib_metadata: Option<Metadata>,
     pub(crate) textures: HashMap<u32, Texture2D>,
+    pub(crate) sounds: HashMap<u32, Sound>
 }
 
 impl Engine {

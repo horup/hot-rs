@@ -80,6 +80,7 @@ impl MyGame {
                                 id:other_id
                             });
 
+                            ctx.play_sound(0);
                             state.flash(0.2, 0.5);
                         }
                     }

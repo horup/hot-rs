@@ -7,6 +7,10 @@ pub enum Command {
         handle:u32,
         path:String
     },
+    DefineSound {
+        handle:u32,
+        path:String
+    },
     LoadMap {
         map_path:String
     },

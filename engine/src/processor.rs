@@ -1,6 +1,6 @@
 use shared::{Command, Event};
 
-use macroquad::texture::{Texture2D, load_texture, FilterMode};
+use macroquad::{texture::{Texture2D, load_texture, FilterMode}, audio::load_sound};
 use crate::Engine;
 
 
@@ -44,6 +44,10 @@ impl Engine {
                 }
                 Command::DespawnEntity { id } => {
                     self.entities.despawn_entity(*id);
+                },
+                Command::DefineSound { handle, path } => {
+                    let sound = load_sound(&path).await.unwrap();
+                    self.sounds.insert(*handle, sound);
                 },
             }
         }
