@@ -3,7 +3,7 @@ use crate::{MyGame, Textures};
 
 impl MyGame {
     pub fn draw(&mut self, ctx:&mut dyn Context) {
-        ctx.draw_world(&self.state.camera); 
+        ctx.draw(&self.state.camera); 
         let dt = ctx.dt();
         let state = &mut self.state;
         state.flash_timer_sec -= dt;

@@ -1,10 +1,12 @@
-use shared::{glam::Vec3, Context, Entity, IgnoreColissions};
+use shared::{glam::Vec3, Context, Entity, IgnoreColissions, World};
 use num_enum::TryFromPrimitive;
 use crate::{Textures, Walker, Door, MyGame, Item};
 
 impl MyGame {
     pub fn start(&mut self, engine:&mut dyn Context) {
         engine.clear();
+        let map = engine.map().clone();
+        *engine.world_mut() = World::from(&map);
         let state = &mut self.state;
         engine.map().clone().grid.for_each_mut(|cell, x, y| {
             let pos = Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0);

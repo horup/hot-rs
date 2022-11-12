@@ -12,7 +12,7 @@ use macroquad::{
 use native_dialog::FileDialog;
 use shared::{
     Camera, Command, Context, Game, Map,
-    PlayerInput, Event, Entities,
+    PlayerInput, Event, Entities, World,
 };
 
 use crate::Edit;
@@ -28,6 +28,7 @@ pub struct Engine {
     pub(crate) edit_camera: Camera,
     pub(crate) edit_mode: bool,
     pub(crate) map: Map,
+    pub(crate) world: World,
     pub(crate) game: Option<Box<dyn Game>>,
     pub(crate) entities: Entities,
     pub(crate) game_lib_path: PathBuf,

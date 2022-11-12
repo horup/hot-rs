@@ -9,15 +9,17 @@ pub struct Grid<T:Clone + Default> {
 
 impl<T> Default for Grid<T> where T:Default+Clone {
     fn default() -> Self {
-        let size = 64;
+        Self::new(64)
+    }
+}
+
+impl<T> Grid<T> where T:Default+Clone {
+    pub fn new(size:usize) -> Self {
         Self { 
             size,
             cells:vec![T::default();size * size]
          }
     }
-}
-
-impl<T> Grid<T> where T:Default+Clone {
     pub fn size(&self)->usize {
         self.size
     }

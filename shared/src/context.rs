@@ -1,6 +1,6 @@
 use std::cell::UnsafeCell;
 
-use crate::{Camera, Command, Entities, Entity, Event, Id, Map};
+use crate::{Camera, Command, Entities, Entity, Event, Id, Map, World};
 use glam::{Vec2, Vec3, IVec2};
 use slotmap::SlotMap;
 
@@ -77,12 +77,14 @@ pub trait Context {
     fn clip_move(&self, id:Id, target:Vec3) -> Collision;
     fn entities(&self) -> &Entities;
     fn entities_mut(&mut self) -> &mut Entities;
+    fn world(&self) -> &World;
+    fn world_mut(&mut self) -> &mut World;
     fn is_key_pressed(&self, key_code: u8) -> bool;
     fn is_key_down(&self, key_code: u8) -> bool;
     fn last_key_pressed(&self) -> Option<u8>;
     fn dt(&self) -> f32;
     fn map(&self) -> &Map;
-    fn draw_world(&mut self, camera: &Camera);
+    fn draw(&mut self, camera: &Camera);
     fn screen_size(&self) -> Vec2;
     fn texture_size(&self, texture: u32) -> Vec2;
     fn draw_string(&self, params: DrawStringParams);
@@ -96,5 +98,6 @@ pub trait Context {
 
     fn clear(&mut self) {
         self.entities_mut().clear();
+        self.world_mut().clear();
     }
 }
