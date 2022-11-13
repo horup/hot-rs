@@ -5,7 +5,7 @@ use serde::{Serialize, Deserialize};
 use crate::{Grid, Map};
 
 
-#[derive(Default, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Tile {
     pub img:Option<u32>,
     pub clips:bool,
@@ -26,10 +26,12 @@ impl World {
 impl From<&Map> for World {
     fn from(map: &Map) -> Self {
         let s = map.grid.size();
-        let mut grid = Grid::new(s);
+        let mut grid:Grid<Tile> = Grid::new(s);
         for y in 0..s {
             for x in 0..s {
-
+                let tile = map.grid.get(x as i32, y as i32).unwrap();
+                grid.get_mut(x as i32, y as i32).unwrap().img = tile.tile;
+             
             }
         }
 

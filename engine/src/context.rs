@@ -49,6 +49,7 @@ impl Context for Engine {
         for cell_y in bounds.top() as i32 .. bounds.bottom() as i32 {
             for cell_x in bounds.left() as i32 .. bounds.right() as i32 {
                 if let Some(cell) = self.world.get(cell_x, cell_y) {
+
                     if !cell.hidden {
                         if let Some(tile) = cell.img {
                             if let Some(tex) = self.textures.get(&tile) {
