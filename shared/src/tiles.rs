@@ -13,17 +13,17 @@ pub struct Tile {
 }
 
 #[derive(Default, Clone, Serialize, Deserialize)]
-pub struct World {
+pub struct Tiles {
     grid:Grid<Tile>
 }
 
-impl World {
+impl Tiles {
     pub fn clear(&mut self) {
         self.grid = Grid::new(self.grid.size());
     }
 }
 
-impl From<&Map> for World {
+impl From<&Map> for Tiles {
     fn from(map: &Map) -> Self {
         let s = map.grid.size();
         let mut grid:Grid<Tile> = Grid::new(s);
@@ -35,13 +35,13 @@ impl From<&Map> for World {
             }
         }
 
-        World {
+        Tiles {
             grid
         }
     }
 }
 
-impl Deref for World {
+impl Deref for Tiles {
     type Target = Grid<Tile>;
 
     fn deref(&self) -> &Self::Target {
@@ -49,7 +49,7 @@ impl Deref for World {
     }
 }
 
-impl DerefMut for World {
+impl DerefMut for Tiles {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.grid
     }

@@ -39,7 +39,7 @@ pub use components::*;
 mod csdunsafecell;
 pub use csdunsafecell::*;
 
-mod world;
-pub use world::*;
+mod tiles;
+pub use tiles::*;
 
 new_key_type! { pub struct Id; }

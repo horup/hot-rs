@@ -274,11 +274,11 @@ impl Context for Engine {
         }
     }
 
-    fn world(&self) -> &shared::World {
+    fn tiles(&self) -> &shared::Tiles {
         &self.world
     }
 
-    fn world_mut(&mut self) -> &mut shared::World {
+    fn tiles_mut(&mut self) -> &mut shared::Tiles {
         &mut self.world
     }
 }

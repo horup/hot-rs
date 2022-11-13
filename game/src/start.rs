@@ -1,4 +1,4 @@
-use shared::{glam::Vec3, Context, Entity, IgnoreColissions, World};
+use shared::{glam::Vec3, Context, Entity, IgnoreColissions, Tiles};
 use num_enum::TryFromPrimitive;
 use crate::{Textures, Walker, Door, MyGame, Item};
 
@@ -7,8 +7,8 @@ impl MyGame {
         engine.clear();
         let map = engine.map().clone();
 
-        let w = World::from(&map);
-        *engine.world_mut() = w;
+        let w = Tiles::from(&map);
+        *engine.tiles_mut() = w;
 
         let state = &mut self.state;
         engine.map().clone().grid.for_each_mut(|cell, x, y| {
