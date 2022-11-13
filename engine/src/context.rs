@@ -214,8 +214,8 @@ impl Context for Engine {
                             let i = i as f32;
                             let cp = Vec2::new(i, i) * rev_dim + d + pos_org.truncate();
                             let np = cp.as_ivec2();
-                            if let Some(cell) = self.map.grid.get(np.x, np.y) {
-                                if cell.blocks {
+                            if let Some(cell) = self.world.get(np.x, np.y) {
+                                if cell.clips {
                                     let s1 =
                                         parry2d::shape::Cuboid::new([e.radius, e.radius].into());
                                     let s1_pos = Isometry2::translation(pos_new.x, pos_new.y);

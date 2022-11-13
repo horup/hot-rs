@@ -31,7 +31,7 @@ impl From<&Map> for World {
             for x in 0..s {
                 let tile = map.grid.get(x as i32, y as i32).unwrap();
                 grid.get_mut(x as i32, y as i32).unwrap().img = tile.tile;
-             
+                grid.get_mut(x as i32, y as i32).unwrap().clips = tile.blocks;
             }
         }
 
