@@ -4,7 +4,7 @@ use std::mem::transmute;
 use macroquad::{
     prelude::*,
     time::get_frame_time,
-    window::{screen_height, screen_width}, shapes::{draw_line, draw_rectangle_lines}, audio::{play_sound_once, play_sound, PlaySoundParams},
+    window::{screen_height, screen_width}, shapes::{draw_line, draw_rectangle_lines}, audio::{play_sound, PlaySoundParams},
 };
 use parry2d::{bounding_volume::BoundingVolume, na::Isometry2};
 use shared::{Camera, Collision, Context, Entities, Event, Id, IgnoreColissions};
