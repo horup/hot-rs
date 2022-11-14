@@ -1,4 +1,4 @@
-use shared::{Context, glam::{Vec2}, IgnoreColissions, Command};
+use shared::{Context, glam::{Vec2, Vec3}, IgnoreColissions, Command};
 use crate::{MyGame, Textures, sounds};
 
 impl MyGame {
@@ -42,7 +42,11 @@ impl MyGame {
             if let Some(other_id) = col.other_entity {
                 if let Some(door) = state.doors.get_mut(other_id) {
                     door.open_door();
-                    ctx.play_sound(sounds::DOOR_OPEN);
+                    if let Some(door) = ctx.entities().get_mut(other_id) {
+                        door.ignore_collisions = IgnoreColissions::WithEntities;
+                        door.hidden = true;
+                        ctx.play_sound(sounds::DOOR_OPEN, 1.0);
+                    }
                 }
             }
             
@@ -52,21 +56,22 @@ impl MyGame {
             }
         }
     
-        for (key, e) in ctx.entities().iter_mut() {
-            if let Some(door) = state.doors.get_mut(key) {
-                if door.open {
-                    e.ignore_collisions = IgnoreColissions::WithEntities;
-                    e.hidden = true;
-                } else {
-                    e.hidden = false;
-                }
-    
-                door.close_timer_sec -= dt;
-                if door.open && door.close_timer_sec <= 0.0 {
-                    door.close_timer_sec = 0.0;
-                    e.ignore_collisions = IgnoreColissions::None;
-                    door.open = false;
-                    ctx.play_sound(sounds::DOOR_CLOSE);
+
+        if let Some(player) = ctx.entities().get(state.player.unwrap_or_default()) {
+            for (key, e) in ctx.entities().iter_mut() {
+                let v = e.pos - player.pos;
+                if v.length() > 1.0 {
+                    if let Some(door) = state.doors.get_mut(key) {
+                        door.close_timer_sec -= dt;
+                        if door.open && door.close_timer_sec <= 0.0 {
+                            door.close_timer_sec = 0.0;
+                            e.ignore_collisions = IgnoreColissions::None;
+                            e.hidden = false;
+                            door.open = false;
+                            let vol = 1.0 / v.length();
+                            ctx.play_sound(sounds::DOOR_CLOSE, vol);
+                        }
+                    }
                 }
             }
         }
@@ -82,7 +87,7 @@ impl MyGame {
                                 id:other_id
                             });
                             state.flash(0.2, 0.5);
-                            ctx.play_sound(sounds::PICKUP);
+                            ctx.play_sound(sounds::PICKUP, 1.0);
 
 
                             if other_entity.texture == Textures::PokemonCard.into() {

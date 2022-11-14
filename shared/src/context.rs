@@ -106,7 +106,7 @@ pub trait Context {
     fn deserialize(&mut self, bytes:&[u8]);
     fn push_command(&self, command: Command);
     fn events(&mut self) -> Vec<Event>;
-    fn play_sound(&self, sound:u32);
+    fn play_sound(&self, sound:u32, volume:f32);
 
     fn clear(&mut self) {
         self.entities_mut().clear();

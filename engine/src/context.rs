@@ -4,7 +4,7 @@ use std::mem::transmute;
 use macroquad::{
     prelude::*,
     time::get_frame_time,
-    window::{screen_height, screen_width}, shapes::{draw_line, draw_rectangle_lines}, audio::play_sound_once,
+    window::{screen_height, screen_width}, shapes::{draw_line, draw_rectangle_lines}, audio::{play_sound_once, play_sound, PlaySoundParams},
 };
 use parry2d::{bounding_volume::BoundingVolume, na::Isometry2};
 use shared::{Camera, Collision, Context, Entities, Event, Id, IgnoreColissions};
@@ -276,9 +276,12 @@ impl Context for Engine {
         }
     }
 
-    fn play_sound(&self, sound:u32) {
+    fn play_sound(&self, sound:u32, volume:f32) {
         if let Some(sound) = self.sounds.get(&sound) {
-            play_sound_once(*sound);
+            play_sound(*sound, PlaySoundParams {
+                volume,
+                ..Default::default()
+            })
         }
     }
 
