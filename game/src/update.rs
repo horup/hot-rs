@@ -1,5 +1,5 @@
 use shared::{Context, glam::{Vec2}, IgnoreColissions, Command};
-use crate::{MyGame, Textures};
+use crate::{MyGame, Textures, sounds};
 
 impl MyGame {
     pub fn update(&mut self, ctx: &mut dyn Context) {
@@ -42,6 +42,7 @@ impl MyGame {
             if let Some(other_id) = col.other_entity {
                 if let Some(door) = state.doors.get_mut(other_id) {
                     door.open_door();
+                    ctx.play_sound(sounds::OPEN_DOOR);
                 }
             }
             
@@ -80,7 +81,7 @@ impl MyGame {
                                 id:other_id
                             });
                             state.flash(0.2, 0.5);
-                            ctx.play_sound(0);
+                            ctx.play_sound(sounds::PICKUP);
 
 
                             if other_entity.texture == Textures::PokemonCard.into() {

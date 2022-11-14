@@ -21,6 +21,8 @@ pub use update::*;
 mod draw;
 pub use draw::*;
 
+pub mod sounds;
+
 #[derive(Default)]
 pub struct MyGame {
     pub state:State,

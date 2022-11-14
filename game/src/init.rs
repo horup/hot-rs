@@ -1,5 +1,5 @@
 use shared::*;
-use crate::Textures;
+use crate::{Textures, sounds};
 
 pub fn init(engine: &mut dyn Context) {
     let mut tiles:Vec<u32> = Vec::new();
@@ -38,5 +38,5 @@ pub fn init(engine: &mut dyn Context) {
     def_entity!(Textures::WaypointMarker, "assets/textures/waypoint_marker.png");
     def_entity!(Textures::ExitMarker, "assets/textures/exit_marker.png");
 
-    engine.push_command(Command::DefineSound { handle: 0, path: "assets/sfx/pickup.ogg".into() });
+    engine.push_command(Command::DefineSound { handle: sounds::PICKUP, path: "assets/sfx/pickup.ogg".into() });
 }
