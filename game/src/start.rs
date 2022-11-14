@@ -67,8 +67,18 @@ impl MyGame {
                                 radius: 0.5,
                                 ..Default::default()
                             });
+
+                            let mut key = None;
+                            if entity == Textures::BlueDoor {
+                                key = Some(Textures::BlueKey);
+                            } else if entity == Textures::GoldDoor {
+                                key = Some(Textures::GoldKey);
+                            }
     
-                            state.doors.attach(door, Door::default());
+                            state.doors.attach(door, Door {
+                                key,
+                                ..Default::default()
+                            });
                         }
                         _ => {
                             engine.entities_mut().spawn_entity(Entity {

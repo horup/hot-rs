@@ -41,6 +41,7 @@ pub struct Walker {
 pub struct Door {
     pub open:bool,
     pub close_timer_sec:f32,
+    pub key:Option<Textures>
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Copy)]

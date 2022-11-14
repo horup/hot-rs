@@ -41,11 +41,17 @@ impl MyGame {
             let col = ctx.clip_move(key, e.pos + v);
             if let Some(other_id) = col.other_entity {
                 if let Some(door) = state.doors.get_mut(other_id) {
-                    door.open_door();
-                    if let Some(door) = ctx.entities().get_mut(other_id) {
-                        door.ignore_collisions = IgnoreColissions::WithEntities;
-                        door.hidden = true;
-                        ctx.play_sound(sounds::DOOR_OPEN, 1.0);
+                    let can_open = match door.key {
+                        Some(tex) => state.inventory.contains_key(&tex),
+                        None => true,
+                    };
+                    if can_open {
+                        door.open_door();
+                        if let Some(door) = ctx.entities().get_mut(other_id) {
+                            door.ignore_collisions = IgnoreColissions::WithEntities;
+                            door.hidden = true;
+                            ctx.play_sound(sounds::DOOR_OPEN, 1.0);
+                        }
                     }
                 }
             }
