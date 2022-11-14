@@ -1,4 +1,4 @@
-use shared::{Context, glam::{Vec2, Vec3}, IgnoreColissions, Command};
+use shared::{Context, glam::{Vec2}, IgnoreColissions, Command};
 use crate::{MyGame, Textures, sounds};
 
 impl MyGame {
