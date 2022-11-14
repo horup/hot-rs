@@ -1,6 +1,6 @@
 use shared::{glam::Vec3, Context, Entity, IgnoreColissions, Tiles};
 use num_enum::TryFromPrimitive;
-use crate::{Textures, Walker, Door, MyGame, Item};
+use crate::{Textures, Walker, Door, MyGame, Item, sounds};
 
 impl MyGame {
     pub fn start(&mut self, engine:&mut dyn Context) {
@@ -38,7 +38,8 @@ impl MyGame {
                             });
 
                             state.items.attach(card, Item {
-                                pickup:true
+                                pickup:true,
+                                ..Default::default()
                             });
 
                             state.pokemon_cards.total += 1.0;
@@ -54,7 +55,8 @@ impl MyGame {
                             });
 
                             state.items.attach(key, Item {
-                                pickup:true
+                                pickup:true,
+                                pickup_sound:Some(sounds::PICKUP_KEY)
                             });
                         },
                         Textures::WhiteDoor

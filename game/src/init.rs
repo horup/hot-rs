@@ -38,7 +38,14 @@ pub fn init(engine: &mut dyn Context) {
     def_entity!(Textures::WaypointMarker, "assets/textures/waypoint_marker.png");
     def_entity!(Textures::ExitMarker, "assets/textures/exit_marker.png");
 
+    macro_rules! def_sound {
+        ($handle:expr, $path:expr) => {
+            engine.push_command(Command::DefineSound { handle: $handle, path: $path.into() });
+        };
+    }
+
     engine.push_command(Command::DefineSound { handle: sounds::PICKUP, path: "assets/sfx/pickup.ogg".into() });
     engine.push_command(Command::DefineSound { handle: sounds::DOOR_OPEN, path: "assets/sfx/door_open.ogg".into() });
     engine.push_command(Command::DefineSound { handle: sounds::DOOR_CLOSE, path: "assets/sfx/door_close.ogg".into() });
+    def_sound!(sounds::PICKUP_KEY, "assets/sfx/pickup_key.ogg");
 }

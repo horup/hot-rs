@@ -46,7 +46,8 @@ pub struct Door {
 
 #[derive(Default, Serialize, Deserialize, Clone, Copy)]
 pub struct Item {
-    pub pickup:bool
+    pub pickup:bool,
+    pub pickup_sound:Option<u32>
 }
 
 impl Door {

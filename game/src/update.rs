@@ -88,12 +88,12 @@ impl MyGame {
                     let v = player.pos - other_entity.pos;
                     let r2 = player.radius + other_entity.radius;
                     if v.length() < r2 {
-                        if let Some(_item) = state.items.get(other_id) {
+                        if let Some(item) = state.items.get(other_id) {
                             ctx.push_command(Command::DespawnEntity{
                                 id:other_id
                             });
+                            ctx.play_sound(item.pickup_sound.unwrap_or(sounds::PICKUP), 1.0);
                             state.flash(0.2, 0.5);
-                            ctx.play_sound(sounds::PICKUP, 1.0);
 
 
                             if other_entity.texture == Textures::PokemonCard.into() {
