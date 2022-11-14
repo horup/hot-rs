@@ -24,13 +24,20 @@ impl MyGame {
         let screen_size = ctx.screen_size();
         let scale = 14.0;
         let ico_size = screen_size.y / scale;
-        let mut x = ico_size / 2.0;
+        let x = ico_size / 2.0;
         let y = ico_size / 2.0;
         let w = screen_size.x / 6.0;
         self.draw_hud_item(ctx, x, y, ico_size, Textures::PokemonCard.into(), format!("{:02}/{:02}", self.state.pokemon_cards.current, self.state.pokemon_cards.total));
 
-        self.draw_hud_item(ctx, x + w, y, ico_size, Textures::BlueKey.into(), "".into());
-        self.draw_hud_item(ctx, x + w + ico_size, y, ico_size, Textures::GoldKey.into(), "".into());
+        let inv = &self.state.inventory;
+        let img = Textures::BlueKey;
+        if inv.contains_key(&img) {
+            self.draw_hud_item(ctx, x + w, y, ico_size, img.into(), "".into());
+        }
+        let img = Textures::GoldKey;
+        if inv.contains_key(&img) {
+            self.draw_hud_item(ctx, x + w + ico_size, y, ico_size, img.into(), "".into());
+        }
     }
 
     fn draw_flash(&mut self, ctx:&mut dyn Context) {

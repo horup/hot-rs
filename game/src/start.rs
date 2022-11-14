@@ -43,6 +43,20 @@ impl MyGame {
 
                             state.pokemon_cards.total += 1.0;
                         },
+                        Textures::GoldKey 
+                        | Textures::BlueKey => {
+                            let key = engine.entities_mut().spawn_entity(Entity {
+                                pos, 
+                                texture: entity.into(),
+                                radius: 0.25,
+                                ignore_collisions: IgnoreColissions::WithEntities,
+                                ..Default::default()
+                            });
+
+                            state.items.attach(key, Item {
+                                pickup:true
+                            });
+                        },
                         Textures::WhiteDoor
                         | Textures::WhiteDoorSide
                         | Textures::BlueDoor

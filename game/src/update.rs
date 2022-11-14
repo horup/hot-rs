@@ -1,5 +1,5 @@
 use shared::{Context, glam::{Vec2}, IgnoreColissions, Command};
-use crate::MyGame;
+use crate::{MyGame, Textures};
 
 impl MyGame {
     pub fn update(&mut self, ctx: &mut dyn Context) {
@@ -79,11 +79,17 @@ impl MyGame {
                             ctx.push_command(Command::DespawnEntity{
                                 id:other_id
                             });
-
-                            state.pokemon_cards.current += 1.0;
-
-                            ctx.play_sound(0);
                             state.flash(0.2, 0.5);
+                            ctx.play_sound(0);
+
+
+                            if other_entity.texture == Textures::PokemonCard.into() {
+                                state.pokemon_cards.current += 1.0;
+                            } else if other_entity.texture == Textures::GoldKey.into() {
+                                state.inventory.insert(Textures::GoldKey, 1.0);
+                            } else if other_entity.texture == Textures::BlueKey.into() {
+                                state.inventory.insert(Textures::BlueKey, 1.0);
+                            }
                         }
                     }
                 });

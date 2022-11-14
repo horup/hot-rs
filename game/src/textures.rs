@@ -1,6 +1,7 @@
 use num_enum::{TryFromPrimitive, IntoPrimitive};
+use serde::{Deserialize, Serialize};
 
-#[derive(TryFromPrimitive, IntoPrimitive)]
+#[derive(TryFromPrimitive, IntoPrimitive, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Hash)]
 #[repr(u32)]
 pub enum Textures {
     Piggy = 2,
