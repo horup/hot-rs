@@ -39,4 +39,6 @@ pub fn init(engine: &mut dyn Context) {
     def_entity!(Textures::ExitMarker, "assets/textures/exit_marker.png");
 
     engine.push_command(Command::DefineSound { handle: sounds::PICKUP, path: "assets/sfx/pickup.ogg".into() });
+    engine.push_command(Command::DefineSound { handle: sounds::DOOR_OPEN, path: "assets/sfx/door_open.ogg".into() });
+    engine.push_command(Command::DefineSound { handle: sounds::DOOR_CLOSE, path: "assets/sfx/door_close.ogg".into() });
 }

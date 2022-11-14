@@ -42,7 +42,7 @@ impl MyGame {
             if let Some(other_id) = col.other_entity {
                 if let Some(door) = state.doors.get_mut(other_id) {
                     door.open_door();
-                    ctx.play_sound(sounds::OPEN_DOOR);
+                    ctx.play_sound(sounds::DOOR_OPEN);
                 }
             }
             
@@ -62,10 +62,11 @@ impl MyGame {
                 }
     
                 door.close_timer_sec -= dt;
-                if door.close_timer_sec <= 0.0 {
+                if door.open && door.close_timer_sec <= 0.0 {
                     door.close_timer_sec = 0.0;
                     e.ignore_collisions = IgnoreColissions::None;
                     door.open = false;
+                    ctx.play_sound(sounds::DOOR_CLOSE);
                 }
             }
         }
