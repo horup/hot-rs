@@ -2,6 +2,12 @@ use shared::{Id, Camera, Components};
 use serde::{Serialize, Deserialize};
 
 #[derive(Default, Serialize, Deserialize, Clone)]
+pub struct Counter {
+    pub current:f32,
+    pub total:f32
+}
+
+#[derive(Default, Serialize, Deserialize, Clone)]
 pub struct State {
     pub camera:Camera,
     pub player:Option<Id>,
@@ -11,6 +17,7 @@ pub struct State {
     pub flash_timer_sec:f32,
     pub flash_timer_start:f32,
     pub flash_max:f32,
+    pub pokemon_cards:Counter
 }
 
 impl State {

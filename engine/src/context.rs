@@ -97,6 +97,14 @@ impl Context for Engine {
 
     fn draw_string(&self, p: shared::DrawStringParams) {
         draw_text_ex(&p.str, p.x, p.y, TextParams {
+            font_size:p.font_height as u16,
+            font_scale:1.0,
+            color:Color {
+                r: p.color.r,
+                g: p.color.g,
+                b: p.color.b,
+                a: p.color.a,
+            },
             ..Default::default()
         });
     }

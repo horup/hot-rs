@@ -116,7 +116,6 @@ impl Engine {
 
                                 if unload {
                                     self.deserialize(&state);
-                                    dbg!(state.len());
                                 }
 
                                 break;

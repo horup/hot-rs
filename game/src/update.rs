@@ -80,6 +80,8 @@ impl MyGame {
                                 id:other_id
                             });
 
+                            state.pokemon_cards.current += 1.0;
+
                             ctx.play_sound(0);
                             state.flash(0.2, 0.5);
                         }

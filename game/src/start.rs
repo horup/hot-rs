@@ -40,6 +40,8 @@ impl MyGame {
                             state.items.attach(card, Item {
                                 pickup:true
                             });
+
+                            state.pokemon_cards.total += 1.0;
                         },
                         Textures::WhiteDoor
                         | Textures::WhiteDoorSide

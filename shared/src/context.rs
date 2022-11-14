@@ -4,11 +4,23 @@ use crate::{Camera, Command, Entities, Entity, Event, Id, Map, Tiles};
 use glam::{Vec2, Vec3, IVec2};
 use slotmap::SlotMap;
 
-#[derive(Default, Clone)]
+#[derive(Clone)]
 pub struct DrawStringParams {
     pub str: String,
     pub x: f32,
     pub y: f32,
+    pub font_height:f32,
+    pub color:Color
+}
+
+impl Default for DrawStringParams {
+    fn default() -> Self {
+        Self { str: Default::default(), 
+            x: Default::default(), 
+            y: Default::default(), 
+            font_height: 16.0,
+            color: Color::default(), }
+    }
 }
 
 #[derive(Default, Clone, Copy)]
