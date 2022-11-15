@@ -87,7 +87,7 @@ impl Engine {
 
         let after = self.map.clone();
         if after != before {
-            
+            self.events.push(Event::MapReady {  });
         }
     
     }
