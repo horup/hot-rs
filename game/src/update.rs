@@ -1,5 +1,5 @@
 use shared::{Context, glam::{Vec2}, IgnoreColissions, Command};
-use crate::{MyGame, Textures, sounds};
+use crate::{MyGame, Images, sounds};
 
 impl MyGame {
     fn proximity_update(&mut self, ctx: &mut dyn Context) {
@@ -8,7 +8,7 @@ impl MyGame {
             for (other_id, other_entity) in ctx.entities().iter().filter(|(id,_)| {id != &player_id}) {
                 let v = other_entity.pos - player_entity.pos;
                 let l = v.length();
-                if other_entity.texture == Textures::ExitMarker.into() {
+                if other_entity.texture == Images::ExitMarker.into() {
                     if l < 0.5 {
                         // TODO end game
                     }
@@ -109,12 +109,12 @@ impl MyGame {
                             ctx.play_sound(item.pickup_sound.unwrap_or(sounds::PICKUP), 1.0);
                             state.flash(0.2, 0.5);
 
-                            if other_entity.texture == Textures::PokemonCard.into() {
+                            if other_entity.texture == Images::PokemonCard.into() {
                                 state.pokemon_cards.current += 1.0;
-                            } else if other_entity.texture == Textures::GoldKey.into() {
-                                state.inventory.insert(Textures::GoldKey, 1.0);
-                            } else if other_entity.texture == Textures::BlueKey.into() {
-                                state.inventory.insert(Textures::BlueKey, 1.0);
+                            } else if other_entity.texture == Images::GoldKey.into() {
+                                state.inventory.insert(Images::GoldKey, 1.0);
+                            } else if other_entity.texture == Images::BlueKey.into() {
+                                state.inventory.insert(Images::BlueKey, 1.0);
                             }
                         }
                     }

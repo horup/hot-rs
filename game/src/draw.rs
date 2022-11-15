@@ -1,5 +1,5 @@
 use shared::*;
-use crate::{MyGame, Textures};
+use crate::{MyGame, Images};
 
 impl MyGame {
     fn draw_hud_item(&self, ctx: &mut dyn Context, x: f32, y: f32, ico_size: f32, tex:u32, s:String) {
@@ -27,14 +27,14 @@ impl MyGame {
         let x = ico_size / 2.0;
         let y = ico_size / 2.0;
         let w = screen_size.x / 6.0;
-        self.draw_hud_item(ctx, x, y, ico_size, Textures::PokemonCard.into(), format!("{:02}/{:02}", self.state.pokemon_cards.current, self.state.pokemon_cards.total));
+        self.draw_hud_item(ctx, x, y, ico_size, Images::PokemonCard.into(), format!("{:02}/{:02}", self.state.pokemon_cards.current, self.state.pokemon_cards.total));
 
         let inv = &self.state.inventory;
-        let img = Textures::BlueKey;
+        let img = Images::BlueKey;
         if inv.contains_key(&img) {
             self.draw_hud_item(ctx, x + w, y, ico_size, img.into(), "".into());
         }
-        let img = Textures::GoldKey;
+        let img = Images::GoldKey;
         if inv.contains_key(&img) {
             self.draw_hud_item(ctx, x + w + ico_size, y, ico_size, img.into(), "".into());
         }

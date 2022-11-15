@@ -1,6 +1,6 @@
 use shared::{glam::Vec3, Context, Entity, IgnoreColissions, Tiles};
 use num_enum::TryFromPrimitive;
-use crate::{Textures, Walker, Door, MyGame, Item, sounds, State};
+use crate::{Images, Walker, Door, MyGame, Item, sounds, State};
 
 impl MyGame {
     pub fn start(&mut self, engine:&mut dyn Context) {
@@ -15,9 +15,9 @@ impl MyGame {
         engine.map().clone().grid.for_each_mut(|cell, x, y| {
             let pos = Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0);
             if let Some(entity) = cell.entity {
-                if let Ok(entity) = Textures::try_from_primitive(entity) {
+                if let Ok(entity) = Images::try_from_primitive(entity) {
                     match entity {
-                        Textures::Viktor => {
+                        Images::Viktor => {
                             dbg!("Spawning Player");
                             let player_entity = engine.entities_mut().spawn_entity(Entity {
                                 pos: Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
@@ -29,7 +29,7 @@ impl MyGame {
                             state.player = Some(player_entity);
                             state.walkers.attach(player_entity, Walker::default());
                         }
-                        Textures::PokemonCard => {
+                        Images::PokemonCard => {
                             let card = engine.entities_mut().spawn_entity(Entity {
                                 pos, 
                                 texture: entity.into(),
@@ -45,8 +45,8 @@ impl MyGame {
 
                             state.pokemon_cards.total += 1.0;
                         },
-                        Textures::GoldKey 
-                        | Textures::BlueKey => {
+                        Images::GoldKey 
+                        | Images::BlueKey => {
                             let key = engine.entities_mut().spawn_entity(Entity {
                                 pos, 
                                 texture: entity.into(),
@@ -60,10 +60,10 @@ impl MyGame {
                                 pickup_sound:Some(sounds::PICKUP_KEY)
                             });
                         },
-                        Textures::WhiteDoor
-                        | Textures::WhiteDoorSide
-                        | Textures::BlueDoor
-                        | Textures::GoldDoor => {
+                        Images::WhiteDoor
+                        | Images::WhiteDoorSide
+                        | Images::BlueDoor
+                        | Images::GoldDoor => {
                             let door = engine.entities_mut().spawn_entity(Entity {
                                 pos: Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
                                 texture: entity.into(),
@@ -72,10 +72,10 @@ impl MyGame {
                             });
 
                             let mut key = None;
-                            if entity == Textures::BlueDoor {
-                                key = Some(Textures::BlueKey);
-                            } else if entity == Textures::GoldDoor {
-                                key = Some(Textures::GoldKey);
+                            if entity == Images::BlueDoor {
+                                key = Some(Images::BlueKey);
+                            } else if entity == Images::GoldDoor {
+                                key = Some(Images::GoldKey);
                             }
     
                             state.doors.attach(door, Door {

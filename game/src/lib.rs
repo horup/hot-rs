@@ -1,5 +1,5 @@
-mod textures;
-pub use textures::*;
+mod images;
+pub use images::*;
 
 mod init;
 pub use init::*;

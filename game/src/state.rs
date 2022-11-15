@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use shared::{Id, Camera, Components};
 use serde::{Serialize, Deserialize};
 
-use crate::Textures;
+use crate::Images;
 
 #[derive(Default, Serialize, Deserialize, Clone)]
 pub struct Counter {
@@ -21,7 +21,7 @@ pub struct State {
     pub flash_timer_start:f32,
     pub flash_max:f32,
     pub pokemon_cards:Counter,
-    pub inventory:HashMap<Textures, f32>
+    pub inventory:HashMap<Images, f32>
 }
 
 impl State {
@@ -41,7 +41,7 @@ pub struct Walker {
 pub struct Door {
     pub open:bool,
     pub close_timer_sec:f32,
-    pub key:Option<Textures>
+    pub key:Option<Images>
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Copy)]

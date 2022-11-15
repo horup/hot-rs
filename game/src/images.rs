@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(TryFromPrimitive, IntoPrimitive, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Hash, Copy)]
 #[repr(u32)]
-pub enum Textures {
+pub enum Images {
     Piggy = 2,
     TiledFloorGray = 6,
     GrassFloor = 7,
