@@ -2,7 +2,7 @@ use crate::Id;
 
 #[derive(Debug, Clone)]
 pub enum Command {
-    DefineTexture {
+    DefineImg {
         handle:u32,
         path:String
     },

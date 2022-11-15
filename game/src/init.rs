@@ -5,7 +5,7 @@ pub fn init(engine: &mut dyn Context) {
     let mut tiles:Vec<u32> = Vec::new();
     macro_rules! def_tile {
         ($handle:expr, $path:expr) => {
-            engine.push_command(Command::DefineTexture { handle: $handle.into(), path: $path.into() });
+            engine.push_command(Command::DefineImg { handle: $handle.into(), path: $path.into() });
             tiles.push($handle.into());
         };
     }
@@ -19,7 +19,7 @@ pub fn init(engine: &mut dyn Context) {
     let mut entities:Vec<u32> = Vec::new();
     macro_rules! def_entity {
         ($handle:expr, $path:expr) => {
-            engine.push_command(Command::DefineTexture { handle: $handle.into(), path: $path.into() });
+            engine.push_command(Command::DefineImg { handle: $handle.into(), path: $path.into() });
             entities.push($handle.into());
         };
     }

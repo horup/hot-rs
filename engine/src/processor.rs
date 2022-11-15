@@ -9,7 +9,7 @@ impl Engine {
         let commands:Vec<Command> = self.commands.borrow_mut().drain(..).collect();
         for command in commands.iter() {
             match command {
-                Command::DefineTexture { handle, path } => {
+                Command::DefineImg { handle, path } => {
                     let texture: Texture2D = load_texture(path).await.unwrap();
                     texture.set_filter(FilterMode::Nearest);
                     self.textures.insert(*handle, texture);

@@ -24,8 +24,8 @@ impl Default for DrawStringParams {
 }
 
 #[derive(Default, Clone, Copy)]
-pub struct DrawTextureParams {
-    pub texture: u32,
+pub struct DrawImgParams {
+    pub img: u32,
     pub x: f32,
     pub y: f32,
     pub w: f32,
@@ -100,7 +100,7 @@ pub trait Context {
     fn screen_size(&self) -> Vec2;
     fn texture_size(&self, texture: u32) -> Vec2;
     fn draw_string(&self, params: DrawStringParams);
-    fn draw_texture(&self, params: DrawTextureParams);
+    fn draw_img(&self, params: DrawImgParams);
     fn draw_rect(&self, params: DrawRectParams);
     fn serialize(&self) -> Vec<u8>;
     fn deserialize(&mut self, bytes:&[u8]);

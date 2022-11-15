@@ -3,12 +3,12 @@ use crate::{MyGame, Textures};
 
 impl MyGame {
     fn draw_hud_item(&self, ctx: &mut dyn Context, x: f32, y: f32, ico_size: f32, tex:u32, s:String) {
-        ctx.draw_texture(DrawTextureParams {
+        ctx.draw_img(DrawImgParams {
             x:x - ico_size / 2.0,
             y:y - ico_size / 2.0,
             w:ico_size,
             h:ico_size,
-            texture:tex,
+            img:tex,
             ..Default::default()
         });
         ctx.draw_string(DrawStringParams {

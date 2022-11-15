@@ -109,8 +109,8 @@ impl Context for Engine {
         });
     }
 
-    fn draw_texture(&self, p: shared::DrawTextureParams) {
-        if let Some(tex) = self.textures.get(&p.texture) {
+    fn draw_img(&self, p: shared::DrawImgParams) {
+        if let Some(tex) = self.textures.get(&p.img) {
             draw_texture_ex(*tex, p.x, p.y, WHITE, DrawTextureParams {
                 dest_size:Some(Vec2::new(p.w, p.h)),
                 ..Default::default()
