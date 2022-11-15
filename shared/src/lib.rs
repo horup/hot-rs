@@ -24,9 +24,6 @@ use slotmap::{new_key_type};
 mod context;
 pub use context::*;
 
-mod input;
-pub use input::*;
-
 mod event;
 pub use event::*;
 

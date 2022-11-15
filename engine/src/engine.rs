@@ -12,17 +12,17 @@ use macroquad::{
 use native_dialog::FileDialog;
 use shared::{
     Camera, Command, Context, Game, Map,
-    PlayerInput, Event, Entities, Tiles,
+    Event, Entities, Tiles,
 };
 
-use crate::Edit;
+use crate::{Edit, EditInput};
 
 #[derive(Default)]
 pub struct Engine {
     pub(crate) events: Vec<Event>,
     pub(crate) over_ui: bool,
     pub(crate) edit: Edit,
-    pub(crate) input: PlayerInput,
+    pub(crate) edit_input: EditInput,
     pub(crate) commands: RefCell<Vec<Command>>,
     pub(crate) game_camera: Camera,
     pub(crate) edit_camera: Camera,

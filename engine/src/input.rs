@@ -1,7 +1,20 @@
-use shared::{Command, PlayerInput, glam::Vec2, Context, Event};
+use shared::{Command, glam::Vec2, Context, Event};
 use macroquad::{prelude::{is_key_pressed, KeyCode, is_key_down, mouse_position, is_mouse_button_down, MouseButton, is_mouse_button_pressed, mouse_wheel}, time::get_frame_time};
 
 use crate::{Engine, Tool};
+
+#[derive(Default)]
+pub struct EditInput {
+    pub dir: Vec2,
+    pub action: bool,
+    pub mouse_pos_screen: Vec2,
+    pub mouse_pos_world: Vec2,
+    pub mouse_left_down: bool,
+    pub mouse_right_down: bool,
+    pub mouse_left_pressed: bool,
+    pub mouse_right_pressed: bool,
+}
+
 
 impl Engine {
     pub fn num(&self) -> Option<u8> {
@@ -32,7 +45,7 @@ impl Engine {
 
 
         let speed = self.edit_camera.zoom * get_frame_time();
-        self.edit_camera.pos += self.input.dir * speed;
+        self.edit_camera.pos += self.edit_input.dir * speed;
 
 
         if is_key_pressed(KeyCode::F5) {
@@ -58,7 +71,7 @@ impl Engine {
         }
 
         if !self.over_ui {
-            let cell = self.input.mouse_pos_world.floor();
+            let cell = self.edit_input.mouse_pos_world.floor();
             if let Some(cell) = self.map.grid.get_mut(cell.x as i32, cell.y as i32) {
                 if is_mouse_button_down(MouseButton::Left) {
                     match self.edit.tool {
@@ -119,7 +132,7 @@ impl Engine {
         }
     
         let m = Vec2::new(mouse_position().0, mouse_position().1);
-        self.input = PlayerInput { 
+        self.edit_input = EditInput { 
             dir:Vec2::new(x, y), 
             action,
             mouse_pos_screen:m,

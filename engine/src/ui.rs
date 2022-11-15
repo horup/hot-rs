@@ -57,7 +57,7 @@ impl Engine {
                 },
             }
 
-            self.over_ui = ui.is_mouse_over(self.input.mouse_pos_screen);
+            self.over_ui = ui.is_mouse_over(self.edit_input.mouse_pos_screen);
         });
     }
 

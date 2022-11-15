@@ -185,7 +185,7 @@ impl Engine {
         }
 
        txt!(&format!("FPS: {:?}", get_fps()));
-       txt!(&format!("Mouse Pos: {:.2},{:.2}", self.input.mouse_pos_world.x, self.input.mouse_pos_world.y));
+       txt!(&format!("Mouse Pos: {:.2},{:.2}", self.edit_input.mouse_pos_world.x, self.edit_input.mouse_pos_world.y));
        txt!(&format!("Zoom: {:.2}", self.active_camera().zoom));
     }
 
