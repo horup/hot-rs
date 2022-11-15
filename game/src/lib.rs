@@ -57,6 +57,9 @@ impl MyGame {
                 Event::Start {} => {
                     engine.push_command(Command::LoadMap { map_path: "assets/maps/test.map".into() });
                 }
+                Event::Restart {  } => {
+                    self.start(engine);
+                },
             }
         }
     }

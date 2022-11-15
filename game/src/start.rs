@@ -1,6 +1,6 @@
 use shared::{glam::Vec3, Context, Entity, IgnoreColissions, Tiles};
 use num_enum::TryFromPrimitive;
-use crate::{Textures, Walker, Door, MyGame, Item, sounds};
+use crate::{Textures, Walker, Door, MyGame, Item, sounds, State};
 
 impl MyGame {
     pub fn start(&mut self, engine:&mut dyn Context) {
@@ -11,6 +11,7 @@ impl MyGame {
         *engine.tiles_mut() = w;
 
         let state = &mut self.state;
+        *state = State::default();
         engine.map().clone().grid.for_each_mut(|cell, x, y| {
             let pos = Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0);
             if let Some(entity) = cell.entity {

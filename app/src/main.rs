@@ -8,7 +8,6 @@ async fn main() {
     let mut lib_path = current_exe_path.parent().unwrap().to_path_buf();
     lib_path.push("game.dll");
     let mut engine = Engine::new(lib_path);
-    engine.push_command(Command::Restart);
     loop {
         engine.poll_game_lib();
         engine.tick().await;

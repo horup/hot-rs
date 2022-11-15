@@ -3,4 +3,7 @@ pub enum Event {
     MapLoaded {
 
     },
+    Restart {
+        
+    }
 }
