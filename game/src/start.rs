@@ -1,4 +1,4 @@
-use shared::{glam::Vec3, Context, Entity, IgnoreColissions, Tiles};
+use shared::{glam::Vec3, Context, Entity, IgnoreColissions, Tiles, Color};
 use num_enum::TryFromPrimitive;
 use crate::{Images, Walker, Door, MyGame, Item, sounds, State};
 
@@ -9,7 +9,12 @@ impl MyGame {
 
         let mut w = Tiles::from(&map);
         w.for_each_mut(|t,_,_| {
-            t.hidden = true;
+            t.diffuse = Color {
+                r: 0.0,
+                g: 0.0,
+                b: 0.0,
+                a: 1.0,
+            };
         });
         *engine.tiles_mut() = w;
 

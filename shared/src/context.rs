@@ -2,6 +2,7 @@ use std::cell::UnsafeCell;
 
 use crate::{Camera, Command, Entities, Entity, Event, Id, Map, Tiles};
 use glam::{Vec2, Vec3, IVec2};
+use serde::{Serialize, Deserialize};
 use slotmap::SlotMap;
 
 #[derive(Clone)]
@@ -41,7 +42,7 @@ pub struct DrawRectParams {
     pub color: Color,
 }
 
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Color {
     pub r: f32,
     pub g: f32,

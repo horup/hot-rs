@@ -106,7 +106,7 @@ impl Engine {
         });
     }
 
-    pub fn draw_tex(&self, p:Vec2, tex:&Texture2D) {
+    pub fn draw_tex(&self, p:Vec2, tex:&Texture2D, color:Color) {
         let p1 = self.to_screen(Vec2::new(p.x,  p.y));
         let p2 = self.to_screen(Vec2::new(p.x + 1.0, p.y + 1.0));
         let v = p2 - p1;
@@ -120,7 +120,7 @@ impl Engine {
         let dw = w;
         let dh = h + a * h;
 
-        draw_texture_ex(*tex, x, y, WHITE, DrawTextureParams {
+        draw_texture_ex(*tex, x, y, color, DrawTextureParams {
             dest_size:Some(Vec2::new(dw,dh)),
             ..Default::default()
         });
@@ -137,7 +137,7 @@ impl Engine {
                 if let Some(cell) = map.grid.get(x as i32, y as i32) {
                     if let Some(tile) = cell.tile {
                         if let Some(tex) = self.textures.get(&tile) {
-                            self.draw_tex(Vec2::new(x as f32, y as f32), tex);
+                            self.draw_tex(Vec2::new(x as f32, y as f32), tex, WHITE);
                         }
                     }
 
@@ -148,7 +148,7 @@ impl Engine {
 
                     if let Some(entity) = cell.entity {
                         if let Some(tex) = self.textures.get(&entity) {
-                            self.draw_tex(Vec2::new(x as f32, y as f32), tex);
+                            self.draw_tex(Vec2::new(x as f32, y as f32), tex, WHITE);
                         }
                     }
                     

@@ -1,4 +1,4 @@
-use shared::{Context, glam::{Vec2, IVec2}, IgnoreColissions, Command, Grid};
+use shared::{Context, glam::{Vec2, IVec2}, IgnoreColissions, Command, Grid, Color};
 use crate::{MyGame, Images, sounds};
 
 
@@ -36,7 +36,7 @@ fn cast_ray_mut<T:Default + Clone, F:FnMut(Visit<T>)->bool>(grid:&mut Grid<T>, r
 
     let mut t = 0.0;
     if dir.x*dir.x + dir.y*dir.y > 0.0 {
-        loop {//tile_x >= 0.0 && tile_x <= grid.size() as f32 && tile_y > 0.0 && tile_y <= grid.size() as f32 {
+        loop {
             if let Some(cell) = grid.get_mut(tile_x as i32, tile_y as i32) {
                 if f(Visit { tile: cell, d:t }) {
                     break;
@@ -59,28 +59,26 @@ fn cast_ray_mut<T:Default + Clone, F:FnMut(Visit<T>)->bool>(grid:&mut Grid<T>, r
             }
         }
     } else {
-        println!("true");
     }
 
 }
 
 
 impl MyGame {
-
     fn raycast_update(&mut self, ctx: &mut dyn Context) {
         let player_id = self.state.player.unwrap_or_default();
         if let Some(player_entity) = ctx.entities().get(player_id) {
-            let pos = player_entity.pos.truncate();
+            let pos = player_entity.pos.truncate().floor() + Vec2::new(0.5, 0.5);
             let size = ctx.tiles().size();
             for y in [0, size] {
-                let y = y as f32;
+                let y = y as f32 + 0.5;
                 for x in 0..size {
-                    let x = x as f32;
+                    let x = x as f32 + 0.5;
                     cast_ray_mut(ctx.tiles_mut(), Ray {
                         start:pos,
                         end:Vec2::new(x, y)
                     }, |visit|{
-                        visit.tile.hidden = false;
+                        visit.tile.diffuse = Color::default();
                         return visit.tile.clips;
                     });
                 }
@@ -88,14 +86,14 @@ impl MyGame {
             }
 
             for x in [0, size] {
-                let x = x as f32;
+                let x = x as f32 + 0.5;
                 for y in 0..size {
-                    let y = y as f32;
+                    let y = y as f32 + 0.5;
                     cast_ray_mut(ctx.tiles_mut(), Ray {
                         start:pos,
                         end:Vec2::new(x, y)
                     }, |visit|{
-                        visit.tile.hidden = false;
+                        visit.tile.diffuse = Color::default();
                         return visit.tile.clips;
                     });
                 }

@@ -2,14 +2,15 @@ use std::ops::{Deref, DerefMut};
 
 use serde::{Serialize, Deserialize};
 
-use crate::{Grid, Map};
+use crate::{Grid, Map, Color};
 
 
-#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Default, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct Tile {
     pub img:Option<u32>,
     pub clips:bool,
-    pub hidden:bool
+    pub hidden:bool,
+    pub diffuse:Color
 }
 
 #[derive(Default, Clone, Serialize, Deserialize)]

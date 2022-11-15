@@ -53,7 +53,8 @@ impl Context for Engine {
                     if !cell.hidden {
                         if let Some(tile) = cell.img {
                             if let Some(tex) = self.textures.get(&tile) {
-                                self.draw_tex(Vec2::new(cell_x as f32, cell_y as f32), tex);
+                                let c = Color { r: cell.diffuse.r, g: cell.diffuse.g, b: cell.diffuse.b, a: cell.diffuse.a  };
+                                self.draw_tex(Vec2::new(cell_x as f32, cell_y as f32), tex, c);
                             }
                         }
                     }
