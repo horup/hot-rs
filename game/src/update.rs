@@ -1,7 +1,87 @@
-use shared::{Context, glam::{Vec2}, IgnoreColissions, Command};
+use shared::{Context, glam::{Vec2, IVec2}, IgnoreColissions, Command, Grid};
 use crate::{MyGame, Images, sounds};
 
+
+struct Ray {
+    pub start:Vec2,
+    pub end:Vec2
+}
+
+struct Visit<'a, T:Default + Clone> {
+    tile:&'a mut T
+}
+
+fn cast_ray_mut<T:Default + Clone, F:FnMut(Visit<T>)->bool>(grid:&mut Grid<T>, ray:Ray, mut f:F) {
+    fn get_helper(cell_size:f32, pos:f32, dir:f32) -> (f32, f32, f32, f32) {
+        let tile = (pos / cell_size).floor() + 1.0;
+        let dtile;
+        let dt;
+        if dir > 0.0 {
+            dtile = 1.0;
+            dt = ((tile + 0.0) * cell_size - pos) / dir;
+        } else {
+            dtile = -1.0;
+            dt = ((tile - 1.0) * cell_size - pos) / dir;
+        }
+
+        (tile, dtile, dt, dtile * cell_size / dir)
+    }
+    let dir = (ray.end - ray.start).normalize_or_zero();
+    if dir.length() == 0.0 {
+        return;
+    }
+    let (mut tile_x, dtile_x, mut dt_x, ddt_x) = get_helper(1.0, ray.start.x, dir.y);
+    let (mut tile_y, dtile_y, mut dt_y, ddt_y) = get_helper(1.0, ray.start.y, dir.y);
+
+    let mut t = 0.0;
+    if dir.x*dir.x + dir.y*dir.y > 0.0 {
+        loop {//tile_x >= 0.0 && tile_x <= grid.size() as f32 && tile_y > 0.0 && tile_y <= grid.size() as f32 {
+            if let Some(cell) = grid.get_mut(tile_x as i32, tile_y as i32) {
+                f(Visit { tile: cell });
+            } else {
+                break;
+            }
+            if dt_x < dt_y {
+                tile_x = tile_x + dtile_x;
+                let dt = dt_x;
+                t = t + dt;
+                dt_x = dt_x + ddt_x - dt;
+                dt_y = dt_y - dt;
+            } else {
+                tile_y = tile_y + dtile_y;
+                let dt = dt_y;
+                t = t + dt;
+                dt_x = dt_x - dt;
+                dt_y = dt_y + ddt_y - dt;
+            }
+        }
+    } else {
+        println!("true");
+    }
+
+}
+
+
 impl MyGame {
+
+    fn raycast_update(&mut self, ctx: &mut dyn Context) {
+        let player_id = self.state.player.unwrap_or_default();
+        if let Some(player_entity) = ctx.entities().get(player_id) {
+            let pos = player_entity.pos.truncate();
+
+            cast_ray_mut(ctx.tiles_mut(), Ray {
+                start:pos,
+                end:Vec2::new(0.0, 0.0)
+            }, |visit|{
+                visit.tile.hidden = false;
+                return visit.tile.clips;
+            });
+          /*   if let Some(tile) = ctx.tiles_mut().get_mut(posi.x, posi.y) {
+                tile.hidden = false;
+            }*/
+        }
+    }
+
     fn proximity_update(&mut self, ctx: &mut dyn Context) {
         let player_id = self.state.player.unwrap_or_default();
         if let Some(player_entity) = ctx.entities().get(player_id) {
@@ -123,6 +203,7 @@ impl MyGame {
         } 
 
         self.proximity_update(ctx);
+        self.raycast_update(ctx);
     }
     
 }

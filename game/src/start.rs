@@ -7,7 +7,10 @@ impl MyGame {
         engine.clear();
         let map = engine.map().clone();
 
-        let w = Tiles::from(&map);
+        let mut w = Tiles::from(&map);
+        w.for_each_mut(|t,_,_| {
+            t.hidden = true;
+        });
         *engine.tiles_mut() = w;
 
         let state = &mut self.state;

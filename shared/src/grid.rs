@@ -44,10 +44,10 @@ impl<T> Grid<T> where T:Default+Clone {
         None
     }
 
-    pub fn for_each_mut(&self, mut f:impl FnMut(&T,i32,i32)) {
+    pub fn for_each_mut(&mut self, mut f:impl FnMut(&mut T,i32,i32)) {
         for y in 0..self.size as i32 {
             for x in 0..self.size as i32 {
-                if let Some(t) = self.get(x, y) {
+                if let Some(t) = self.get_mut(x, y) {
                     f(t, x, y);
                 }
             }
