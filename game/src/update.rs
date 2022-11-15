@@ -8,7 +8,8 @@ struct Ray {
 }
 
 struct Visit<'a, T:Default + Clone> {
-    tile:&'a mut T
+    pub tile:&'a mut T,
+    pub d:f32
 }
 
 fn cast_ray_mut<T:Default + Clone, F:FnMut(Visit<T>)->bool>(grid:&mut Grid<T>, ray:Ray, mut f:F) {
@@ -30,14 +31,16 @@ fn cast_ray_mut<T:Default + Clone, F:FnMut(Visit<T>)->bool>(grid:&mut Grid<T>, r
     if dir.length() == 0.0 {
         return;
     }
-    let (mut tile_x, dtile_x, mut dt_x, ddt_x) = get_helper(1.0, ray.start.x, dir.y);
+    let (mut tile_x, dtile_x, mut dt_x, ddt_x) = get_helper(1.0, ray.start.x, dir.x);
     let (mut tile_y, dtile_y, mut dt_y, ddt_y) = get_helper(1.0, ray.start.y, dir.y);
 
     let mut t = 0.0;
     if dir.x*dir.x + dir.y*dir.y > 0.0 {
         loop {//tile_x >= 0.0 && tile_x <= grid.size() as f32 && tile_y > 0.0 && tile_y <= grid.size() as f32 {
             if let Some(cell) = grid.get_mut(tile_x as i32, tile_y as i32) {
-                f(Visit { tile: cell });
+                if f(Visit { tile: cell, d:t }) {
+                    break;
+                }
             } else {
                 break;
             }
@@ -68,17 +71,36 @@ impl MyGame {
         let player_id = self.state.player.unwrap_or_default();
         if let Some(player_entity) = ctx.entities().get(player_id) {
             let pos = player_entity.pos.truncate();
+            let size = ctx.tiles().size();
+            for y in [0, size] {
+                let y = y as f32;
+                for x in 0..size {
+                    let x = x as f32;
+                    cast_ray_mut(ctx.tiles_mut(), Ray {
+                        start:pos,
+                        end:Vec2::new(x, y)
+                    }, |visit|{
+                        visit.tile.hidden = false;
+                        return visit.tile.clips;
+                    });
+                }
 
-            cast_ray_mut(ctx.tiles_mut(), Ray {
-                start:pos,
-                end:Vec2::new(0.0, 0.0)
-            }, |visit|{
-                visit.tile.hidden = false;
-                return visit.tile.clips;
-            });
-          /*   if let Some(tile) = ctx.tiles_mut().get_mut(posi.x, posi.y) {
-                tile.hidden = false;
-            }*/
+            }
+
+            for x in [0, size] {
+                let x = x as f32;
+                for y in 0..size {
+                    let y = y as f32;
+                    cast_ray_mut(ctx.tiles_mut(), Ray {
+                        start:pos,
+                        end:Vec2::new(x, y)
+                    }, |visit|{
+                        visit.tile.hidden = false;
+                        return visit.tile.clips;
+                    });
+                }
+
+            }
         }
     }
 
