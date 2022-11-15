@@ -19,7 +19,7 @@ fn cast_ray_mut<T:Default + Clone, F:FnMut(Visit<T>)->bool>(grid:&mut Grid<T>, r
         let dt;
         if dir > 0.0 {
             dtile = 1.0;
-            dt = ((tile + 0.0) * cell_size - pos) / dir;
+            dt = ((tile + 1.0) * cell_size - pos) / dir;
         } else {
             dtile = -1.0;
             dt = ((tile - 1.0) * cell_size - pos) / dir;
@@ -59,6 +59,7 @@ fn cast_ray_mut<T:Default + Clone, F:FnMut(Visit<T>)->bool>(grid:&mut Grid<T>, r
             }
         }
     } else {
+        println!("lolser");
     }
 
 }
