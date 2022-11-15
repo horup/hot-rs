@@ -16,11 +16,7 @@ impl Engine {
                 },
                 Command::LoadMap { map_path } => {
                     self.load_map_from_path(map_path);
-                    if !self.edit_mode {
-                     //   self.call_game_start();
-                    }
-
-                    self.events.push(Event::MapLoaded {  });
+                    self.events.push(Event::MapReady {  });
                 }
                 Command::DespawnEntity { id } => {
                     self.entities.despawn_entity(*id);

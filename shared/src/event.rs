@@ -1,6 +1,6 @@
 pub enum Event {
     Start,
-    MapLoaded {
+    MapReady {
 
     },
     Restart {

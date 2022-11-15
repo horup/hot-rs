@@ -51,7 +51,7 @@ impl MyGame {
     fn process_events(&mut self, engine: &mut dyn Context) {
         for event in engine.events().iter() {
             match event {
-                Event::MapLoaded {  } => {
+                Event::MapReady {  } => {
                     self.start(engine);
                 },
                 Event::Start {} => {
