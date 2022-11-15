@@ -2,6 +2,20 @@ use shared::{Context, glam::{Vec2}, IgnoreColissions, Command};
 use crate::{MyGame, Textures, sounds};
 
 impl MyGame {
+    fn proximity_update(&mut self, ctx: &mut dyn Context) {
+        let player_id = self.state.player.unwrap_or_default();
+        if let Some(player_entity) = ctx.entities().get(player_id) {
+            for (other_id, other_entity) in ctx.entities().iter().filter(|(id,_)| {id != &player_id}) {
+                let v = other_entity.pos - player_entity.pos;
+                let l = v.length();
+                if other_entity.texture == Textures::ExitMarker.into() {
+                    if l < 0.5 {
+                        // TODO end game
+                    }
+                }
+            }
+        }
+    }
     pub fn update(&mut self, ctx: &mut dyn Context) {
         let state = &mut self.state;
         let dt = ctx.dt(); 
@@ -95,7 +109,6 @@ impl MyGame {
                             ctx.play_sound(item.pickup_sound.unwrap_or(sounds::PICKUP), 1.0);
                             state.flash(0.2, 0.5);
 
-
                             if other_entity.texture == Textures::PokemonCard.into() {
                                 state.pokemon_cards.current += 1.0;
                             } else if other_entity.texture == Textures::GoldKey.into() {
@@ -108,6 +121,8 @@ impl MyGame {
                 });
             }
         } 
+
+        self.proximity_update(ctx);
     }
     
 }
