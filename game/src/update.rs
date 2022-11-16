@@ -1,4 +1,4 @@
-use shared::{Context, glam::{Vec2}, IgnoreColissions, Grid, Color};
+use shared::{Context, glam::{Vec2}, IgnoreColissions, Grid, Color, Tile};
 use crate::{MyGame, Images, sounds};
 
 
@@ -9,6 +9,8 @@ struct Ray {
 
 struct Visit<'a, T:Default + Clone> {
     pub tile:&'a mut T,
+    pub x:f32,
+    pub y:f32,
     pub d:f32
 }
 
@@ -38,7 +40,7 @@ fn cast_ray_mut<T:Default + Clone, F:FnMut(Visit<T>)->bool>(grid:&mut Grid<T>, r
     if dir.x*dir.x + dir.y*dir.y > 0.0 {
         loop {
             if let Some(cell) = grid.get_mut(tile_x as i32, tile_y as i32) {
-                if f(Visit { tile: cell, d:t }) {
+                if f(Visit { tile: cell, d:t, x:tile_x, y:tile_y }) {
                     break;
                 }
             } else {
@@ -59,7 +61,6 @@ fn cast_ray_mut<T:Default + Clone, F:FnMut(Visit<T>)->bool>(grid:&mut Grid<T>, r
             }
         }
     } else {
-        println!("lolser");
     }
 
 }
@@ -67,6 +68,28 @@ fn cast_ray_mut<T:Default + Clone, F:FnMut(Visit<T>)->bool>(grid:&mut Grid<T>, r
 
 impl MyGame {
     fn raycast_update(&mut self, _ctx: &mut dyn Context) {
+        let mut los_blocked = Grid::new(self.state.world.tiles.size());
+        for (id, door_sprite) in self.state.world.entities.iter() {
+            if let Some(door) = self.state.doors.get(id) {
+                if door.open == false {
+                    if let Some(cell) = los_blocked.get_mut(door_sprite.pos.x as i32, door_sprite.pos.y as i32) {
+                        *cell = true;
+                    }
+                }
+            }
+        }
+
+        let f = |visit:Visit<Tile>| {
+            visit.tile.diffuse = Color::default();
+            if let Some(blocked) = los_blocked.get(visit.x as i32, visit.y as i32) {
+                if *blocked {
+                    return true;
+                }
+            }
+
+            visit.tile.clips
+        };
+
         let player_id = self.state.player.unwrap_or_default();
         if let Some(player_entity) = self.state.world.entities.get(player_id) {
             let pos = player_entity.pos.truncate().floor() + Vec2::new(0.5, 0.5);
@@ -78,10 +101,7 @@ impl MyGame {
                     cast_ray_mut(&mut self.state.world.tiles, Ray {
                         start:pos,
                         end:Vec2::new(x, y)
-                    }, |visit|{
-                        visit.tile.diffuse = Color::default();
-                        visit.tile.clips
-                    });
+                    }, f);
                 }
 
             }
@@ -93,10 +113,7 @@ impl MyGame {
                     cast_ray_mut(&mut self.state.world.tiles, Ray {
                         start:pos,
                         end:Vec2::new(x, y)
-                    }, |visit|{
-                        visit.tile.diffuse = Color::default();
-                        visit.tile.clips
-                    });
+                    }, f);
                 }
 
             }

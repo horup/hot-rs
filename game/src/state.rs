@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use shared::{Id, Camera, Components, World};
+use shared::{Id, Camera, Components, World, glam::IVec2};
 use serde::{Serialize, Deserialize};
 
 use crate::Images;
@@ -20,7 +20,7 @@ pub struct State {
     pub items:Components<Item>,
     pub flash:Flash,
     pub pokemon_cards:Counter,
-    pub inventory:HashMap<Images, f32>
+    pub inventory:HashMap<Images, f32>,
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Copy)]

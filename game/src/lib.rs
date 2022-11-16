@@ -1,4 +1,6 @@
 mod images;
+use std::collections::HashMap;
+
 pub use images::*;
 
 mod init;
@@ -10,7 +12,7 @@ pub use state::*;
 mod start;
 pub use start::*;
 
-use shared::{*, glam::Vec2};
+use shared::{*, glam::{Vec2, IVec2}};
 
 mod input;
 pub use input::*;
@@ -26,7 +28,7 @@ pub mod sounds;
 #[derive(Default)]
 pub struct MyGame {
     pub state:State,
-    pub dir:Vec2
+    pub dir:Vec2,
 }
  
 impl Game for MyGame {
