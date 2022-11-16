@@ -7,7 +7,7 @@ use macroquad::{
     window::{screen_height, screen_width}, shapes::{draw_line, draw_rectangle_lines}, audio::{play_sound, PlaySoundParams},
 };
 use parry2d::{bounding_volume::BoundingVolume, na::Isometry2};
-use shared::{Camera, Collision, Context, Sprites, Event, Id, IgnoreColissions, World};
+use shared::{Camera, Collision, Context, Sprites, Event, Id,  World};
 
 use crate::Engine;
 
@@ -191,8 +191,7 @@ impl Context for Engine {
 
                         // collision handling between entities
                         for (other_id, other_e) in world.sprites.iter() {
-                            let ignore = e.ignore_collisions == IgnoreColissions::WithEntities
-                                || other_e.ignore_collisions == IgnoreColissions::WithEntities;
+                            let ignore = e.no_clip || other_e.no_clip;
                             if other_id != id && !ignore {
                                 let d = e.pos - other_e.pos;
                                 let r2 = e.radius + other_e.radius;

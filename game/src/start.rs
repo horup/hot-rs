@@ -1,4 +1,4 @@
-use shared::{glam::Vec3, Context, Sprite, IgnoreColissions, Tiles, Color, World, Map};
+use shared::{glam::Vec3, Context, Sprite, Tiles, Color, World, Map};
 use num_enum::TryFromPrimitive;
 use crate::{Images, Walker, Door, MyGame, Item, sounds};
 
@@ -43,7 +43,7 @@ impl MyGame {
                                 pos, 
                                 texture: entity.into(),
                                 radius: 0.25,
-                                ignore_collisions: IgnoreColissions::WithEntities,
+                                no_clip: true,
                                 ..Default::default()
                             });
 
@@ -60,7 +60,7 @@ impl MyGame {
                                 pos, 
                                 texture: entity.into(),
                                 radius: 0.25,
-                                ignore_collisions: IgnoreColissions::WithEntities,
+                                no_clip: true,
                                 ..Default::default()
                             });
 
@@ -97,7 +97,7 @@ impl MyGame {
                                 pos: Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
                                 texture: entity.into(),
                                 radius: 0.5,
-                                ignore_collisions: IgnoreColissions::WithEntities,
+                                no_clip: true,
                                 ..Default::default()
                             });
                         }

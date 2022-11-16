@@ -1,4 +1,4 @@
-use shared::{Context, glam::{Vec2}, IgnoreColissions, Grid, Color, Tile};
+use shared::{Context, glam::{Vec2}, Grid, Color, Tile};
 use crate::{MyGame, Images, sounds};
 
 
@@ -178,7 +178,7 @@ impl MyGame {
                     if can_open {
                         door.open_door();
                         if let Some(door) = state.world.sprites.get_mut(other_id) {
-                            door.ignore_collisions = IgnoreColissions::WithEntities;
+                            door.no_clip = true;
                             door.hidden = true;
                             ctx.play_sound(sounds::DOOR_OPEN, 1.0);
                         }
@@ -201,7 +201,7 @@ impl MyGame {
                         door.close_timer_sec -= dt;
                         if door.open && door.close_timer_sec <= 0.0 {
                             door.close_timer_sec = 0.0;
-                            e.ignore_collisions = IgnoreColissions::None;
+                            e.no_clip = false;
                             e.hidden = false;
                             door.open = false;
                             let vol = 1.0 / v.length();

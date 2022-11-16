@@ -1,17 +1,6 @@
 use glam::{Vec3, IVec2};
 use serde::{Serialize, Deserialize};
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
-pub enum IgnoreColissions {
-    None,
-    WithEntities
-}
-impl Default for IgnoreColissions {
-    fn default() -> Self {
-        Self::None
-    }
-}
-
 #[derive(Debug, Clone, Copy, Default, Serialize, Deserialize)]
 pub struct Sprite {
     pub pos:Vec3,
@@ -20,7 +9,7 @@ pub struct Sprite {
     pub texture:u32,
     pub flip_x:bool,
     pub radius:f32,
-    pub ignore_collisions:IgnoreColissions,
+    pub no_clip:bool,
     pub hidden:bool
 }
 
