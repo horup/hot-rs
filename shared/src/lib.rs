@@ -1,5 +1,5 @@
-mod entity;
-pub use entity::*;
+mod sprite;
+pub use sprite::*;
 
 mod game;
 pub use game::*;
@@ -27,8 +27,8 @@ pub use context::*;
 mod event;
 pub use event::*;
 
-mod entities;
-pub use entities::*;
+mod sprites;
+pub use sprites::*;
 
 mod components;
 pub use components::*;

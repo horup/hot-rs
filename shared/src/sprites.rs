@@ -1,22 +1,22 @@
 use serde::{Serialize, Deserialize};
 use slotmap::SlotMap;
-use crate::{Id, Entity, CSDUnsafeCell};
+use crate::{Id, Sprite, CSDUnsafeCell};
 
 
 #[derive(Default, Serialize, Clone)]
-pub struct Entities {
-    inner:SlotMap<Id, CSDUnsafeCell<Entity>>
+pub struct Sprites {
+    inner:SlotMap<Id, CSDUnsafeCell<Sprite>>
 }
 
-type E = SlotMap<Id, CSDUnsafeCell<Entity>>;
+type E = SlotMap<Id, CSDUnsafeCell<Sprite>>;
 
-impl<'de> Deserialize<'de> for Entities {
+impl<'de> Deserialize<'de> for Sprites {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: serde::Deserializer<'de> {
         match E::deserialize(deserializer) {
             Ok(inner) => {
-                Ok(Entities {
+                Ok(Sprites {
                     inner
                 })
             },
@@ -28,11 +28,11 @@ impl<'de> Deserialize<'de> for Entities {
 }
 
 pub struct IterMut<'a> {
-    iter:slotmap::basic::Iter<'a, Id, CSDUnsafeCell<Entity>>
+    iter:slotmap::basic::Iter<'a, Id, CSDUnsafeCell<Sprite>>
 }
 
 impl<'a> Iterator for IterMut<'a> {
-    type Item = (Id, &'a mut Entity);
+    type Item = (Id, &'a mut Sprite);
 
     fn next(&mut self) -> Option<Self::Item> {
         if let Some((id, e)) = self.iter.next() {
@@ -45,11 +45,11 @@ impl<'a> Iterator for IterMut<'a> {
 }
 
 pub struct Iter<'a> {
-    iter:slotmap::basic::Iter<'a, Id, CSDUnsafeCell<Entity>>
+    iter:slotmap::basic::Iter<'a, Id, CSDUnsafeCell<Sprite>>
 }
 
 impl<'a> Iterator for Iter<'a> {
-    type Item = (Id, &'a Entity);
+    type Item = (Id, &'a Sprite);
 
     fn next(&mut self) -> Option<Self::Item> {
         if let Some((id, e)) = self.iter.next() {
@@ -62,8 +62,8 @@ impl<'a> Iterator for Iter<'a> {
 }
 
 
-impl Entities {
-    pub fn spawn_entity(&mut self, entity:Entity) -> Id {
+impl Sprites {
+    pub fn spawn_entity(&mut self, entity:Sprite) -> Id {
         self.inner.insert(CSDUnsafeCell::new(entity))
     }
 
@@ -87,7 +87,7 @@ impl Entities {
         self.inner.clear();
     }
 
-    pub fn get(&self, id:Id) -> Option<&Entity> {
+    pub fn get(&self, id:Id) -> Option<&Sprite> {
         if let Some(e) = self.inner.get(id) {
             return Some(unsafe {& *e.get()});
         }
@@ -95,7 +95,7 @@ impl Entities {
         None
     }
 
-    pub fn get_mut(&self, id:Id) -> Option<&mut Entity> {
+    pub fn get_mut(&self, id:Id) -> Option<&mut Sprite> {
         if let Some(e) = self.inner.get(id) {
             return Some(unsafe {&mut *e.get()});
         }

@@ -69,7 +69,7 @@ fn cast_ray_mut<T:Default + Clone, F:FnMut(Visit<T>)->bool>(grid:&mut Grid<T>, r
 impl MyGame {
     fn raycast_update(&mut self, _ctx: &mut dyn Context) {
         let mut los_blocked = Grid::new(self.state.world.tiles.size());
-        for (id, door_sprite) in self.state.world.entities.iter() {
+        for (id, door_sprite) in self.state.world.sprites.iter() {
             if let Some(door) = self.state.doors.get(id) {
                 if door.open == false {
                     if let Some(cell) = los_blocked.get_mut(door_sprite.pos.x as i32, door_sprite.pos.y as i32) {
@@ -91,7 +91,7 @@ impl MyGame {
         };
 
         let player_id = self.state.player.unwrap_or_default();
-        if let Some(player_entity) = self.state.world.entities.get(player_id) {
+        if let Some(player_entity) = self.state.world.sprites.get(player_id) {
             let pos = player_entity.pos.truncate().floor() + Vec2::new(0.5, 0.5);
             let size = self.state.world.tiles.size();
             for y in [0, size] {
@@ -122,8 +122,8 @@ impl MyGame {
 
     fn proximity_update(&mut self, _ctx: &mut dyn Context) {
         let player_id = self.state.player.unwrap_or_default();
-        if let Some(player_entity) = self.state.world.entities.get(player_id) {
-            for (_other_id, other_entity) in self.state.world.entities.iter().filter(|(id,_)| {id != &player_id}) {
+        if let Some(player_entity) = self.state.world.sprites.get(player_id) {
+            for (_other_id, other_entity) in self.state.world.sprites.iter().filter(|(id,_)| {id != &player_id}) {
                 let v = other_entity.pos - player_entity.pos;
                 let l = v.length();
                 if other_entity.texture == Images::ExitMarker.into() && l < 0.5 {
@@ -135,7 +135,7 @@ impl MyGame {
     pub fn update(&mut self, ctx: &mut dyn Context) {
         let state = &mut self.state;
         let dt = ctx.dt(); 
-        for (key, e) in state.world.entities.iter_mut() {
+        for (key, e) in state.world.sprites.iter_mut() {
             let speed = 3.0;
             let mut v = Vec2::default();
             if state.player == Some(key) {
@@ -177,7 +177,7 @@ impl MyGame {
                     };
                     if can_open {
                         door.open_door();
-                        if let Some(door) = state.world.entities.get_mut(other_id) {
+                        if let Some(door) = state.world.sprites.get_mut(other_id) {
                             door.ignore_collisions = IgnoreColissions::WithEntities;
                             door.hidden = true;
                             ctx.play_sound(sounds::DOOR_OPEN, 1.0);
@@ -193,8 +193,8 @@ impl MyGame {
         }
     
 
-        if let Some(player) = state.world.entities.get(state.player.unwrap_or_default()) {
-            for (key, e) in state.world.entities.iter_mut() {
+        if let Some(player) = state.world.sprites.get(state.player.unwrap_or_default()) {
+            for (key, e) in state.world.sprites.iter_mut() {
                 let v = e.pos - player.pos;
                 if v.length() > 1.0 {
                     if let Some(door) = state.doors.get_mut(key) {
@@ -214,8 +214,8 @@ impl MyGame {
 
         let mut despawner = Vec::new();
         if let Some(player_id) = state.player {
-            if let Some(player) = state.world.entities.get(player_id) {
-                for (other_id, other_entity) in state.world.entities.iter().filter(|e| {e.0 != player_id}) {
+            if let Some(player) = state.world.sprites.get(player_id) {
+                for (other_id, other_entity) in state.world.sprites.iter().filter(|e| {e.0 != player_id}) {
                     let v = player.pos - other_entity.pos;
                     let r2 = player.radius + other_entity.radius;
                     if v.length() < r2 {
@@ -238,7 +238,7 @@ impl MyGame {
         } 
 
         despawner.iter().for_each(|id|{
-            self.state.world.entities.despawn_entity(*id);
+            self.state.world.sprites.despawn_entity(*id);
         });
 
         self.proximity_update(ctx);

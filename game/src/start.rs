@@ -1,4 +1,4 @@
-use shared::{glam::Vec3, Context, Entity, IgnoreColissions, Tiles, Color, World, Map};
+use shared::{glam::Vec3, Context, Sprite, IgnoreColissions, Tiles, Color, World, Map};
 use num_enum::TryFromPrimitive;
 use crate::{Images, Walker, Door, MyGame, Item, sounds};
 
@@ -16,7 +16,7 @@ impl MyGame {
         });
         
         self.state.world = World {
-            entities: Default::default(),
+            sprites: Default::default(),
             tiles,
         }; 
 
@@ -28,7 +28,7 @@ impl MyGame {
                     match entity {
                         Images::Viktor => {
                             dbg!("Spawning Player");
-                            let player_entity = state.world.entities.spawn_entity(Entity {
+                            let player_entity = state.world.sprites.spawn_entity(Sprite {
                                 pos: Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
                                 texture: entity.into(),
                                 radius: 0.25,
@@ -39,7 +39,7 @@ impl MyGame {
                             state.walkers.attach(player_entity, Walker::default());
                         }
                         Images::PokemonCard => {
-                            let card = state.world.entities.spawn_entity(Entity {
+                            let card = state.world.sprites.spawn_entity(Sprite {
                                 pos, 
                                 texture: entity.into(),
                                 radius: 0.25,
@@ -56,7 +56,7 @@ impl MyGame {
                         },
                         Images::GoldKey 
                         | Images::BlueKey => {
-                            let key = state.world.entities.spawn_entity(Entity {
+                            let key = state.world.sprites.spawn_entity(Sprite {
                                 pos, 
                                 texture: entity.into(),
                                 radius: 0.25,
@@ -73,7 +73,7 @@ impl MyGame {
                         | Images::WhiteDoorSide
                         | Images::BlueDoor
                         | Images::GoldDoor => {
-                            let door = state.world.entities.spawn_entity(Entity {
+                            let door = state.world.sprites.spawn_entity(Sprite {
                                 pos: Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
                                 texture: entity.into(),
                                 radius: 0.5,
@@ -93,7 +93,7 @@ impl MyGame {
                             });
                         }
                         _ => {
-                            state.world.entities.spawn_entity(Entity {
+                            state.world.sprites.spawn_entity(Sprite {
                                 pos: Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
                                 texture: entity.into(),
                                 radius: 0.5,

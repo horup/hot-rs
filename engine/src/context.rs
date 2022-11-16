@@ -7,7 +7,7 @@ use macroquad::{
     window::{screen_height, screen_width}, shapes::{draw_line, draw_rectangle_lines}, audio::{play_sound, PlaySoundParams},
 };
 use parry2d::{bounding_volume::BoundingVolume, na::Isometry2};
-use shared::{Camera, Collision, Context, Entities, Event, Id, IgnoreColissions, World};
+use shared::{Camera, Collision, Context, Sprites, Event, Id, IgnoreColissions, World};
 
 use crate::Engine;
 
@@ -22,16 +22,16 @@ impl Context for Engine {
             w: bounds.w + margin * 2.0,
             h: bounds.h + margin * 2.0,
         };
-        let mut visible_set:Vec<Id> = Vec::with_capacity(world.entities.len());
+        let mut visible_set:Vec<Id> = Vec::with_capacity(world.sprites.len());
 
-        for (key, e) in world.entities.iter_mut() {
+        for (key, e) in world.sprites.iter_mut() {
             if bounds.contains(e.pos.truncate()) {
                 visible_set.push(key);
             }
         }
 
         visible_set.sort_by(|a, b| {
-            if let (Some(a), Some(b)) = (world.entities.get(*a), world.entities.get(*b)){
+            if let (Some(a), Some(b)) = (world.sprites.get(*a), world.sprites.get(*b)){
                 if a.pos.y < b.pos.y {
                     return std::cmp::Ordering::Less;
                 } else if a.pos.y > b.pos.y {
@@ -57,7 +57,7 @@ impl Context for Engine {
                     }
                 }
                 for key in visible_set.iter() {
-                    if let Some(e) = world.entities.get(*key) {
+                    if let Some(e) = world.sprites.get(*key) {
                         if e.hidden {
                             continue;
                         }
@@ -76,7 +76,7 @@ impl Context for Engine {
             }
         }
 
-        for (_, e) in world.entities.iter_mut() {
+        for (_, e) in world.sprites.iter_mut() {
             let s = self.cell_size_screen() * e.radius * 2.0;
             let p = self.to_screen(e.pos.truncate());
             draw_rectangle_lines(p.x - s.x / 2.0, p.y - s.y / 2.0, s.x, s.y, 1.0, RED);
@@ -163,7 +163,7 @@ impl Context for Engine {
 
     fn clip_move(&self, id: Id, target: Vec3, world:&World) -> Collision {
         let mut col = Collision::default();
-        if let Some(e) = world.entities.get_mut(id) {
+        if let Some(e) = world.sprites.get_mut(id) {
             let v = target - e.pos;
             if v.length() > 0.0 {
                 let mut left = v.length();
@@ -190,7 +190,7 @@ impl Context for Engine {
                         let mut pos_new = pos_org + v.extend(0.0);
 
                         // collision handling between entities
-                        for (other_id, other_e) in world.entities.iter() {
+                        for (other_id, other_e) in world.sprites.iter() {
                             let ignore = e.ignore_collisions == IgnoreColissions::WithEntities
                                 || other_e.ignore_collisions == IgnoreColissions::WithEntities;
                             if other_id != id && !ignore {
@@ -249,7 +249,7 @@ impl Context for Engine {
     }
 
     fn serialize(&self) -> Vec<u8> {
-        let mut s:(Entities, Vec<u8>) = (Entities::default(), Vec::new());
+        let mut s:(Sprites, Vec<u8>) = (Sprites::default(), Vec::new());
         if let Some(game) = &self.game {
             s.1 = game.serialize();
         }
@@ -259,7 +259,7 @@ impl Context for Engine {
 
     fn deserialize(&mut self, bytes:&[u8]) {
         if !bytes.is_empty() {
-            let s:(Entities, Vec<u8>) = bincode::deserialize(bytes).unwrap();
+            let s:(Sprites, Vec<u8>) = bincode::deserialize(bytes).unwrap();
             let (_entities, game_bytes) = s;
             //self.entities = entities;
             if !game_bytes.is_empty() {

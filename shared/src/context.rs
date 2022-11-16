@@ -1,6 +1,6 @@
 use std::cell::UnsafeCell;
 
-use crate::{Camera, Command, Entity, Event, Id, World};
+use crate::{Camera, Command, Sprite, Event, Id, World};
 use glam::{Vec2, Vec3, IVec2};
 use serde::{Serialize, Deserialize};
 use slotmap::SlotMap;
@@ -71,12 +71,12 @@ pub const WHITE:Color = Color { r: 1.0, g: 1.0, b: 1.0, a: 1.0 };
 pub const BLACK:Color = Color { r: 0.0, g: 0.0, b: 0.0, a: 1.0 };
 
 pub struct EntityIter<'a> {
-    pub entities: &'a SlotMap<Id, UnsafeCell<Entity>>,
-    pub iter: slotmap::basic::Iter<'a, Id, UnsafeCell<Entity>>,
+    pub entities: &'a SlotMap<Id, UnsafeCell<Sprite>>,
+    pub iter: slotmap::basic::Iter<'a, Id, UnsafeCell<Sprite>>,
 }
 
 impl<'a> Iterator for EntityIter<'a> {
-    type Item = (Id, &'a mut Entity);
+    type Item = (Id, &'a mut Sprite);
 
     fn next(&mut self) -> Option<Self::Item> {
         None
