@@ -78,7 +78,7 @@ impl Engine {
         }
     }
 
-    pub fn draw_sprite(&self, p:Vec3, tex:&Texture2D, flip_x:bool, flip_y:bool) {
+    pub fn draw_sprite(&self, p:Vec3, tex:&Texture2D, flip_x:bool, flip_y:bool, color:Color) {
         let p1 = self.to_screen(Vec2::new(p.x,  p.y));
         let p2 = self.to_screen(Vec2::new(p.x + 1.0, p.y + 1.0));
         let v = p2 - p1;
@@ -98,7 +98,7 @@ impl Engine {
         let y = y - h/2.0;
         let y = y + -p.z * h;
 
-        draw_texture_ex(*tex, x, y, WHITE, DrawTextureParams {
+        draw_texture_ex(*tex, x, y, color, DrawTextureParams {
             dest_size:Some(Vec2::new(dw,dh)),
             flip_x,
             flip_y,

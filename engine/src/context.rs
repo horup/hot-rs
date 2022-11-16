@@ -44,12 +44,13 @@ impl Context for Engine {
 
         for cell_y in bounds.top() as i32 .. bounds.bottom() as i32 {
             for cell_x in bounds.left() as i32 .. bounds.right() as i32 {
+                let mut diffuse = shared::WHITE;
                 if let Some(cell) = world.tiles.get(cell_x, cell_y) {
-
                     if !cell.hidden {
                         if let Some(tile) = cell.img {
                             if let Some(tex) = self.textures.get(&tile) {
-                                let c = Color { r: cell.diffuse.r, g: cell.diffuse.g, b: cell.diffuse.b, a: cell.diffuse.a  };
+                                let diffuse = cell.diffuse;
+                                let c = Color { r: diffuse.r, g: diffuse.g, b: diffuse.b, a: diffuse.a  };
                                 self.draw_tex(Vec2::new(cell_x as f32, cell_y as f32), tex, c);
                             }
                         }
@@ -63,7 +64,11 @@ impl Context for Engine {
 
                         if e.pos.y as i32 == cell_y {
                             if let Some(tex) = self.textures.get(&e.texture) {
-                                self.draw_sprite(e.pos, tex, e.flip_x, false);
+                                let mut diffuse = shared::WHITE;
+                                if let Some(tile) = world.tiles.get(e.pos.x as i32, e.pos.y as i32) {
+                                    diffuse = tile.diffuse;
+                                }
+                                self.draw_sprite(e.pos, tex, e.flip_x, false, Color { r: diffuse.r, g: diffuse.g, b: diffuse.b, a: diffuse.a  });
                             }
                         }
                     }
