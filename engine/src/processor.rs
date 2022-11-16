@@ -16,7 +16,7 @@ impl Engine {
                 },
                 Command::LoadMap { map_path } => {
                     self.load_map_from_path(map_path);
-                    self.events.push(Event::MapReady {  });
+                    self.events.push(Event::MapReady { map:self.map.clone() });
                 }
                 Command::DefineSound { handle, path } => {
                     let sound = load_sound(path).await.unwrap();

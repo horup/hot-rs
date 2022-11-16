@@ -12,10 +12,6 @@ use shared::{Camera, Collision, Context, Entities, Event, Id, IgnoreColissions, 
 use crate::Engine;
 
 impl Context for Engine {
-    fn map(&self) -> &shared::Map {
-        &self.map
-    }
-
     fn draw(&mut self, camera: &Camera, world:&World) {
         self.game_camera = camera.clone();
         let bounds = self.bounds();

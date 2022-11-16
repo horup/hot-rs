@@ -1,13 +1,11 @@
-use shared::{glam::Vec3, Context, Entity, IgnoreColissions, Tiles, Color, World};
+use shared::{glam::Vec3, Context, Entity, IgnoreColissions, Tiles, Color, World, Map};
 use num_enum::TryFromPrimitive;
 use crate::{Images, Walker, Door, MyGame, Item, sounds, State};
 
 impl MyGame {
-    pub fn start(&mut self, engine:&mut dyn Context) {
+    pub fn start(&mut self, engine:&mut dyn Context, map:&Map) {
         self.state.world.clear();
-        
-        let map = engine.map().clone();
-        let mut tiles = Tiles::from(&map);
+        let mut tiles = Tiles::from(map);
         tiles.for_each_mut(|t,_,_| {
             t.diffuse = Color {
                 r: 0.0,
@@ -23,7 +21,7 @@ impl MyGame {
         }; 
 
         let state = &mut self.state;
-        engine.map().clone().grid.for_each_mut(|cell, x, y| {
+        map.grid.for_each(|cell, x, y| {
             let pos = Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0);
             if let Some(entity) = cell.entity {
                 if let Ok(entity) = Images::try_from_primitive(entity) {

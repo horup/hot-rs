@@ -100,7 +100,7 @@ impl Engine {
 
         let after = self.map.clone();
         if after != before {
-            self.events.push(Event::MapReady {  });
+            self.events.push(Event::MapReady { map:after });
         }
     
     }

@@ -51,14 +51,14 @@ impl MyGame {
     fn process_events(&mut self, engine: &mut dyn Context) {
         for event in engine.events().iter() {
             match event {
-                Event::MapReady {  } => {
-                    self.start(engine);
+                Event::MapReady { map } => {
+                    self.start(engine, map);
                 },
                 Event::Start {} => {
                     engine.push_command(Command::LoadMap { map_path: "assets/maps/test.map".into() });
                 }
                 Event::Restart {  } => {
-                    self.start(engine);
+                    engine.push_command(Command::LoadMap { map_path: "assets/maps/test.map".into() });
                 },
             }
         }
