@@ -18,9 +18,6 @@ impl Engine {
                     self.load_map_from_path(map_path);
                     self.events.push(Event::MapReady {  });
                 }
-                Command::DespawnEntity { id } => {
-                    self.entities.despawn_entity(*id);
-                },
                 Command::DefineSound { handle, path } => {
                     let sound = load_sound(path).await.unwrap();
                     self.sounds.insert(*handle, sound);

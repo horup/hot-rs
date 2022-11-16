@@ -43,14 +43,14 @@ impl MyGame {
     fn draw_flash(&mut self, ctx:&mut dyn Context) {
         let dt = ctx.dt();
         let state = &mut self.state;
-        state.flash_timer_sec -= dt;
-        if state.flash_timer_sec < 0.0 {
-            state.flash_timer_sec = 0.0;
+        state.flash.flash_timer_sec -= dt;
+        if state.flash.flash_timer_sec < 0.0 {
+            state.flash.flash_timer_sec = 0.0;
         }
         let screen_size = ctx.screen_size();
-        if state.flash_timer_sec > 0.0 && state.flash_timer_start > 0.0 {
-            let a = state.flash_timer_sec / state.flash_timer_start;
-            let a = a * state.flash_max;
+        if state.flash.flash_timer_sec > 0.0 && state.flash.flash_timer_start > 0.0 {
+            let a = state.flash.flash_timer_sec / state.flash.flash_timer_start;
+            let a = a * state.flash.flash_max;
             ctx.draw_rect(DrawRectParams {
                 x:0.0,
                 y:0.0,
@@ -62,7 +62,7 @@ impl MyGame {
     }
 
     pub fn draw(&mut self, ctx:&mut dyn Context) {
-        ctx.draw(&self.state.camera); 
+        ctx.draw(&self.state.camera, &self.state.world); 
         self.draw_flash(ctx);
         self.draw_hud(ctx);
     }

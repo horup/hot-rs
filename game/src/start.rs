@@ -1,14 +1,14 @@
-use shared::{glam::Vec3, Context, Entity, IgnoreColissions, Tiles, Color};
+use shared::{glam::Vec3, Context, Entity, IgnoreColissions, Tiles, Color, World};
 use num_enum::TryFromPrimitive;
 use crate::{Images, Walker, Door, MyGame, Item, sounds, State};
 
 impl MyGame {
     pub fn start(&mut self, engine:&mut dyn Context) {
-        engine.clear();
+        self.state.world.clear();
+        
         let map = engine.map().clone();
-
-        let mut w = Tiles::from(&map);
-        w.for_each_mut(|t,_,_| {
+        let mut tiles = Tiles::from(&map);
+        tiles.for_each_mut(|t,_,_| {
             t.diffuse = Color {
                 r: 0.0,
                 g: 0.0,
@@ -16,10 +16,13 @@ impl MyGame {
                 a: 1.0,
             };
         });
-        *engine.tiles_mut() = w;
+        
+        self.state.world = World {
+            entities: Default::default(),
+            tiles,
+        }; 
 
         let state = &mut self.state;
-        *state = State::default();
         engine.map().clone().grid.for_each_mut(|cell, x, y| {
             let pos = Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0);
             if let Some(entity) = cell.entity {
@@ -27,7 +30,7 @@ impl MyGame {
                     match entity {
                         Images::Viktor => {
                             dbg!("Spawning Player");
-                            let player_entity = engine.entities_mut().spawn_entity(Entity {
+                            let player_entity = state.world.entities.spawn_entity(Entity {
                                 pos: Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
                                 texture: entity.into(),
                                 radius: 0.25,
@@ -38,7 +41,7 @@ impl MyGame {
                             state.walkers.attach(player_entity, Walker::default());
                         }
                         Images::PokemonCard => {
-                            let card = engine.entities_mut().spawn_entity(Entity {
+                            let card = state.world.entities.spawn_entity(Entity {
                                 pos, 
                                 texture: entity.into(),
                                 radius: 0.25,
@@ -55,7 +58,7 @@ impl MyGame {
                         },
                         Images::GoldKey 
                         | Images::BlueKey => {
-                            let key = engine.entities_mut().spawn_entity(Entity {
+                            let key = state.world.entities.spawn_entity(Entity {
                                 pos, 
                                 texture: entity.into(),
                                 radius: 0.25,
@@ -72,7 +75,7 @@ impl MyGame {
                         | Images::WhiteDoorSide
                         | Images::BlueDoor
                         | Images::GoldDoor => {
-                            let door = engine.entities_mut().spawn_entity(Entity {
+                            let door = state.world.entities.spawn_entity(Entity {
                                 pos: Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
                                 texture: entity.into(),
                                 radius: 0.5,
@@ -92,7 +95,7 @@ impl MyGame {
                             });
                         }
                         _ => {
-                            engine.entities_mut().spawn_entity(Entity {
+                            state.world.entities.spawn_entity(Entity {
                                 pos: Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
                                 texture: entity.into(),
                                 radius: 0.5,

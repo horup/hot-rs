@@ -1,6 +1,6 @@
 use std::cell::UnsafeCell;
 
-use crate::{Camera, Command, Entities, Entity, Event, Id, Map, Tiles};
+use crate::{Camera, Command, Entities, Entity, Event, Id, Map, Tiles, world, World};
 use glam::{Vec2, Vec3, IVec2};
 use serde::{Serialize, Deserialize};
 use slotmap::SlotMap;
@@ -87,17 +87,13 @@ pub struct Collision {
 }
 
 pub trait Context {
-    fn clip_move(&self, id:Id, target:Vec3) -> Collision;
-    fn entities(&self) -> &Entities;
-    fn entities_mut(&mut self) -> &mut Entities;
-    fn tiles(&self) -> &Tiles;
-    fn tiles_mut(&mut self) -> &mut Tiles;
+    fn clip_move(&self, id:Id, target:Vec3, world:&World) -> Collision;
     fn is_key_pressed(&self, key_code: u8) -> bool;
     fn is_key_down(&self, key_code: u8) -> bool;
     fn last_key_pressed(&self) -> Option<u8>;
     fn dt(&self) -> f32;
     fn map(&self) -> &Map;
-    fn draw(&mut self, camera: &Camera);
+    fn draw(&mut self, camera: &Camera, world:&World);
     fn screen_size(&self) -> Vec2;
     fn texture_size(&self, texture: u32) -> Vec2;
     fn draw_string(&self, params: DrawStringParams);
@@ -108,9 +104,4 @@ pub trait Context {
     fn push_command(&self, command: Command);
     fn events(&mut self) -> Vec<Event>;
     fn play_sound(&self, sound:u32, volume:f32);
-
-    fn clear(&mut self) {
-        self.entities_mut().clear();
-        self.tiles_mut().clear();
-    }
 }

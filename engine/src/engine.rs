@@ -12,7 +12,7 @@ use macroquad::{
 use native_dialog::FileDialog;
 use shared::{
     Camera, Command, Context, Game, Map,
-    Event, Entities, Tiles,
+    Event
 };
 
 use crate::{Edit, EditInput};
@@ -28,9 +28,7 @@ pub struct Engine {
     pub(crate) edit_camera: Camera,
     pub(crate) edit_mode: bool,
     pub(crate) map: Map,
-    pub(crate) world: Tiles,
     pub(crate) game: Option<Box<dyn Game>>,
-    pub(crate) entities: Entities,
     pub(crate) game_lib_path: PathBuf,
     pub(crate) game_lib: Option<Library>,
     pub(crate) game_lib_metadata: Option<Metadata>,
@@ -90,7 +88,6 @@ impl Engine {
             let mut state: Vec<u8> = Vec::new();
             if unload {
                 state = self.serialize();
-                self.entities.clear();
                 self.game = None;
                 if let Some(lib) = self.game_lib.take() {
                     lib.close().unwrap();

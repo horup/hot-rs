@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use shared::{Id, Camera, Components};
+use shared::{Id, Camera, Components, World};
 use serde::{Serialize, Deserialize};
 
 use crate::Images;
@@ -12,19 +12,25 @@ pub struct Counter {
 }
 #[derive(Default, Serialize, Deserialize, Clone)]
 pub struct State {
+    pub world:World,
     pub camera:Camera,
     pub player:Option<Id>,
     pub walkers:Components<Walker>,
     pub doors:Components<Door>,
     pub items:Components<Item>,
-    pub flash_timer_sec:f32,
-    pub flash_timer_start:f32,
-    pub flash_max:f32,
+    pub flash:Flash,
     pub pokemon_cards:Counter,
     pub inventory:HashMap<Images, f32>
 }
 
-impl State {
+#[derive(Default, Serialize, Deserialize, Clone, Copy)]
+pub struct Flash {
+    pub flash_timer_sec:f32,
+    pub flash_timer_start:f32,
+    pub flash_max:f32,
+}
+
+impl Flash {
     pub fn flash(&mut self, duration_sec:f32, flash_max:f32) {
         self.flash_timer_sec = duration_sec;
         self.flash_timer_start = duration_sec;

@@ -12,8 +12,5 @@ pub enum Command {
     },
     LoadMap {
         map_path:String
-    },
-    DespawnEntity {
-        id:Id
     }
 }
