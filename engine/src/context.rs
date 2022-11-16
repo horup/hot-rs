@@ -255,7 +255,7 @@ impl Context for Engine {
     fn deserialize(&mut self, bytes:&[u8]) {
         if !bytes.is_empty() {
             let s:(Entities, Vec<u8>) = bincode::deserialize(bytes).unwrap();
-            let (entities, game_bytes) = s;
+            let (_entities, game_bytes) = s;
             //self.entities = entities;
             if !game_bytes.is_empty() {
                 if let Some(game) = &mut self.game {

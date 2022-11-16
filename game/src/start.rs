@@ -1,9 +1,9 @@
 use shared::{glam::Vec3, Context, Entity, IgnoreColissions, Tiles, Color, World, Map};
 use num_enum::TryFromPrimitive;
-use crate::{Images, Walker, Door, MyGame, Item, sounds, State};
+use crate::{Images, Walker, Door, MyGame, Item, sounds};
 
 impl MyGame {
-    pub fn start(&mut self, engine:&mut dyn Context, map:&Map) {
+    pub fn start(&mut self, _engine:&mut dyn Context, map:&Map) {
         self.state.world.clear();
         let mut tiles = Tiles::from(map);
         tiles.for_each_mut(|t,_,_| {

@@ -1,4 +1,4 @@
-use shared::{Context, glam::{Vec2, IVec2}, IgnoreColissions, Command, Grid, Color, Tile};
+use shared::{Context, glam::{Vec2}, IgnoreColissions, Grid, Color};
 use crate::{MyGame, Images, sounds};
 
 
@@ -45,16 +45,16 @@ fn cast_ray_mut<T:Default + Clone, F:FnMut(Visit<T>)->bool>(grid:&mut Grid<T>, r
                 break;
             }
             if dt_x < dt_y {
-                tile_x = tile_x + dtile_x;
+                tile_x += dtile_x;
                 let dt = dt_x;
-                t = t + dt;
+                t += dt;
                 dt_x = dt_x + ddt_x - dt;
-                dt_y = dt_y - dt;
+                dt_y -= dt;
             } else {
-                tile_y = tile_y + dtile_y;
+                tile_y += dtile_y;
                 let dt = dt_y;
-                t = t + dt;
-                dt_x = dt_x - dt;
+                t += dt;
+                dt_x -= dt;
                 dt_y = dt_y + ddt_y - dt;
             }
         }
@@ -66,7 +66,7 @@ fn cast_ray_mut<T:Default + Clone, F:FnMut(Visit<T>)->bool>(grid:&mut Grid<T>, r
 
 
 impl MyGame {
-    fn raycast_update(&mut self, ctx: &mut dyn Context) {
+    fn raycast_update(&mut self, _ctx: &mut dyn Context) {
         let player_id = self.state.player.unwrap_or_default();
         if let Some(player_entity) = self.state.world.entities.get(player_id) {
             let pos = player_entity.pos.truncate().floor() + Vec2::new(0.5, 0.5);
@@ -80,7 +80,7 @@ impl MyGame {
                         end:Vec2::new(x, y)
                     }, |visit|{
                         visit.tile.diffuse = Color::default();
-                        return visit.tile.clips;
+                        visit.tile.clips
                     });
                 }
 
@@ -95,7 +95,7 @@ impl MyGame {
                         end:Vec2::new(x, y)
                     }, |visit|{
                         visit.tile.diffuse = Color::default();
-                        return visit.tile.clips;
+                        visit.tile.clips
                     });
                 }
 
@@ -103,16 +103,14 @@ impl MyGame {
         }
     }
 
-    fn proximity_update(&mut self, ctx: &mut dyn Context) {
+    fn proximity_update(&mut self, _ctx: &mut dyn Context) {
         let player_id = self.state.player.unwrap_or_default();
         if let Some(player_entity) = self.state.world.entities.get(player_id) {
-            for (other_id, other_entity) in self.state.world.entities.iter().filter(|(id,_)| {id != &player_id}) {
+            for (_other_id, other_entity) in self.state.world.entities.iter().filter(|(id,_)| {id != &player_id}) {
                 let v = other_entity.pos - player_entity.pos;
                 let l = v.length();
-                if other_entity.texture == Images::ExitMarker.into() {
-                    if l < 0.5 {
-                        // TODO end game
-                    }
+                if other_entity.texture == Images::ExitMarker.into() && l < 0.5 {
+                    // TODO end game
                 }
             }
         }
