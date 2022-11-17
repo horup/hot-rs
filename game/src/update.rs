@@ -132,6 +132,7 @@ impl MyGame {
             }
         }
     }
+    
     pub fn update(&mut self, ctx: &mut dyn Context) {
         let state = &mut self.state;
         let dt = ctx.dt(); 

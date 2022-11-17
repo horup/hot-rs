@@ -6,11 +6,6 @@ use serde::{Serialize, Deserialize};
 use crate::Images;
 
 #[derive(Default, Serialize, Deserialize, Clone)]
-pub struct Counter {
-    pub current:f32,
-    pub total:f32
-}
-#[derive(Default, Serialize, Deserialize, Clone)]
 pub struct State {
     pub world:World,
     pub camera:Camera,
@@ -44,6 +39,11 @@ impl DerefMut for State {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.world
     }
+}
+#[derive(Default, Serialize, Deserialize, Clone)]
+pub struct Counter {
+    pub current:f32,
+    pub total:f32
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Copy)]

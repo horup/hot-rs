@@ -26,3 +26,17 @@ pub enum Images {
     WaypointMarker = 24,
     ExitMarker = 25
 }
+
+
+pub const PIGGY:u32 = 2;
+pub const TILEDFLOORGRAY:u32 = 6;
+
+fn test() {
+    let u = 4 as u32;
+    match u {
+        PIGGY =>{
+
+        },
+        _ => {}
+    }
+}
