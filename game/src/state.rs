@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, ops::{Deref, DerefMut}};
 
 use shared::{Id, Camera, Components, World, glam::IVec2};
 use serde::{Serialize, Deserialize};
@@ -21,6 +21,29 @@ pub struct State {
     pub flash:Flash,
     pub pokemon_cards:Counter,
     pub inventory:HashMap<Images, f32>,
+}
+
+impl State {
+    pub fn new(world:World) -> Self {
+        Self {
+            world,
+            ..Default::default()
+        }
+    }
+}
+
+impl Deref for State {
+    type Target = World;
+
+    fn deref(&self) -> &Self::Target {
+        &self.world
+    }
+}
+
+impl DerefMut for State {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.world
+    }
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Copy)]

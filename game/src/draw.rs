@@ -62,7 +62,7 @@ impl MyGame {
     }
 
     pub fn draw(&mut self, ctx:&mut dyn Context) {
-        ctx.draw(&self.state.camera, &self.state.world); 
+        ctx.draw(&self.state.camera, &self.state); 
         self.draw_flash(ctx);
         self.draw_hud(ctx);
     }
