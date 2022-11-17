@@ -7,7 +7,7 @@ use crate::{Grid, Map, Color};
 
 #[derive(Debug, Default, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct Tile {
-    pub img:Option<u32>,
+    pub img_top:Option<u32>,
     pub clips:bool,
     pub hidden:bool,
     pub diffuse:Color
@@ -31,7 +31,7 @@ impl From<&Map> for Tiles {
         for y in 0..s {
             for x in 0..s {
                 let tile = map.grid.get(x as i32, y as i32).unwrap();
-                grid.get_mut(x as i32, y as i32).unwrap().img = tile.tile;
+                grid.get_mut(x as i32, y as i32).unwrap().img_top = tile.tile;
                 grid.get_mut(x as i32, y as i32).unwrap().clips = tile.blocks;
             }
         }

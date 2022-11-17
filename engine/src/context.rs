@@ -47,7 +47,7 @@ impl Context for Engine {
                 let mut diffuse = shared::WHITE;
                 if let Some(cell) = world.tiles.get(cell_x, cell_y) {
                     if !cell.hidden {
-                        if let Some(tile) = cell.img {
+                        if let Some(tile) = cell.img_top {
                             if let Some(tex) = self.textures.get(&tile) {
                                 let diffuse = cell.diffuse;
                                 let c = Color { r: diffuse.r, g: diffuse.g, b: diffuse.b, a: diffuse.a  };
