@@ -6,7 +6,6 @@ use crate::{Images, Walker, Door, MyGame, Item, sounds, State};
 
 impl MyGame {
     pub fn start(&mut self, _engine:&mut dyn Context, map:&Map) {
-        self.state.clear();
         let mut tiles = Tiles::from(map);
         tiles.for_each_mut(|t,_,_| {
             t.diffuse = Color {
