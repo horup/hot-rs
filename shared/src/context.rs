@@ -89,13 +89,18 @@ pub struct Collision {
     pub tile:Option<IVec2>
 }
 
+#[derive(Default)]
+pub struct DrawParams {
+    pub debug_entity:bool
+}
+
 pub trait Context {
     fn clip_move(&self, id:Id, target:Vec3, world:&World) -> Collision;
     fn is_key_pressed(&self, key_code: u8) -> bool;
     fn is_key_down(&self, key_code: u8) -> bool;
     fn last_key_pressed(&self) -> Option<u8>;
     fn dt(&self) -> f32;
-    fn draw(&mut self, camera: &Camera, world:&World);
+    fn draw(&mut self, camera: &Camera, world:&World, params:DrawParams);
     fn screen_size(&self) -> Vec2;
     fn texture_size(&self, texture: u32) -> Vec2;
     fn draw_string(&self, params: DrawStringParams);

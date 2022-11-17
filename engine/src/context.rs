@@ -7,12 +7,12 @@ use macroquad::{
     window::{screen_height, screen_width}, shapes::{draw_line, draw_rectangle_lines}, audio::{play_sound, PlaySoundParams},
 };
 use parry2d::{bounding_volume::BoundingVolume, na::Isometry2};
-use shared::{Camera, Collision, Context, Sprites, Event, Id,  World};
+use shared::{Camera, Collision, Context, Sprites, Event, Id,  World, DrawParams};
 
 use crate::Engine;
 
 impl Context for Engine {
-    fn draw(&mut self, camera: &Camera, world:&World) {
+    fn draw(&mut self, camera: &Camera, world:&World, params:DrawParams) {
         self.game_camera = camera.clone();
         let bounds = self.bounds();
         let margin = 3.0;
@@ -76,12 +76,14 @@ impl Context for Engine {
             }
         }
 
-        for (_, e) in world.sprites.iter_mut() {
-            let s = self.cell_size_screen() * e.radius * 2.0;
-            let p = self.to_screen(e.pos.truncate());
-            draw_rectangle_lines(p.x - s.x / 2.0, p.y - s.y / 2.0, s.x, s.y, 1.0, RED);
-            let v = Vec2::from_angle(e.dir) * s / 2.0;
-            draw_line(p.x, p.y, p.x + v.x, p.y - v.y, 1.0, BLUE);
+        if params.debug_entity {
+            for (_, e) in world.sprites.iter_mut() {
+                let s = self.cell_size_screen() * e.radius * 2.0;
+                let p = self.to_screen(e.pos.truncate());
+                draw_rectangle_lines(p.x - s.x / 2.0, p.y - s.y / 2.0, s.x, s.y, 1.0, RED);
+                let v = Vec2::from_angle(e.dir) * s / 2.0;
+                draw_line(p.x, p.y, p.x + v.x, p.y - v.y, 1.0, BLUE);
+            }
         }
     }
 
