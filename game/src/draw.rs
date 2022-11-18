@@ -109,11 +109,14 @@ impl MyGame {
 
         let s = screen.x / 4.0;
         let sx = screen.x / 6.0;
+        let sy = screen.y / 3.0;
         let x = sx * 2.0;
+        let y = sy;
+
         ctx.draw_img(DrawImgParams {
             img:Images::William.into(),
             x:x - s / 2.0,
-            y:screen.y / 2.0 - s,
+            y:y - s,
             w:s,
             h:s * 2.0,
             ..Default::default()
@@ -124,7 +127,7 @@ impl MyGame {
         ctx.draw_img(DrawImgParams {
             img:Images::Viktor.into(),
             x:x - s / 2.0,
-            y:screen.y / 2.0 - s,
+            y:y - s,
             w:s,
             h:s * 2.0,
             ..Default::default()
