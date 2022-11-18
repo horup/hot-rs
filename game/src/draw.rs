@@ -150,7 +150,15 @@ impl MyGame {
             ctx.draw_rect(DrawRectParams {
                 rect: r,
                 color: color,
-            })
+            });
+
+            ctx.draw_img(DrawImgParams {
+                img: img.into(),
+                x:r.x,
+                y:r.y - h / 3.0,
+                w,
+                h:w * 2.0,
+            });
         }
 
         
