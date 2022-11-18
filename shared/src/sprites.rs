@@ -63,11 +63,11 @@ impl<'a> Iterator for Iter<'a> {
 
 
 impl Sprites {
-    pub fn spawn_entity(&mut self, entity:Sprite) -> Id {
+    pub fn spawn(&mut self, entity:Sprite) -> Id {
         self.inner.insert(CSDUnsafeCell::new(entity))
     }
 
-    pub fn despawn_entity(&mut self, id:Id) {
+    pub fn despawn(&mut self, id:Id) {
         self.inner.remove(id);
     }
 

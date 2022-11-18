@@ -6,9 +6,9 @@ impl MyGame {
 
     pub fn start(&mut self, player_img:Images) {
         let pos =  self.state.start_pos;
-        let player_entity = self.state.sprites.spawn_entity(Sprite {
+        let player_entity = self.state.sprites.spawn(Sprite {
             pos,
-            texture: player_img.into(),
+            img: player_img.into(),
             radius: 0.25,
             ..Default::default()
         });
@@ -60,9 +60,9 @@ impl MyGame {
                             state.walkers.attach(player_entity, Walker::default());*/
                         }
                         Images::PokemonCard => {
-                            let card = state.sprites.spawn_entity(Sprite {
+                            let card = state.sprites.spawn(Sprite {
                                 pos, 
-                                texture: entity.into(),
+                                img: entity.into(),
                                 radius: 0.25,
                                 no_clip: true,
                                 ..Default::default()
@@ -77,9 +77,9 @@ impl MyGame {
                         },
                         Images::GoldKey 
                         | Images::BlueKey => {
-                            let key = state.sprites.spawn_entity(Sprite {
+                            let key = state.sprites.spawn(Sprite {
                                 pos, 
-                                texture: entity.into(),
+                                img: entity.into(),
                                 radius: 0.25,
                                 no_clip: true,
                                 ..Default::default()
@@ -94,9 +94,9 @@ impl MyGame {
                         | Images::WhiteDoorSide
                         | Images::BlueDoor
                         | Images::GoldDoor => {
-                            let door = state.sprites.spawn_entity(Sprite {
+                            let door = state.sprites.spawn(Sprite {
                                 pos: Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
-                                texture: entity.into(),
+                                img: entity.into(),
                                 radius: 0.5,
                                 ..Default::default()
                             });
@@ -114,9 +114,9 @@ impl MyGame {
                             });
                         }
                         _ => {
-                            state.sprites.spawn_entity(Sprite {
+                            state.sprites.spawn(Sprite {
                                 pos: Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
-                                texture: entity.into(),
+                                img: entity.into(),
                                 radius: 0.5,
                                 no_clip: true,
                                 ..Default::default()

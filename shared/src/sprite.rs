@@ -6,7 +6,7 @@ pub struct Sprite {
     pub pos:Vec3,
     pub vel:Vec3,
     pub dir:f32,
-    pub texture:u32,
+    pub img:u32,
     pub flip_x:bool,
     pub radius:f32,
     pub no_clip:bool,

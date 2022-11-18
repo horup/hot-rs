@@ -126,7 +126,7 @@ impl MyGame {
             for (_other_id, other_entity) in self.state.sprites.iter().filter(|(id,_)| {id != &player_id}) {
                 let v = other_entity.pos - player_entity.pos;
                 let l = v.length();
-                if other_entity.texture == Images::ExitMarker.into() && l < 0.5 {
+                if other_entity.img == Images::ExitMarker.into() && l < 0.5 {
                     // TODO end game
                 }
             }
@@ -229,11 +229,11 @@ impl MyGame {
                             ctx.play_sound(item.pickup_sound.unwrap_or(sounds::PICKUP), 1.0);
                             state.flash.flash(0.2, 0.5);
 
-                            if other_entity.texture == Images::PokemonCard.into() {
+                            if other_entity.img == Images::PokemonCard.into() {
                                 state.pokemon_cards.current += 1.0;
-                            } else if other_entity.texture == Images::GoldKey.into() {
+                            } else if other_entity.img == Images::GoldKey.into() {
                                 state.inventory.insert(Images::GoldKey, 1.0);
-                            } else if other_entity.texture == Images::BlueKey.into() {
+                            } else if other_entity.img == Images::BlueKey.into() {
                                 state.inventory.insert(Images::BlueKey, 1.0);
                             }
                         }
@@ -243,7 +243,7 @@ impl MyGame {
         } 
 
         despawner.iter().for_each(|id|{
-            self.state.sprites.despawn_entity(*id);
+            self.state.sprites.despawn(*id);
         });
 
         self.proximity_update(ctx);

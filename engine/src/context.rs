@@ -63,7 +63,7 @@ impl Context for Engine {
                         }
 
                         if e.pos.y as i32 == cell_y {
-                            if let Some(tex) = self.textures.get(&e.texture) {
+                            if let Some(tex) = self.textures.get(&e.img) {
                                 let mut diffuse = shared::WHITE;
                                 if let Some(tile) = world.tiles.get(e.pos.x as i32, e.pos.y as i32) {
                                     diffuse = tile.diffuse;
