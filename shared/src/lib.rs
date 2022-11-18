@@ -42,4 +42,7 @@ pub use tiles::*;
 mod world;
 pub use world::*;
 
+mod rect;
+pub use rect::*;
+
 new_key_type! { pub struct Id; }

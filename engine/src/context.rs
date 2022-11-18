@@ -123,7 +123,7 @@ impl Context for Engine {
     }
 
     fn draw_rect(&self, params: shared::DrawRectParams) {
-        draw_rectangle(params.x, params.y, params.w, params.h, Color {
+        draw_rectangle(params.rect.x, params.rect.y, params.rect.w, params.rect.h, Color {
             r:params.color.r,
             g:params.color.g,
             b:params.color.b,

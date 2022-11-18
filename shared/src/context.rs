@@ -1,6 +1,6 @@
 use std::cell::UnsafeCell;
 
-use crate::{Camera, Command, Sprite, Event, Id, World};
+use crate::{Camera, Command, Sprite, Event, Id, World, Rect2};
 use glam::{Vec2, Vec3, IVec2};
 use serde::{Serialize, Deserialize};
 use slotmap::SlotMap;
@@ -35,10 +35,7 @@ pub struct DrawImgParams {
 
 #[derive(Default, Clone, Copy)]
 pub struct DrawRectParams {
-    pub x: f32,
-    pub y: f32,
-    pub w: f32,
-    pub h: f32,
+    pub rect:Rect2,
     pub color: Color,
 }
 

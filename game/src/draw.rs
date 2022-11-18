@@ -70,10 +70,7 @@ impl MyGame {
             let a = state.flash.flash_timer_sec / state.flash.flash_timer_start;
             let a = a * state.flash.flash_max;
             ctx.draw_rect(DrawRectParams {
-                x: 0.0,
-                y: 0.0,
-                w: screen_size.x,
-                h: screen_size.y,
+                rect:Rect2 { x: 0.0, y: 0.0, w: screen_size.x, h: screen_size.y },
                 color: Color::new(1.0, 1.0, 1.0, a),
             });
         }
@@ -107,13 +104,49 @@ impl MyGame {
             color: WHITE,
         });
 
-        let s = screen.x / 4.0;
+       /* let s = screen.x / 4.0;
         let sx = screen.x / 6.0;
         let sy = screen.y / 3.0;
-        let x = sx * 2.0;
         let y = sy;
 
-        ctx.draw_img(DrawImgParams {
+        let x = sx * 1.0;
+        let r = Rect2::new(x, y, s, s);
+        ctx.draw_rect(DrawRectParams {
+            rect: r,
+            color: WHITE,
+        });
+
+        let x = sx * 4.0;
+        let r = Rect2::new(x, y, s, s * 2.0);
+        ctx.draw_rect(DrawRectParams {
+            rect: r,
+            color: WHITE,
+        });*/
+
+
+        let sx = screen.x / 6.0;
+    
+        let chars = [
+            (screen.x / 2.0 - sx, Images::William), 
+            (screen.x / 2.0 + sx, Images::Viktor)
+        ];
+       
+        for (x, img) in chars {
+            let w = sx * 1.5;
+            let h = w * 1.5;
+            let y = screen.y / 4.0;
+
+            let r = Rect2::new(x - w /2.0, y, w, h);
+            
+            ctx.draw_rect(DrawRectParams {
+                rect: r,
+                color: WHITE,
+            })
+        }
+
+        
+
+       /* ctx.draw_img(DrawImgParams {
             img:Images::William.into(),
             x:x - s / 2.0,
             y:y - s,
@@ -131,7 +164,7 @@ impl MyGame {
             w:s,
             h:s * 2.0,
             ..Default::default()
-        });
+        });*/
 
 
        // ctx.draw_img(params)
