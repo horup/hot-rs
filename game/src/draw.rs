@@ -95,13 +95,13 @@ impl MyGame {
 
     pub fn draw_character_selector(&mut self, ctx:&mut dyn Context) {
         let screen = ctx.screen_size();
-        let h = screen.x / 16.0;
-        let y = screen.y / 4.0;
+        let font_height = screen.x / 16.0;
+        let y = screen.y / 6.0;
         ctx.draw_string(DrawStringParams {
             str: "Please select your character!".into(),
             x: screen.x / 2.0,
-            y: y - h,
-            font_height: h,
+            y: y - font_height,
+            font_height,
             color: WHITE,
             alignment_horizontal: Alignment::Center,
         });
@@ -109,12 +109,12 @@ impl MyGame {
         let sx = screen.x / 6.0;
     
         let chars = [
-            (screen.x / 2.0 - sx, Images::William), 
-            (screen.x / 2.0 + sx, Images::Viktor)
+            (screen.x / 2.0 - sx, Images::William, "William"), 
+            (screen.x / 2.0 + sx, Images::Viktor, "Viktor")
         ];
        
         let mouse_pos = ctx.mouse_pos();
-        for (x, img) in chars {
+        for (x, img, name) in chars {
             let w = sx * 1.5;
             let h = w * 1.5;
             
@@ -141,6 +141,15 @@ impl MyGame {
                 w,
                 h:w * 2.0,
                 ..Default::default()
+            });
+
+            ctx.draw_string(DrawStringParams {
+                str: name.into(),
+                x,
+                y: y + h + font_height,
+                font_height: font_height,
+                color:WHITE,
+                alignment_horizontal: Alignment::Center,
             });
         }
 
