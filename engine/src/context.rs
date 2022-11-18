@@ -279,4 +279,18 @@ impl Context for Engine {
             })
         }
     }
+
+    fn mouse_pos(&self) -> Vec2 {
+        mouse_position().into()
+    }
+
+    fn mouse_button_pressed(&self, button:u8) -> bool {
+        let btn: MouseButton = unsafe { transmute(button) };
+        is_mouse_button_pressed(btn)
+    }
+
+    fn mouse_button_down(&self, button:u8) -> bool {
+        let btn: MouseButton = unsafe { transmute(button) };
+        is_mouse_button_down(btn)
+    }
 }

@@ -131,16 +131,25 @@ impl MyGame {
             (screen.x / 2.0 + sx, Images::Viktor)
         ];
        
+        let mouse_pos = ctx.mouse_pos();
         for (x, img) in chars {
             let w = sx * 1.5;
             let h = w * 1.5;
             let y = screen.y / 4.0;
 
             let r = Rect2::new(x - w /2.0, y, w, h);
-            
+            let mut color = WHITE;
+            if r.contains(&mouse_pos) {
+                color.a = 0.0;
+
+                if ctx.mouse_button_pressed(1) {
+                    self.state.chosen_character = Some(img);
+                  //  self.start(player_img, pos)
+                }
+            }
             ctx.draw_rect(DrawRectParams {
                 rect: r,
-                color: WHITE,
+                color: color,
             })
         }
 

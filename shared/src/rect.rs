@@ -16,7 +16,7 @@ impl Rect2 {
         }
     }
 
-    pub fn contains(&self, p:Vec2) -> bool {
+    pub fn contains(&self, p:&Vec2) -> bool {
         if p.x >= self.x && p.x <= self.x + self.w
         && p.y >= self.y && p.y <= self.y + self.h
         {

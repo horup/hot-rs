@@ -95,6 +95,9 @@ pub trait Context {
     fn clip_move(&self, id:Id, target:Vec3, world:&World) -> Collision;
     fn is_key_pressed(&self, key_code: u8) -> bool;
     fn is_key_down(&self, key_code: u8) -> bool;
+    fn mouse_button_pressed(&self, button:u8) -> bool;
+    fn mouse_button_down(&self, button:u8) -> bool;
+    fn mouse_pos(&self) -> Vec2;
     fn last_key_pressed(&self) -> Option<u8>;
     fn dt(&self) -> f32;
     fn draw(&mut self, camera: &Camera, world:&World, params:DrawParams);
