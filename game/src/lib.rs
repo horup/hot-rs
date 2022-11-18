@@ -54,7 +54,7 @@ impl MyGame {
         for event in engine.events().iter() {
             match event {
                 Event::MapReady { map } => {
-                    self.start(engine, map);
+                    self.load_map(engine, map);
                 },
                 Event::Start {} => {
                     engine.push_command(Command::LoadMap { map_path: "assets/maps/test.map".into() });

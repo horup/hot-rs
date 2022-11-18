@@ -16,6 +16,8 @@ pub struct State {
     pub flash:Flash,
     pub pokemon_cards:Counter,
     pub inventory:HashMap<Images, f32>,
+    pub chosen_character:Option<Images>,
+    pub pause:bool
 }
 
 impl State {

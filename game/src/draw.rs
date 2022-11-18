@@ -80,6 +80,11 @@ impl MyGame {
     }
 
     pub fn draw(&mut self, ctx: &mut dyn Context) {
+        if self.state.chosen_character.is_none() {
+            self.draw_character_selector(ctx);
+            return;
+        } 
+        
         ctx.draw(
             &self.state.camera,
             &self.state,
@@ -89,5 +94,45 @@ impl MyGame {
         );
         self.draw_flash(ctx);
         self.draw_hud(ctx);
+    }
+
+    pub fn draw_character_selector(&mut self, ctx:&mut dyn Context) {
+        let screen = ctx.screen_size();
+        let h = screen.x / 16.0;
+        ctx.draw_string(DrawStringParams {
+            str: "Please select your character!".into(),
+            x: 16.0,
+            y: h,
+            font_height: h,
+            color: WHITE,
+        });
+
+        let s = screen.x / 4.0;
+        let sx = screen.x / 6.0;
+        let x = sx * 2.0;
+        ctx.draw_img(DrawImgParams {
+            img:Images::William.into(),
+            x:x - s / 2.0,
+            y:screen.y / 2.0 - s,
+            w:s,
+            h:s * 2.0,
+            ..Default::default()
+        });
+
+        let x = sx * 4.0;
+
+        ctx.draw_img(DrawImgParams {
+            img:Images::Viktor.into(),
+            x:x - s / 2.0,
+            y:screen.y / 2.0 - s,
+            w:s,
+            h:s * 2.0,
+            ..Default::default()
+        });
+
+
+       // ctx.draw_img(params)
+
+
     }
 }

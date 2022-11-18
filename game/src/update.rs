@@ -134,6 +134,10 @@ impl MyGame {
     }
     
     pub fn update(&mut self, ctx: &mut dyn Context) {
+        if self.state.pause {
+            return;
+        }
+
         let state = &mut self.state;
         let dt = ctx.dt(); 
         for (key, e) in state.world.sprites.iter_mut() {
