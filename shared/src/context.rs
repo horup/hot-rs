@@ -6,12 +6,27 @@ use serde::{Serialize, Deserialize};
 use slotmap::SlotMap;
 
 #[derive(Clone)]
+pub enum Alignment {
+    Left,
+    Center,
+    Right
+}
+
+impl Default for Alignment {
+    fn default() -> Self {
+        Self::Left
+    }
+}
+
+#[derive(Clone)]
 pub struct DrawStringParams {
     pub str: String,
     pub x: f32,
     pub y: f32,
     pub font_height:f32,
-    pub color:Color
+    pub color:Color,
+    pub alignment_horizontal:Alignment
+
 }
 
 impl Default for DrawStringParams {
@@ -20,7 +35,8 @@ impl Default for DrawStringParams {
             x: Default::default(), 
             y: Default::default(), 
             font_height: 16.0,
-            color: Color::default(), }
+            color: Color::default(),
+            alignment_horizontal: Default::default(), }
     }
 }
 
@@ -31,6 +47,7 @@ pub struct DrawImgParams {
     pub y: f32,
     pub w: f32,
     pub h: f32,
+    pub color:Color
 }
 
 #[derive(Default, Clone, Copy)]

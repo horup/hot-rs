@@ -96,33 +96,15 @@ impl MyGame {
     pub fn draw_character_selector(&mut self, ctx:&mut dyn Context) {
         let screen = ctx.screen_size();
         let h = screen.x / 16.0;
+        let y = screen.y / 4.0;
         ctx.draw_string(DrawStringParams {
             str: "Please select your character!".into(),
-            x: 16.0,
-            y: h,
+            x: screen.x / 2.0,
+            y: y - h,
             font_height: h,
             color: WHITE,
+            alignment_horizontal: Alignment::Center,
         });
-
-       /* let s = screen.x / 4.0;
-        let sx = screen.x / 6.0;
-        let sy = screen.y / 3.0;
-        let y = sy;
-
-        let x = sx * 1.0;
-        let r = Rect2::new(x, y, s, s);
-        ctx.draw_rect(DrawRectParams {
-            rect: r,
-            color: WHITE,
-        });
-
-        let x = sx * 4.0;
-        let r = Rect2::new(x, y, s, s * 2.0);
-        ctx.draw_rect(DrawRectParams {
-            rect: r,
-            color: WHITE,
-        });*/
-
 
         let sx = screen.x / 6.0;
     
@@ -135,12 +117,12 @@ impl MyGame {
         for (x, img) in chars {
             let w = sx * 1.5;
             let h = w * 1.5;
-            let y = screen.y / 4.0;
+            
 
             let r = Rect2::new(x - w /2.0, y, w, h);
-            let mut color = WHITE;
+            let mut color = Color { r: 1.0, g: 1.0, b: 1.0, a: 0.25 };
             if r.contains(&mouse_pos) {
-                color.a = 0.0;
+                color.a = 0.5;
 
                 if ctx.mouse_button_pressed(1) {
                     self.state.chosen_character = Some(img);
@@ -158,6 +140,7 @@ impl MyGame {
                 y:r.y - h / 3.0,
                 w,
                 h:w * 2.0,
+                ..Default::default()
             });
         }
 

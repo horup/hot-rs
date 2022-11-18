@@ -100,7 +100,13 @@ impl Context for Engine {
     }
 
     fn draw_string(&self, p: shared::DrawStringParams) {
-        draw_text_ex(&p.str, p.x, p.y, TextParams {
+        let s = measure_text(&p.str, None, p.font_height as u16, 1.0);
+        let x = match p.alignment_horizontal {
+            shared::Alignment::Left => 0.0,
+            shared::Alignment::Center => -s.width / 2.0,
+            shared::Alignment::Right => -s.width,
+        };
+        draw_text_ex(&p.str, p.x + x, p.y, TextParams {
             font_size:p.font_height as u16,
             font_scale:1.0,
             color:Color {
