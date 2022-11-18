@@ -24,7 +24,8 @@ pub enum Images {
     BlueDoor = 22,
     BlueKey = 23,
     WaypointMarker = 24,
-    ExitMarker = 25
+    ExitMarker = 25,
+    Player = 26
 }
 
 

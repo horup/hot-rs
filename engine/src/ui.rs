@@ -26,15 +26,19 @@ impl Engine {
             match self.edit.tool {
                 Tool::Tile => {
                     ui.label(None, &format!("blocks = {}", self.edit.blocks));
-                    textures = self.edit.tiles.clone();
+                    //textures = self.edit.tiles.clone();
                     selected = self.edit.selected_tile;
                 },
 
                 Tool::Entity => {
-                    textures = self.edit.entities.clone();
+                    //textures = self.edit.entities.clone();
                     selected = self.edit.selected_entity;
                 },
             }
+
+            textures = self.textures.iter().map(|(key,_)| {
+                key.clone()
+            }).collect();
 
             for tex_id in textures {
                 if let Some(tex) = self.textures.get(&tex_id) {

@@ -37,6 +37,7 @@ pub fn init(engine: &mut dyn Context) {
     def_entity!(Images::BlueKey, "assets/textures/blue_key.png");
     def_entity!(Images::WaypointMarker, "assets/textures/waypoint_marker.png");
     def_entity!(Images::ExitMarker, "assets/textures/exit_marker.png");
+    def_entity!(Images::Player, "assets/textures/player.png");
 
     macro_rules! def_sound {
         ($handle:expr, $path:expr) => {
