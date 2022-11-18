@@ -4,9 +4,10 @@ use crate::{Images, Walker, Door, MyGame, Item, sounds, State};
 
 impl MyGame {
 
-    pub fn start(&mut self, player_img:Images, pos:Vec3) {
+    pub fn start(&mut self, player_img:Images) {
+        let pos =  self.state.start_pos;
         let player_entity = self.state.sprites.spawn_entity(Sprite {
-            pos: pos,
+            pos,
             texture: player_img.into(),
             radius: 0.25,
             ..Default::default()
@@ -41,6 +42,9 @@ impl MyGame {
             if let Some(entity) = cell.entity {
                 if let Ok(entity) = Images::try_from_primitive(entity) {
                     match entity {
+                        Images::Player => {
+                            state.start_pos = Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0);
+                        },
                         Images::Viktor | Images::William => {
                            /* dbg!("Spawning Player");
                             let player_entity = state.sprites.spawn_entity(Sprite {

@@ -126,7 +126,7 @@ impl MyGame {
 
                 if ctx.mouse_button_pressed(1) {
                     self.state.chosen_character = Some(img);
-                  //  self.start(player_img, pos)
+                    self.start(img);
                 }
             }
             ctx.draw_rect(DrawRectParams {

@@ -1,6 +1,6 @@
 use std::{collections::HashMap, ops::{Deref, DerefMut}};
 
-use shared::{Id, Camera, Components, World, glam::IVec2};
+use shared::{Id, Camera, Components, World, glam::{IVec2, Vec3}};
 use serde::{Serialize, Deserialize};
 
 use crate::Images;
@@ -17,7 +17,8 @@ pub struct State {
     pub pokemon_cards:Counter,
     pub inventory:HashMap<Images, f32>,
     pub chosen_character:Option<Images>,
-    pub pause:bool
+    pub pause:bool,
+    pub start_pos:Vec3
 }
 
 impl State {
