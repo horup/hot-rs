@@ -81,6 +81,11 @@ impl MyGame {
             self.draw_character_selector(ctx);
             return;
         } 
+
+        if self.state.won {
+            self.draw_won(ctx);
+            return;
+        }
         
         ctx.draw(
             &self.state.camera,
@@ -91,6 +96,23 @@ impl MyGame {
         );
         self.draw_flash(ctx);
         self.draw_hud(ctx);
+    }
+
+    pub fn draw_won(&mut self, ctx:&mut dyn Context) {
+        if self.state.won == false {
+            return;
+        }
+
+        let screen = ctx.screen_size();
+        let font_height = screen.x / 16.0;
+        ctx.draw_string(DrawStringParams {
+            str: "You Escaped!!!".into(),
+            x: screen.x / 2.0,
+            y: screen.y / 2.0,
+            font_height,
+            color: WHITE,
+            alignment_horizontal: Alignment::Center,
+        });
     }
 
     pub fn draw_character_selector(&mut self, ctx:&mut dyn Context) {

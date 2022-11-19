@@ -128,6 +128,9 @@ impl MyGame {
                 let l = v.length();
                 if other_entity.img == Images::ExitMarker.into() && l < 0.5 {
                     // TODO end game
+                    self.state.won = true;
+                    self.state.pause = true;
+                    break;
                 }
             }
         }

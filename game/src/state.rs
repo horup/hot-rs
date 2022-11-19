@@ -18,7 +18,8 @@ pub struct State {
     pub inventory:HashMap<Images, f32>,
     pub chosen_character:Option<Images>,
     pub pause:bool,
-    pub start_pos:Vec3
+    pub start_pos:Vec3,
+    pub won:bool
 }
 
 impl State {
@@ -43,6 +44,7 @@ impl DerefMut for State {
         &mut self.world
     }
 }
+
 #[derive(Default, Serialize, Deserialize, Clone)]
 pub struct Counter {
     pub current:f32,
