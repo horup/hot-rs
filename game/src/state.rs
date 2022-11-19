@@ -3,7 +3,7 @@ use std::{collections::HashMap, ops::{Deref, DerefMut}};
 use shared::{Id, Camera, Components, World, glam::{IVec2, Vec3}};
 use serde::{Serialize, Deserialize};
 
-use crate::Images;
+use crate::{Images, Critter};
 
 #[derive(Default, Serialize, Deserialize, Clone)]
 pub struct State {
@@ -13,13 +13,15 @@ pub struct State {
     pub walkers:Components<Walker>,
     pub doors:Components<Door>,
     pub items:Components<Item>,
+    pub critters:Components<Critter>,
     pub flash:Flash,
     pub pokemon_cards:Counter,
     pub inventory:HashMap<Images, f32>,
     pub chosen_character:Option<Images>,
     pub pause:bool,
     pub start_pos:Vec3,
-    pub won:bool
+    pub won:bool,
+    pub died:bool
 }
 
 impl State {

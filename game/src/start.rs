@@ -1,6 +1,6 @@
 use shared::{glam::Vec3, Context, Sprite, Tiles, Color, World, Map};
 use num_enum::TryFromPrimitive;
-use crate::{Images, Walker, Door, MyGame, Item, sounds, State};
+use crate::{Images, Walker, Door, MyGame, Item, sounds, State, Critter};
 
 impl MyGame {
 
@@ -44,6 +44,16 @@ impl MyGame {
                     match entity {
                         Images::Player => {
                             state.start_pos = Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0);
+                        },
+                        Images::Piggy => {
+                            let e = state.sprites.spawn(Sprite {
+                                pos: Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0),
+                                img: entity.into(),
+                                radius: 0.25,
+                                ..Default::default()
+                            });
+
+                            state.critters.attach(e, Critter::default());
                         },
                         Images::Viktor | Images::William => {
                            /* dbg!("Spawning Player");

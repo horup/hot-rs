@@ -20,6 +20,9 @@ pub use input::*;
 mod update;
 pub use update::*;
 
+mod critter;
+pub use critter::*;
+
 mod draw;
 pub use draw::*;
 

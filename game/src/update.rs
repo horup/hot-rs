@@ -123,7 +123,7 @@ impl MyGame {
     fn proximity_update(&mut self, _ctx: &mut dyn Context) {
         let player_id = self.state.player.unwrap_or_default();
         if let Some(player_entity) = self.state.sprites.get(player_id) {
-            for (_other_id, other_entity) in self.state.sprites.iter().filter(|(id,_)| {id != &player_id}) {
+            for (other_id, other_entity) in self.state.sprites.iter().filter(|(id,_)| {id != &player_id}) {
                 let v = other_entity.pos - player_entity.pos;
                 let l = v.length();
                 if other_entity.img == Images::ExitMarker.into() && l < 0.5 {
@@ -131,6 +131,12 @@ impl MyGame {
                     self.state.won = true;
                     self.state.pause = true;
                     break;
+                } else if let Some(critter) = self.state.critters.get(other_id) {
+                    if l < 0.6 {
+                        self.state.died = true;
+                        self.state.pause = true;
+                        break;
+                    }
                 }
             }
         }
