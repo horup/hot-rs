@@ -113,6 +113,10 @@ impl MyGame {
             color: WHITE,
             alignment_horizontal: Alignment::Center,
         });
+
+        if ctx.mouse_button_pressed(1) {
+            ctx.push_command(Command::LoadMap { map_path: "assets/maps/test.map".into() });
+        }
     }
 
     pub fn draw_character_selector(&mut self, ctx:&mut dyn Context) {
