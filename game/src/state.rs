@@ -21,7 +21,7 @@ pub struct State {
     pub pause:bool,
     pub start_pos:Vec3,
     pub won:bool,
-    pub died:bool
+    pub lost:bool
 }
 
 impl State {

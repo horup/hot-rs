@@ -127,13 +127,12 @@ impl MyGame {
                 let v = other_entity.pos - player_entity.pos;
                 let l = v.length();
                 if other_entity.img == Images::ExitMarker.into() && l < 0.5 {
-                    // TODO end game
                     self.state.won = true;
                     self.state.pause = true;
                     break;
                 } else if let Some(critter) = self.state.critters.get(other_id) {
                     if l < 0.6 {
-                        self.state.died = true;
+                        self.state.lost = true;
                         self.state.pause = true;
                         break;
                     }

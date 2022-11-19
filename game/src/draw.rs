@@ -87,6 +87,7 @@ impl MyGame {
             return;
         }
         
+        
         ctx.draw(
             &self.state.camera,
             &self.state,
@@ -94,8 +95,13 @@ impl MyGame {
                 debug_entity: false,
             },
         );
+
         self.draw_flash(ctx);
         self.draw_hud(ctx);
+
+        if self.state.lost {
+            self.draw_lost(ctx);
+        }
     }
 
     pub fn draw_won(&mut self, ctx:&mut dyn Context) {
@@ -107,6 +113,32 @@ impl MyGame {
         let font_height = screen.x / 16.0;
         ctx.draw_string(DrawStringParams {
             str: "You Escaped!!!".into(),
+            x: screen.x / 2.0,
+            y: screen.y / 2.0,
+            font_height,
+            color: WHITE,
+            alignment_horizontal: Alignment::Center,
+        });
+
+        if ctx.mouse_button_pressed(1) {
+            ctx.push_command(Command::LoadMap { map_path: "assets/maps/test.map".into() });
+        }
+    }
+
+    pub fn draw_lost(&mut self, ctx:&mut dyn Context) {
+        if self.state.lost == false {
+            return;
+        }
+
+        let screen = ctx.screen_size();
+        let font_height = screen.x / 16.0;
+
+        ctx.draw_rect(DrawRectParams {
+            rect: Rect2 { x: 0.0, y: 0.0, w: screen.x, h: screen.y },
+            color: Color::new(1.0, 0.0, 0.0, 0.75),
+        });
+        ctx.draw_string(DrawStringParams {
+            str: "You were caught!!!".into(),
             x: screen.x / 2.0,
             y: screen.y / 2.0,
             font_height,
