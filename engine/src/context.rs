@@ -255,22 +255,26 @@ impl Context for Engine {
     }
 
     fn serialize(&self) -> Vec<u8> {
-        let mut s:(Sprites, Vec<u8>) = (Sprites::default(), Vec::new());
-        if let Some(game) = &self.game {
-            s.1 = game.serialize();
+        unsafe {
+            let mut s:(Sprites, Vec<u8>) = (Sprites::default(), Vec::new());
+            if let Some(game) = &*self.game.get() {
+                s.1 = game.serialize();
+            }
+    
+            bincode::serialize(&s).unwrap()
         }
-
-        bincode::serialize(&s).unwrap()
     }
 
     fn deserialize(&mut self, bytes:&[u8]) {
         if !bytes.is_empty() {
-            let s:(Sprites, Vec<u8>) = bincode::deserialize(bytes).unwrap();
-            let (_entities, game_bytes) = s;
-            //self.entities = entities;
-            if !game_bytes.is_empty() {
-                if let Some(game) = &mut self.game {
-                    game.deserialize(&game_bytes);
+            unsafe {
+                let s:(Sprites, Vec<u8>) = bincode::deserialize(bytes).unwrap();
+                let (_entities, game_bytes) = s;
+                //self.entities = entities;
+                if !game_bytes.is_empty() {
+                    if let Some(game) = &mut *self.game.get() {
+                        game.deserialize(&game_bytes);
+                    }
                 }
             }
         }

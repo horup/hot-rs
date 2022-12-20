@@ -2,7 +2,7 @@ use std::{
     collections::HashMap,
     fs::Metadata,
     path::{Path, PathBuf},
-    time::Duration, cell::RefCell,
+    time::Duration, cell::{RefCell, UnsafeCell}, borrow::BorrowMut,
 };
 
 use libloading::{Library};
@@ -28,7 +28,7 @@ pub struct Engine {
     pub(crate) edit_camera: Camera,
     pub(crate) edit_mode: bool,
     pub(crate) map: Map,
-    pub(crate) game: Option<Box<dyn Game>>,
+    pub(crate) game: UnsafeCell<Option<Box<dyn Game>>>,
     pub(crate) game_lib_path: PathBuf,
     pub(crate) game_lib: Option<Library>,
     pub(crate) game_lib_metadata: Option<Metadata>,
@@ -88,7 +88,7 @@ impl Engine {
             let mut state: Vec<u8> = Vec::new();
             if unload {
                 state = self.serialize();
-                self.game = None;
+                self.game = UnsafeCell::default();
                 if let Some(lib) = self.game_lib.take() {
                     lib.close().unwrap();
                 }
@@ -109,7 +109,7 @@ impl Engine {
                                 self.game_lib = Some(lib);
                                 println!("Game lib loaded");
                                 let s = self.call_game_create().unwrap();
-                                self.game = Some(s);
+                                self.game = UnsafeCell::new(Some(s));
 
                                 if unload {
                                     self.deserialize(&state);
@@ -160,13 +160,20 @@ impl Engine {
         let edit_mode_changed = prev_edit_mode != self.edit_mode;
 
         if !self.edit_mode {
-            let game = self.game.take();
-            if let Some(mut game) = game {
-                if edit_mode_changed {
+            unsafe {
+                let game = &mut *self.game.get();
+                if let Some(game) = game {
+                    game.tick(self);
                 }
-
-                game.tick(self);
-                self.game = Some(game);
+              
+                
+                /*if let Some(mut game) = game {
+                    if edit_mode_changed {
+                    }
+    
+                    game.tick(self);
+                    self.game = UnsafeCell::new(Some(game));
+                }*/
             }
         } else {
             self.draw_edit_mode();
