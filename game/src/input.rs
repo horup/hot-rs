@@ -20,8 +20,9 @@ impl MyGame {
             } else if key == 74 {
                 if let Ok(mut f) = File::open(quick_save_path) {
                     let mut buf = Vec::new();
-                    f.read_to_end(&mut buf).unwrap();
-                    engine.deserialize(&buf);
+                    if let Ok(_) = f.read_to_end(&mut buf) {
+                        engine.deserialize(&buf);
+                    }
                 }
                 println!("loaded state");
             }
