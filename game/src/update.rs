@@ -1,6 +1,6 @@
-use shared::{Context, glam::{Vec2}, Grid, Color, Tile};
+use shared::{Context, glam::{Vec2, IVec2}, Grid, Color, Tile};
 use crate::{MyGame, Images, sounds};
-
+use pathfinding::prelude::*;
 
 struct Ray {
     pub start:Vec2,
@@ -141,13 +141,48 @@ impl MyGame {
         }
     }
 
+    fn astar(&self, start:IVec2, end:IVec2) -> Option<Vec<IVec2>> {
+        let p = astar(&start, |n| {
+            let mut vec:Vec<(IVec2, i32)> = Vec::with_capacity(4);
+            for p in [IVec2::new(n.x - 1, n.y), IVec2::new(n.x + 1, n.y), IVec2::new(n.x, n.y - 1), IVec2::new(n.x, n.y + 1)] {
+                if let Some(tile) = self.state.world.tiles.get(p.x, p.y) {
+                    if tile.clips == false {
+                        vec.push((p, 1));
+                    }
+                }
+            }
+            return vec;
+        }, |n|{
+            let v = (*n - end).abs();
+            return v.x + v.y;
+        }, |n|{
+            return n == &end;
+        });
+        if let Some((vec, _)) = p {
+            return Some(vec);
+        }
+
+        None
+    }
+
     fn critter_update(&mut self, ctx:&mut dyn Context) {
+        let size = self.state.world.tiles.size();
+        
         if let Some(player_id) = self.state.player {
             if let Some(player_sprite) = self.state.world.sprites.get(player_id).clone() {
                 for (key, critter_sprite) in self.state.world.sprites.iter_mut() {
                     if let Some(critter) = self.state.critters.get_mut(key) {
                         let v = (player_sprite.pos - critter_sprite.pos).normalize_or_zero();
-                        critter.dir = v.truncate();
+                        critter.dir = Vec2::default();
+                        
+                        let path = self.astar(critter_sprite.pos.truncate().as_ivec2(), player_sprite.pos.truncate().as_ivec2());
+                        if let Some(path) = path {
+                            if let Some(first) = path.get(1) {
+                                let p = first.as_vec2() + Vec2::new(0.5, 0.5);
+                                let v = p - critter_sprite.pos.truncate();
+                                critter.dir = v.normalize_or_zero();
+                            }
+                        }
                     }
                 }
             }
