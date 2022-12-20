@@ -157,7 +157,7 @@ impl Engine {
         let prev_edit_mode = self.edit_mode;
         self.input();
         self.process_commands().await;
-        let edit_mode_changed = prev_edit_mode != self.edit_mode;
+        // let edit_mode_changed = prev_edit_mode != self.edit_mode;
 
         if !self.edit_mode {
             unsafe {
@@ -165,15 +165,6 @@ impl Engine {
                 if let Some(game) = game {
                     game.tick(self);
                 }
-              
-                
-                /*if let Some(mut game) = game {
-                    if edit_mode_changed {
-                    }
-    
-                    game.tick(self);
-                    self.game = UnsafeCell::new(Some(game));
-                }*/
             }
         } else {
             self.draw_edit_mode();
