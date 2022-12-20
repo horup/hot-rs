@@ -44,7 +44,6 @@ impl Context for Engine {
 
         for cell_y in bounds.top() as i32 .. bounds.bottom() as i32 {
             for cell_x in bounds.left() as i32 .. bounds.right() as i32 {
-                let mut diffuse = shared::WHITE;
                 if let Some(cell) = world.tiles.get(cell_x, cell_y) {
                     if !cell.hidden {
                         if let Some(tile) = cell.img_top {

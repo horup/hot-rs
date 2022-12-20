@@ -1,6 +1,6 @@
 use std::{collections::HashMap, ops::{Deref, DerefMut}};
 
-use shared::{Id, Camera, Components, World, glam::{IVec2, Vec3}};
+use shared::{Id, Camera, Components, World, glam::{Vec3}};
 use serde::{Serialize, Deserialize};
 
 use crate::{Images, Critter};

@@ -6,7 +6,7 @@ struct Ray {
     pub start:Vec2,
     pub end:Vec2
 }
-
+#[allow(dead_code)]
 struct Visit<'a, T:Default + Clone> {
     pub tile:&'a mut T,
     pub x:f32,
@@ -130,7 +130,7 @@ impl MyGame {
                     self.state.won = true;
                     self.state.pause = true;
                     break;
-                } else if let Some(critter) = self.state.critters.get(other_id) {
+                } else if let Some(_critter) = self.state.critters.get(other_id) {
                     if l < 0.6 {
                         self.state.lost = true;
                         self.state.pause = true;

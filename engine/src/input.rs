@@ -1,4 +1,4 @@
-use shared::{glam::Vec2, Context, Event};
+use shared::{glam::Vec2, Event};
 use macroquad::{prelude::{is_key_pressed, KeyCode, is_key_down, mouse_position, is_mouse_button_down, MouseButton, is_mouse_button_pressed, mouse_wheel}, time::get_frame_time};
 
 use crate::{Engine, Tool};

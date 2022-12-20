@@ -1,5 +1,4 @@
 mod images;
-use std::collections::HashMap;
 
 pub use images::*;
 
@@ -12,7 +11,7 @@ pub use state::*;
 mod start;
 pub use start::*;
 
-use shared::{*, glam::{Vec2, IVec2}};
+use shared::{*, glam::{Vec2}};
 
 mod input;
 pub use input::*;
