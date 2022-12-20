@@ -140,11 +140,26 @@ impl MyGame {
             }
         }
     }
+
+    fn critter_update(&mut self, ctx:&mut dyn Context) {
+        if let Some(player_id) = self.state.player {
+            if let Some(player_sprite) = self.state.world.sprites.get(player_id).clone() {
+                for (key, critter_sprite) in self.state.world.sprites.iter_mut() {
+                    if let Some(critter) = self.state.critters.get_mut(key) {
+                        let v = (player_sprite.pos - critter_sprite.pos).normalize_or_zero();
+                        critter.dir = v.truncate();
+                    }
+                }
+            }
+        }
+    }
     
     pub fn update(&mut self, ctx: &mut dyn Context) {
         if self.state.pause {
             return;
         }
+
+        self.critter_update(ctx);
 
         let state = &mut self.state;
         let dt = ctx.dt(); 
