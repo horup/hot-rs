@@ -154,6 +154,9 @@ impl MyGame {
             if state.player == Some(key) {
                 v = self.dir * speed * dt;
             }
+            if let Some(critter) = state.critters.get_mut(key) {
+                v = critter.dir * speed * dt;
+            }
     
             if v.x > 0.0 {
                 e.flip_x = false;

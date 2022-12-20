@@ -54,6 +54,7 @@ impl MyGame {
                             });
 
                             state.critters.attach(e, Critter::default());
+                            state.walkers.attach(e, Walker::default());
                         },
                         Images::Viktor | Images::William => {
                            /* dbg!("Spawning Player");
