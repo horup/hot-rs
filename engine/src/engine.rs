@@ -154,7 +154,7 @@ impl Engine {
     }
 
     pub async fn tick(&mut self) {
-        let prev_edit_mode = self.edit_mode;
+        // let prev_edit_mode = self.edit_mode;
         self.input();
         self.process_commands().await;
         // let edit_mode_changed = prev_edit_mode != self.edit_mode;
