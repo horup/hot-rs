@@ -167,7 +167,6 @@ impl MyGame {
 
     fn critter_update(&mut self, ctx:&mut dyn Context) {
         let size = self.state.world.tiles.size();
-        
         if let Some(player_id) = self.state.player {
             if let Some(player_sprite) = self.state.world.sprites.get(player_id).clone() {
                 for (key, critter_sprite) in self.state.world.sprites.iter_mut() {
@@ -181,6 +180,8 @@ impl MyGame {
                                 let p = first.as_vec2() + Vec2::new(0.5, 0.5);
                                 let v = p - critter_sprite.pos.truncate();
                                 critter.dir = v.normalize_or_zero();
+                            } else {
+                                critter.dir = v.truncate().normalize_or_zero();
                             }
                         }
                     }
